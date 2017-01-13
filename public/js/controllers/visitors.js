@@ -1,0 +1,202 @@
+
+socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','$timeout', function($scope,$http, $filter, $route, $timeout){
+	$scope.AllVisitors = [];
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var block_id = userData.block_id;
+
+	$http.post('/getVisitorsForStaff', {block_id: block_id}).success(function(response){
+		
+		if (response.hasOwnProperty('status') && response.status==200) {
+			var AllVisitors = response.data;
+			var log = [];
+			angular.forEach(AllVisitors, function(value, key){
+				value.estimate_arival_date_time = new Date(value.estimate_arival_date_time);
+				value.enid = btoa(value.id);
+				log.push(value);
+			});
+			$scope.AllVisitors = log;
+		}else{
+			alert(response.error);
+		}
+		
+	});
+	$scope.visitorDetails = {};
+	$scope.leaveSociety = function(visitor_id, no_of_persons){
+		$scope.visitorDetails.id = visitor_id;
+		if (no_of_persons!='') {
+			$scope.visitorDetails.no_of_persons = parseInt(no_of_persons);
+		}
+		
+	}
+
+	$scope.updateVisiterLeavingDetails = function(){
+		var details = $scope.visitorDetails;
+		var date = new Date(details.date);
+		details.date = $filter('date')(date, 'yyyy-MM-dd');
+        details.time = $filter('date')(details.time, 'HH:mm:ss');
+        details.leaving_date_time = details.date+' '+details.time+':00';
+        details.updated_by = userData.id;
+        $http.post('/UpdateVisitorDetails', details).success(function(response){
+        	if(response.hasOwnProperty('status')&& response.status=='200'){
+        		angular.element('.closeBtn').trigger('click');
+        		$timeout(function(){
+        			$route.reload();
+        		}, 500);
+        		
+        	}
+        });
+    }
+
+    $scope.updateVisiterEntryDetails = function(){
+    	var details = $scope.visitorDetails;
+		var date = new Date(details.entry_date);
+		details.entry_date = $filter('date')(date, 'yyyy-MM-dd');
+        details.entry_time = $filter('date')(details.entry_time, 'HH:mm:ss');
+        details.entry_date_time = details.entry_date+' '+details.entry_time+':00';
+        details.updated_by = userData.id;
+
+        $http.post('/UpdateVisitorEntryDetails', details).success(function(response){
+        	if(response.hasOwnProperty('status')&& response.status=='200'){
+        		angular.element('.closeBtn').trigger('click');
+        		$timeout(function(){
+        			$route.reload();
+        		}, 2000);
+        	}
+        });
+    }
+}]);
+
+socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$http){
+	$scope.AllVisitors = [];
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var id = userData.id;
+
+	$http.post('/getVisitorsForResident', {id: id}).success(function(response){
+		if (response.hasOwnProperty('status') && response.status==200) {
+			var AllVisitors = response.data;
+			var log = [];
+			angular.forEach(AllVisitors, function(value, key){
+				value.estimate_arival_date_time = new Date(value.estimate_arival_date_time);
+				value.enid = btoa(value.id);
+				log.push(value);
+			});
+			$scope.AllVisitors = log;
+		}else{
+			alert(response.error);
+		}
+		
+	});
+}]);
+
+socialApp.controller('AddVisitorResident', ['$scope','$http','$location', function($scope, $http, $location){
+
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var id = userData.id;
+	$scope.visitor = {
+		resident_id: id
+	};
+	$scope.today = new Date();
+	$scope.addVisitor = function(){
+		
+		$http.post('/addVisitorsByResident', $scope.visitor).success(function(response){
+			if (response.hasOwnProperty('status') && response.status==200) {
+				$location.path('/visitors-for-resident');
+			}else{
+				$scope.errorBlock = true;
+				$scope.error = response.error;
+			}
+		});
+	}
+}]);
+
+socialApp.controller('AddVisitorStaff', ['$scope','$http','$location','$filter', function($scope, $http, $location, $filter){
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var block_id = userData.block_id;
+	$scope.visitor = {};
+
+	$http.post('/getSimpleResidentListOfBlock', {id: block_id}).success(function(response){
+		if (response.status==200) {
+			$scope.residents = response.success;
+		}
+		
+	});
+	$scope.addVisitor = function(response){
+		var details = $scope.visitor;
+		details.updated_by = userData.id;
+
+		/*details.arrival_date = $filter('date')(details.arrival_date, 'yyyy-MM-dd');
+        details.arrivaltime = $filter('date')(details.arrivaltime, 'HH:mm:ss');*/
+        
+        details.arrival_date_time = details.arrival_date+' '+details.arrivaltime+':00';
+
+        $http.post('/addVisitorsByStaff', details).success(function(response){
+        	if (response.status==200) {
+        		$location.path('/visitors-for-staff');
+        	}else{
+        		$scope.errorBlock = true;
+				$scope.error = response.error;
+        	}
+        });
+	}
+}]);
+
+
+socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function($scope, $http, $routeParams){
+	$scope.visitor = {};
+	var id = atob($routeParams.visitorID);
+	$http.post('/getVisitorDetail', {id: id}).success(function(response){
+		
+		if (response.hasOwnProperty('status') && response.status==200) {
+			$scope.visitor = response.data;
+
+			if ($scope.visitor.arival_date_time=='0000-00-00 00:00:00') {
+				$scope.visitor.arival_date_time = 'N/A';
+			}
+			if ($scope.visitor.depart_date_time=='0000-00-00 00:00:00') {
+				$scope.visitor.depart_date_time = 'N/A';
+			}
+			if ($scope.visitor.estimate_arival_date_time=='0000-00-00 00:00:00') {
+				$scope.visitor.estimate_arival_date_time = $scope.visitor.arival_date_time;
+			}
+		}
+	});
+
+}]);
+
+socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routeParams','DTOptionsBuilder', function($scope, $http,$routeParams, DTOptionsBuilder){
+	$scope.AllVisitors = [];
+	var id = atob($routeParams.blockID);
+	
+	$http.post('/ExternalVisitorsForManager', {id: id}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			
+			angular.forEach(response.data, function(item, key){
+				item.enid = btoa(item.id);
+				if (item.status==1) {
+					item.status = 'Not Come Yet';
+				}
+				if (item.status==2) {
+					item.status = 'In Society';
+				}
+				if (item.status==3) {
+					item.status = 'Left Society';
+				}
+				$scope.AllVisitors.push(item);
+			});
+		}
+	})
+	/*$scope.dtOptions = DTOptionsBuilder.withButtons([
+            'columnsToggle',
+            'colvis',
+            'copy',
+            'print',
+            'excel',
+            {
+                text: 'Some button',
+                key: '1',
+                action: function (e, dt, node, config) {
+                    alert('Button activated');
+                }
+            }
+        ]);*/
+}]);
