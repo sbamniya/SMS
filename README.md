@@ -1,2 +1,2 @@
-# vehicle-management
-Vehicle Managment on top of of the MEAN Stack 
+# society-management
+Society Managment on top of of the MEAN Stack 
