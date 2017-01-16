@@ -21,27 +21,27 @@ exports.insertNotice = function(pool, transporter){
                     var Q = 'select email, concat(first_name, " ", last_name) as name from residents where id = "'+resident_id+'"';
                     console.log(Q);
                     pool.query(Q, function(err, rows){
-                    if (err)
-                    {
-                        result.error= err;
-                        console.log(err);
-                    }
+                        if (err)
+                        {
+                            result.error= err;
+                            console.log(err);
+                        }
                         else{
-                        var resident_name = rows[0].name;
-                        var email = rows[0].email;
-                        transporter.sendMail({
+                            var resident_name = rows[0].name;
+                            var email = rows[0].email;
+                            transporter.sendMail({
                             from: 'kalika.deltabee@gmail.com',
                             to: email,
                             subject: 'Notice',
                             html: 'Hello '+resident_name+'!<br/><br><b>Subject</b>: '+notice_subject+'<br/><br/>'+notice_content+'<br/><br/>Thank You.'
-                        }, function(error, response) {
-                        if (error){
-                            console.log(error);
-                        }else{
-                            console.log('Message sent'); 
+                            }, function(error, response) {
+                                if (error){
+                                    console.log(error);
+                                }else{
+                                    console.log('Message sent'); 
+                                }
+                            });
                         }
-                        });
-                    }
                     });    
 
                 } 
@@ -73,7 +73,6 @@ exports.listOfNoticeToManager = function(pool){
     };
 };
 
-
 exports.sentNoticeToResidents = function(pool,transporter){
     return function(req,res){
         res.setHeader('content-Type','application/json');
@@ -96,15 +95,15 @@ exports.sentNoticeToResidents = function(pool,transporter){
                     var subject = rows[0].notice_subject ; 
                     var content = rows[0].notice_content ;   
                     transporter.sendMail({
-                    from: 'kalika.deltabee@gmail.com',
+                        from: 'kalika.deltabee@gmail.com',
                         to: email,
                         subject: 'Resend Notice',
                         html: 'Hello '+resident_name+'!<br/><br><b>Subject</b>: '+subject+'<br/><br/>'+content+'<br/><br/><b>Manager Wrote</b>: '+new_content+'<br/><br/>Thank You.'
                     }, function(error, response) {
                         if (error){
-                            console.log(error);
+                        console.log(error);
                         }else{
-                            console.log('Message sent'); 
+                        console.log('Message sent'); 
                         }
                     });
                     result.success = " successfully";
@@ -114,4 +113,3 @@ exports.sentNoticeToResidents = function(pool,transporter){
         }
     }
 }
-
