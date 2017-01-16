@@ -57,6 +57,34 @@
                                 <div class="form-group">
                                     <label>ID Number(Optional)</label>
                                     <input type="text" class="form-control" ng-model="manager.idNumber" name="contact" placeholder="Enter ID Number">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                        <h4 align="center">PayUMoney Credentials</h4>
+                        <div class="row">
+                        
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Merchant ID</label>
+                                    <input type="text" class="form-control" ng-model="manager.merchant_id" name="merchant_id" placeholder="Enter Merchant ID " required>
+                                    <p  ng-show="societyAddForm.merchant_id.$invalid && !societyAddForm.merchant_id.$pristine" class="help-block red-text">Please enter valid Merchant ID</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Merchant Key</label>
+                                    <input type="text" class="form-control" ng-model="manager.marchant_key" name="merchantkey" placeholder="Enter Merchant Key" required>
+                                    <p  ng-show="societyAddForm.merchantkey.$invalid && !societyAddForm.merchantkey.$pristine" class="help-block red-text">Please enter valid merchant key</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Merchant Salt</label>
+                                    <input type="text" class="form-control" ng-model="manager.marchant_salt" name="merchantsalt" placeholder="Enter Merchant Salt" required>
+                                    <p  ng-show="societyAddForm.merchantsalt.$invalid && !societyAddForm.merchantsalt.$pristine" class="help-block red-text">Please enter valid merchant salt</p>
                                 </div>
                             </div>
                         </div>

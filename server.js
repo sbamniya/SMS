@@ -225,8 +225,8 @@
 
     app.post('/facilityRequestesForManager',facility.facilityRequestesForManager(pool));
 
-    /**/
-    app.post('/addVendor',vendor.addVendor(pool));  
+    /*vendor*/
+    app.post('/addVendor',vendor.addVendor(pool,transporter));  
     app.post('/listvendors',vendor.listvendors(pool));  
     app.post('/deleteVendor',vendor.deleteVendor(pool));  
     app.post('/updateVendor',vendor.updateVendor(pool));
@@ -296,6 +296,6 @@
     /*Routing Handler*/
     app.use(app.router);
     
-    app.listen(process.env.PORT || 8080);
-    console.log("App listening on port 8080");
+    app.listen(process.env.PORT || 2000);
+    console.log("App listening on port 2000");
 	

@@ -113,6 +113,15 @@
                             </div>    
                         </div>
                         <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Payment</label>
+                                    <input type="number" min="0" name="pay" class="form-control" ng-model="maintainance.reccuring_days" placeholder="Enter the total payment">
+                                    <p ng-show="maintainanceForm.pay.$invalid && !maintainanceForm.pay.$pristine" class="help-block red-text">Please Enter the total payment</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>Description</label>
