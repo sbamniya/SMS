@@ -1,6 +1,6 @@
 /*List of Add block page*/
 socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload', '$timeout','$routeParams', function ($scope, $http,$location, $compile, Upload, $timeout, $routeParams) {
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		var id = $routeParams.id;
 		$scope.blocks = [
 							{
@@ -23,12 +23,15 @@ socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload
 					$scope.blocks[0].name = result.name;
 					$scope.blocks[0].manager = result.society_manager;
 				}
-				$scope.$emit('UNLOAD');
+				
 			}else{
 				alert('Error !');
 			}
+			$timeout(function(){
+				$scope.$emit('UNLOAD');	
+			}, 1000);
 		});
-		$scope.ActiveManagers = {};
+		$scope.ActiveManagers = [];
 
 		/*Get list of managers*/
 		/*$scope.$emit('LOAD');*/
@@ -45,7 +48,7 @@ socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload
 		}
 
 		$scope.addBlocks = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			
 			var blockDetails = $scope.blocks;
 			var check =0;
@@ -67,13 +70,14 @@ socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload
 		             	value.parent_id = id;
 		             	 
 			            $http.post('/addBlock', value).success(function(addResponse){
-
+			            	$timeout(function(){
+								$scope.$emit('UNLOAD');	
+							}, 1000);
 			             	if(addResponse.success){
 			             		$location.path('/society-list');
 			             	}else{
 			             		alert(addResponse.error);
 			             	}
-				    		$scope.$emit('UNLOAD');
 				    	});
 			    	});
 				});
@@ -83,7 +87,7 @@ socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload
 
 /*For Edit of Block*/
 socialApp.controller('editBlock',['$scope', '$http', '$location', '$compile','Upload', '$timeout','$routeParams', function ($scope, $http,$location, $compile, Upload, $timeout, $routeParams) {
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		var id = $routeParams.blockId;
 		
 		$http.post('/getSingleBlock', {id: id}).success(function(response){
@@ -91,24 +95,24 @@ socialApp.controller('editBlock',['$scope', '$http', '$location', '$compile','Up
 
 				$scope.block = response.success;
 				$scope.block.parking_avail = response.success.parking_avail;
-				$scope.$emit('UNLOAD');
+				
 			}else{
 				$scope.$emit('UNLOAD');
 				$location.path('/404');
 
 			}
+			$scope.$emit('UNLOAD');
 		});
-		$scope.ActiveManagers = {};
+		$scope.ActiveManagers = [];
 		/*Get list of managers*/
 		/*$scope.$emit('LOAD');*/
 		$http.get('/ActiveManagersList').success(function(response){
 			$scope.ActiveManagers = JSON.parse(response.success);
 			$scope.$emit('UNLOAD');
-			
 		});
 
 		$scope.editBlocks = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			$scope.error = false;
 			var value = $scope.block;
 			if ($scope.block.parking_avail==1 && $scope.block.parking_area=='') {
@@ -116,13 +120,13 @@ socialApp.controller('editBlock',['$scope', '$http', '$location', '$compile','Up
 				return;
 			}
 			$http.post('/editBlock', value).success(function(response){
-
+				$scope.$emit('UNLOAD');
 				if(response.success){
 					$location.path('/block-list/'+value.parent_id);
 				}else{
 					alert(response.error);
 				}
-				$scope.$emit('UNLOAD');
+				
 			});
 
 		}

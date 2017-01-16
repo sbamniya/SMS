@@ -293,3 +293,8 @@ socialApp.controller('BlockIncomes', ['$scope','$http', '$routeParams','$route',
 		$window.open('#/transaction-receipt/'+transID, "popup", "width=600,height=400,left=10,top=50");
 	}
 }]);
+
+
+socialApp.controller('Expenses', ['$scope','$http','$location', '$route', '$timeout', function($scope, $http, $location, $route, $timeout){
+	
+}]);

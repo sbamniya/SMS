@@ -1,9 +1,10 @@
 socialApp.controller('tenantAssign', ['$scope','Upload','$http','$timeout','$location','fileUpload', function($scope, Upload,$http, $timeout, $location, fileUpload){
 	var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
+    $scope.today = new Date(),
+        
     $scope.$emit('LOAD');
 	$scope.tenant = {
 		name: '',
-		move_in_date: new Date(),
 		contact_no: '',
 		email: '',
 		id_proof: '',

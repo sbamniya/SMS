@@ -1,6 +1,6 @@
 
 socialApp.controller('society',['$scope', '$http', '$location', '$compile','Upload', '$timeout', function ($scope, $http,$location, $compile, Upload, $timeout) {
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		$scope.close=false;
 		$scope.cropedImg = false;
 		$scope.crop =false;
@@ -17,7 +17,6 @@ socialApp.controller('society',['$scope', '$http', '$location', '$compile','Uplo
 	    $scope.LoadMap= function() {
 		    
 	    	SetMarker(22.71777014235048, 75.85437297821045, 'Indore');
-	    	$scope.$emit('UNLOAD');
 	    }
 
 		$scope.GetLocation = function(){

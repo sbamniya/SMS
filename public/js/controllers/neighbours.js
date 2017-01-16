@@ -1,5 +1,5 @@
 socialApp.controller('neighbours', ['$scope','$http', function($scope, $http){
-	/*$scope.$emit('LOAD');*/
+	$scope.$emit('LOAD');
 	$scope.neighbours = [];
 	$scope.NoNeighbour = false;
 	var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
@@ -25,8 +25,8 @@ socialApp.controller('neighbours', ['$scope','$http', function($scope, $http){
 					if ($scope.neighbours.length==0) {
 						$scope.NoNeighbour = true;
 					}
-					$scope.$emit('UNLOAD');
 				}
+				$scope.$emit('UNLOAD');
 			});
 		}
 		

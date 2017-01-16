@@ -139,8 +139,8 @@ socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeou
 		});
 	}
  }]);
-socialApp.controller('RequestedListForResident', ['$scope','$http', function($scope, $http){
-	
+socialApp.controller('RequestedListForResident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+	$scope.$emit('LOAD');
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Amenities = [];
@@ -149,10 +149,14 @@ socialApp.controller('RequestedListForResident', ['$scope','$http', function($sc
 		if (response.hasOwnProperty('success')) {
 			$scope.Amenities = response.data;
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
 	});
 }]);
 
 socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route','$timeout', function($scope, $http, $route, $timeout){
+	$scope.$emit('LOAD');
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Amenities = [];
@@ -166,10 +170,13 @@ socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route',
 				$scope.Amenities.push(item);
 			});
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
 	});
 	var activadate = [];
 	$scope.ShowAvailiability = function(aminity_id){
-
+		$scope.$emit('LOAD');
 		angular.element('#calendar').fullCalendar('destroy');
 		
 		$http.post('/checkDateForAmenity', {id: aminity_id}).success(function(response){
@@ -200,6 +207,7 @@ socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route',
 							
 					    }
 				});
+				$scope.$emit('UNLOAD');
 			}, 500);
 			
 		});
@@ -222,9 +230,9 @@ socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route',
 					booking_end_date: $scope.booking_end_date, 
 					resident_message: $scope.resident_message
 				}
-
+		$scope.$emit('LOAD');
 		$http.post('/requestToManagerForAmenities', data).success(function(response){
-			
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$timeout(function(){
 					$route.reload();
@@ -234,6 +242,5 @@ socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route',
 				alert(response.error);
 			}
 		});
-
 	}
  }]);

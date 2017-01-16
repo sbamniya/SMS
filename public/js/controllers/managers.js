@@ -1,5 +1,5 @@
 socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-		///*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
         $scope.managers = {};
 		$scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server 
@@ -77,7 +77,7 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
 socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', function ($scope, $http,$location, $compile) {
 		$scope.formErrorShow = false;
 		$scope.addManager = function(){
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
 			$scope.formErrorShow = false;
 			$http.post('/addManager', $scope.manager).success(function(response){
 

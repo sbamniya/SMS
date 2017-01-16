@@ -1,5 +1,6 @@
 /*Admin Dashboard*/
-socialApp.controller('AdminDashboard', ['$scope','$http', function($scope, $http){
+socialApp.controller('AdminDashboard', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+	$scope.$emit('LOAD');
 	var chart1 = {};
 	chart1.type = "PieChart";
 	chart1.data = [
@@ -23,6 +24,9 @@ socialApp.controller('AdminDashboard', ['$scope','$http', function($scope, $http
 		    };
 
 		    $scope.chart = chart1;
+		    $timeout(function(){
+		    	$scope.$emit('UNLOAD');
+		    }, 1000);
     	}
     });
 }]);
