@@ -26,21 +26,13 @@ exports.addJobcard = function(pool){
     }
 }
 
+
 exports.updateJobcardStatus = function(pool){
    return function(req,res){
         var result     = {};
         var jobcard_id = req.body.job_card_id;
-        /*
-        var vendor_id               = req.body.vendor_id;
-        var category                = req.body.category;
-        var block_id                = req.body.block_id;
-        var type                    = req.body.type;
-        var contract_type           = req.body.contract_type;
-        var total_visits            = req.body.total_visits;
-        var approximate_visit_date  = req.body.approximate_visit_date;
-        var reccuring_days          = req.body.reccuring_days;
-        */
-        var Q = 'Update job_card_master SET status = "1" where job_card_id = "'+jobcard_id+'"';
+        
+        var Q = 'Update job_card_master SET status = "1" where id = "'+jobcard_id+'"';
         pool.query(Q,function(err,rows){
             if(err){
                 console.log(err);
@@ -58,17 +50,8 @@ exports.deleteJobcardStatus = function(pool){
    return function(req,res){
         var result     = {};
         var jobcard_id = req.body.job_card_id;
-        /*
-        var vendor_id               = req.body.vendor_id;
-        var category                = req.body.category;
-        var block_id                = req.body.block_id;
-        var type                    = req.body.type;
-        var contract_type           = req.body.contract_type;
-        var total_visits            = req.body.total_visits;
-        var approximate_visit_date  = req.body.approximate_visit_date;
-        var reccuring_days          = req.body.reccuring_days;
-        */
-        var Q = 'delete from job_card_master where job_card_id = "'+jobcard_id+'"';
+        
+        var Q = 'delete from job_card_master where id = "'+jobcard_id+'"';
         pool.query(Q,function(err,rows){
             if(err){
                 console.log(err);
@@ -80,6 +63,8 @@ exports.deleteJobcardStatus = function(pool){
         });
     }
 }
+
+
 exports.jobcardDetails = function(pool){
    return function(req,res){
         res.setHeader('Content-Type', 'application/json');      
@@ -98,6 +83,8 @@ exports.jobcardDetails = function(pool){
         });
     }
 }
+
+
 exports.singlejobcardDetailsWithVendor = function(pool){
    return function(req,res){
         res.setHeader('Content-Type', 'application/json');      

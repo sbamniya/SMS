@@ -11,22 +11,25 @@ socialApp.controller('CreateJobCard', ['$scope','$routeParams','$http','$locatio
 	{
 		$scope.approximate.push(i);
 	}
-		$scope.today = new Date();
-		/*Get list of managers*/
-		/*$scope.$emit('LOAD');*/
-		$http.post('/listvendors',$scope.Vendors).success(function(response){
-			$scope.Vendors = response.data;
-		});
-	$scope.maintainance_category={
+	$scope.today = new Date();
+	/*Get list of managers*/
+	$scope.$emit('LOAD');
+	
+	$scope.maintainance_category = {
 		block_id: block_id
 	};
-		$http.post('/allCategory',$scope.maintainance_category).success(function(response){
-			$scope.maintainance_category = response.data;
+	$http.post('/allCategory',$scope.maintainance_category).success(function(response){
+		$scope.maintainance_category = response.data;
+		$http.post('/listvendors',$scope.Vendors).success(function(response){
+			$scope.Vendors = response.data;
+			$scope.$emit('UNLOAD');
 		});
+	});
 		
 
 		
-	$scope.addMaintainance=function(){
+	$scope.addMaintainance = function(){
+		$scope.$emit('LOAD');
 		if($scope.maintainance.job_card_type==1){
             $scope.maintainance.contract_type='';
             $scope.maintainance.total_visits='';
@@ -37,6 +40,7 @@ socialApp.controller('CreateJobCard', ['$scope','$routeParams','$http','$locatio
             $scope.maintainance.approximate_visit_date = 0;
         }
 		$http.post('/addJobcard', $scope.maintainance).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$location.path('/job-card-display/'+btoa(block_id));
 			}
@@ -45,6 +49,7 @@ socialApp.controller('CreateJobCard', ['$scope','$routeParams','$http','$locatio
 }]);
 
 socialApp.controller('RecurrentJobCard', ['$scope','$routeParams','$http','$route','$window', function($scope,$routeParams,$http,$route, $window){
+	$scope.$emit('LOAD');
 	var block_id = atob($routeParams.blockID);
 	$scope.jobcard = {
 		block_id: block_id
@@ -65,15 +70,16 @@ socialApp.controller('RecurrentJobCard', ['$scope','$routeParams','$http','$rout
 			}
 			
 		}
+		$scope.$emit('UNLOAD');
 	});
 	$scope.deleteJob = function(job_id){
 		var returnVal = confirm('Are You Sure ?');
 		if (!returnVal) {
 			return;
 		}
-
+		$scope.$emit('LOAD');
 		$http.post('/deleteJobcardStatus', {job_card_id: job_id}).success(function(response){
-			//console.log(job_card_id);
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
@@ -85,7 +91,7 @@ socialApp.controller('RecurrentJobCard', ['$scope','$routeParams','$http','$rout
 	}
 }]);
 socialApp.controller('viewJobCard', ['$scope','$routeParams', '$location','$http', function($scope, $routeParams, $location,$http){
-    /*$scope.$emit('LOAD');*/
+    $scope.$emit('LOAD');
     var id = '';
     if (!angular.isUndefined($routeParams.blockID)) {
         id = atob($routeParams.blockID);
@@ -136,18 +142,17 @@ socialApp.controller('viewJobCard', ['$scope','$routeParams', '$location','$http
             }else{
             	$scope.jobcardDetail.contract_type = "AMC";
             }
-
-            $scope.$emit('UNLOAD');
-        }
+		}
+		$scope.$emit('UNLOAD');
    });
 }]);
 
 socialApp.controller('JobCardPrint', ['$scope', '$routeParams', '$window', '$timeout','$http', function($scope, $routeParams, $window, $timeout,$http){
 	var jobID = atob($routeParams.jobCardID);
 	$scope.societyLogo = '1477314891243-Pacific_Bulb_Society_logo.jpg';
-	
+	$scope.$emit('LOAD');
 	$http.post('/jobcardDetailsForPrint', {id: jobID}).success(function(res){
-		console.log(res.data);
+		$scope.$emit('UNLOAD');
 		if (res.hasOwnProperty('sucess')) {
 			var temp = res.data;
 			if (temp.job_card_type==1) {
@@ -168,5 +173,5 @@ socialApp.controller('JobCardPrint', ['$scope', '$routeParams', '$window', '$tim
 			$scope.complaintDetail = temp;
 			$timeout($window.print, 0);
 		}
-	})
+	});
 }]);

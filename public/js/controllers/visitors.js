@@ -3,7 +3,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
 	$scope.AllVisitors = [];
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var block_id = userData.block_id;
-
+	$scope.$emit('LOAD');
 	$http.post('/getVisitorsForStaff', {block_id: block_id}).success(function(response){
 		
 		if (response.hasOwnProperty('status') && response.status==200) {
@@ -18,7 +18,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
 		}else{
 			alert(response.error);
 		}
-		
+		$scope.$emit('UNLOAD');
 	});
 	$scope.visitorDetails = {};
 	$scope.leaveSociety = function(visitor_id, no_of_persons){
@@ -30,6 +30,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
 	}
 
 	$scope.updateVisiterLeavingDetails = function(){
+		$scope.$emit('LOAD');
 		var details = $scope.visitorDetails;
 		var date = new Date(details.date);
 		details.date = $filter('date')(date, 'yyyy-MM-dd');
@@ -40,6 +41,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
         	if(response.hasOwnProperty('status')&& response.status=='200'){
         		angular.element('.closeBtn').trigger('click');
         		$timeout(function(){
+        			$scope.$emit('UNLOAD');
         			$route.reload();
         		}, 500);
         		
@@ -48,6 +50,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
     }
 
     $scope.updateVisiterEntryDetails = function(){
+    	$scope.$emit('LOAD');
     	var details = $scope.visitorDetails;
 		var date = new Date(details.entry_date);
 		details.entry_date = $filter('date')(date, 'yyyy-MM-dd');
@@ -59,6 +62,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
         	if(response.hasOwnProperty('status')&& response.status=='200'){
         		angular.element('.closeBtn').trigger('click');
         		$timeout(function(){
+        			$scope.$emit('UNLOAD');
         			$route.reload();
         		}, 2000);
         	}
@@ -70,7 +74,7 @@ socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$
 	$scope.AllVisitors = [];
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userData.id;
-
+	$scope.$emit('LOAD');
 	$http.post('/getVisitorsForResident', {id: id}).success(function(response){
 		if (response.hasOwnProperty('status') && response.status==200) {
 			var AllVisitors = response.data;
@@ -84,7 +88,7 @@ socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$
 		}else{
 			alert(response.error);
 		}
-		
+		$scope.$emit('UNLOAD');
 	});
 }]);
 
@@ -97,7 +101,7 @@ socialApp.controller('AddVisitorResident', ['$scope','$http','$location', functi
 	};
 	$scope.today = new Date();
 	$scope.addVisitor = function(){
-		
+		$scope.$emit('LOAD');
 		$http.post('/addVisitorsByResident', $scope.visitor).success(function(response){
 			if (response.hasOwnProperty('status') && response.status==200) {
 				$location.path('/visitors-for-resident');
@@ -105,6 +109,7 @@ socialApp.controller('AddVisitorResident', ['$scope','$http','$location', functi
 				$scope.errorBlock = true;
 				$scope.error = response.error;
 			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 }]);
@@ -143,6 +148,7 @@ socialApp.controller('AddVisitorStaff', ['$scope','$http','$location','$filter',
 
 socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function($scope, $http, $routeParams){
 	$scope.visitor = {};
+	$scope.$emit('LOAD');
 	var id = atob($routeParams.visitorID);
 	$http.post('/getVisitorDetail', {id: id}).success(function(response){
 		
@@ -159,6 +165,7 @@ socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function
 				$scope.visitor.estimate_arival_date_time = $scope.visitor.arival_date_time;
 			}
 		}
+		$scope.$emit('UNLOAD');
 	});
 
 }]);
@@ -166,7 +173,7 @@ socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function
 socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routeParams','DTOptionsBuilder', function($scope, $http,$routeParams, DTOptionsBuilder){
 	$scope.AllVisitors = [];
 	var id = atob($routeParams.blockID);
-	
+	$scope.$emit('LOAD');
 	$http.post('/ExternalVisitorsForManager', {id: id}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			
@@ -184,19 +191,6 @@ socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routePara
 				$scope.AllVisitors.push(item);
 			});
 		}
-	})
-	/*$scope.dtOptions = DTOptionsBuilder.withButtons([
-            'columnsToggle',
-            'colvis',
-            'copy',
-            'print',
-            'excel',
-            {
-                text: 'Some button',
-                key: '1',
-                action: function (e, dt, node, config) {
-                    alert('Button activated');
-                }
-            }
-        ]);*/
+		$scope.$emit('UNLOAD');
+	});
 }]);

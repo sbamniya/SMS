@@ -5,10 +5,12 @@ socialApp.controller('AddFacility', ['$scope','$http','$routeParams','$location'
 		block_id: block_id
 	};
 	$scope.AddFacility = function(){
+		$scope.$emit('LOAD');
 		$http.post('/addFacility', $scope.facility).success(function(response){
 			if (response.hasOwnProperty('success')) {
 				$location.path('/facility-list/'+$routeParams.blockID)
-			};
+			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 }]);
@@ -16,10 +18,12 @@ socialApp.controller('AddFacility', ['$scope','$http','$routeParams','$location'
 socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','$timeout', function($scope, $http, $routeParams,$route, $timeout){
 	var block_id = atob($routeParams.blockID);
 	$scope.facilities = [];
+	$scope.$emit('LOAD');
 	$http.post('/listFacilities', {block_id: block_id}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			$scope.facilities = response.data;
 		}
+		$scope.$emit('UNLOAD');
 	});
 
 	$scope.deleteFacility = function(id){
@@ -27,11 +31,12 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 		if(!returnVal){
 			return;
 		}
-
+		$scope.$emit('LOAD');
 		$http.post('/deleteFacilities', {id: id, block_id: block_id}).success(function(response){
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 	$scope.facilityDetail = {
@@ -39,21 +44,24 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 	};
 
 	$scope.updateId = function(id){
+		$scope.$emit('LOAD');
 		$scope.facilityDetail.id = id;
 		$http.post('/getSingleFacility', {id: id}).success(function(response){
 			if (response.hasOwnProperty('success')) {
 				$scope.facilityDetail.facility_name = response.data.facility_name;
 				$scope.facilityDetail.charges = response.data.charges;
 				$scope.facilityDetail.description = response.data.description;
-				
 			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 
 	$scope.updateFacilityDetails = function(){
+		$scope.$emit('LOAD');
 		$http.post('/updateFacility', $scope.facilityDetail).success(function(response){
 			if (response.hasOwnProperty('success')){
 				$timeout(function(){
+					$scope.$emit('UNLOAD');
 					$route.reload();
 				}, 500);
 			}
@@ -63,6 +71,7 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 }]);
 
 socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route', function($scope, $routeParams, $http,$route){
+	$scope.$emit('LOAD');
 	var block_id = atob($routeParams.blockID);
 	$scope.AllRequests = [];
 	$http.post('/facilityRequestesForManager', {block_id: block_id}).success(function(response){
@@ -76,6 +85,7 @@ socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route
 				$scope.AllRequests.push(item);
 			});
 		}
+		$scope.$emit('UNLOAD');
 		
 	});
 
@@ -84,7 +94,9 @@ socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route
 		if (!returnVal) {
 			return;
 		}
+		$scope.$emit('LOAD');
 		$http.post('/sendApproveDetailsToResidentAboutFacility', {id: id}).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
@@ -92,12 +104,14 @@ socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route
 	}
 }]);
 
-socialApp.controller('RequestedFacilityListForResident', ['$scope','$http', function($scope, $http){
+socialApp.controller('RequestedFacilityListForResident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+	$scope.$emit('LOAD');
+
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Facilities = [];
 	$http.post('/listOfRequestedFacilitiesForResident', {resident_id: id}).success(function(response){
-		console.log(response);
+		
 		if (response.hasOwnProperty('success')) {
 			angular.forEach(response.data, function(item, key){
 				if (item.status == 1) {
@@ -108,13 +122,18 @@ socialApp.controller('RequestedFacilityListForResident', ['$scope','$http', func
 				$scope.Facilities.push(item);
 			});
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
+		
 	});
 }]);
 
-socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route', function($scope, $http, $route){
+socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route','$timeout', function($scope, $http, $route, $timeout){
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Facilities = [];
+	$scope.$emit('LOAD');
 	$http.post('/listOfFacilitiesForResident', {resident_id: id}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			
@@ -125,6 +144,9 @@ socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route'
 				$scope.Facilities.push(item);
 			});
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
 	});
 
 	$scope.RequestForFacility = function(facility_id){
@@ -132,7 +154,9 @@ socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route'
 		if (!returnVal) {
 			return;
 		}
+		$scope.$emit('LOAD');
 		$http.post('/requestToManagerForFacility', {facility_id: facility_id,resident_id: id}).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}else{

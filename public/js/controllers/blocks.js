@@ -131,7 +131,7 @@ socialApp.controller('editBlock',['$scope', '$http', '$location', '$compile','Up
 
 /*For select Block*/
 socialApp.controller('selectBlock',['$scope', '$http', '$location', '$compile', '$timeout','$routeParams', function ($scope, $http,$location, $compile, $timeout, $routeParams) {
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			$scope.blocks = {};
 			$http.get("/authentication/societyManager").success(function(response,status,headers,config){
 	             if(response.status =='success'){
@@ -139,21 +139,18 @@ socialApp.controller('selectBlock',['$scope', '$http', '$location', '$compile', 
 	             }else{
 	                $location.path("/society-manager-login");
 	             }
-	             $scope.$emit('UNLOAD');
+	             $http.get("/societyBlockList").success(function(response,status,headers,config){
+		        	if (response.success) {
+		        		$scope.blocks = response.success;
+		        		$scope.$emit('UNLOAD');
+		        	}
+		        });
 	        });
-	        /*$scope.$emit('LOAD');*/
-	        $http.get("/societyBlockList").success(function(response,status,headers,config){
-	        	if (response.success) {
-	        		$scope.blocks = response.success;
-	        		$scope.$emit('UNLOAD');
-	        	}
-	        });
+	        
 	        $scope.goToDashboard = function(){
-	        	/*$scope.$emit('LOAD');*/
 	        	var blockName = angular.element('.select-block option[value="'+$scope.block_id+'"]').text();
 	        	window.localStorage.setItem('manageDetail', blockName);
 	           	$location.path('/society-dashboard/'+window.btoa($scope.block_id));
-	           	$scope.$emit('UNLOAD');
 	        }
 }]);
 

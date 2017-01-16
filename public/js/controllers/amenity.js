@@ -10,17 +10,20 @@ socialApp.controller('AddAmenity', ['$scope','$http','$routeParams','$location',
 		if (angular.isUndefined(file)) {
            return;
         }
-
+        $scope.$emit('LOAD');
         var uploadUrl = "/uploadPhoto";
         var res = fileUpload.uploadFileToUrl(file, uploadUrl);
 
         res.success(function(response){
+        	$scope.$emit('UNLOAD');
         	$scope.amenity.image = response.photoId;
         });
 	};
 
 	$scope.AddAmenity = function(){
+		$scope.$emit('LOAD');
 		$http.post('/addAmenities', $scope.amenity).success(function(res){
+			$scope.$emit('UNLOAD');
 			if (res.hasOwnProperty('status') && res.status==200) {
 				$location.path('/eminity-list/'+block_id);
 			}
@@ -29,12 +32,14 @@ socialApp.controller('AddAmenity', ['$scope','$http','$routeParams','$location',
 }]);
 
 socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$timeout', function($scope, $http, $routeParams,$route, $timeout){
+	$scope.$emit('LOAD');
 	var block_id = atob($routeParams.blockID);
 	$scope.amenities = [];
 	$http.post('/listAmenities', {block_id: block_id}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			$scope.amenities = response.data;
 		}
+		$scope.$emit('UNLOAD');
 	});
 
 	$scope.deleteAmility = function(id){
@@ -42,8 +47,9 @@ socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$
 		if(!returnVal){
 			return;
 		}
-
+		$scope.$emit('LOAD');
 		$http.post('/deleteAmenities', {id: id, block_id: block_id}).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
@@ -54,6 +60,7 @@ socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$
 	};
 
 	$scope.updateId = function(id){
+		$scope.$emit('LOAD');
 		$scope.facilityDetail.id = id;
 		$http.post('/getSingleAmility', {id: id}).success(function(response){
 			if (response.hasOwnProperty('success')) {
@@ -63,12 +70,15 @@ socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$
 				$scope.facilityDetail.time_for_pay = response.data.time_for_pay;
 				
 			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 	$scope.updateAmelityDetails = function(){
+		$scope.$emit('LOAD');
 		$http.post('/updateAmenities', $scope.facilityDetail).success(function(response){
 			if (response.hasOwnProperty('success')){
 				$timeout(function(){
+					$scope.$emit('UNLOAD');
 					$route.reload();
 				}, 500);
 			}
@@ -77,6 +87,8 @@ socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$
  }]);
 
 socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeout','$route', function($scope,$routeParams,$http, $timeout, $route){
+	$scope.$emit('LOAD');
+
 	$scope.error = false;
 	var block_id = atob($routeParams.blockID);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
@@ -94,7 +106,7 @@ socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeou
 				$scope.AllRequests.push(item);
 			});
 		}
-		
+		$scope.$emit('UNLOAD');
 	});
 	$scope.UpdateDetails = {};
 	$scope.setID = function(req_id){
@@ -111,20 +123,24 @@ socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeou
 				id: $scope.UpdateDetails.Req_id, 
 				manager_comment: $scope.UpdateDetails.manager_comment
 		}
+		$scope.$emit('LOAD');
 		$http.post('/sendApproveDetailsToResidentAboutAmenities', data).success(function(response){
 			if (response.hasOwnProperty('success')) {
 				$timeout(function(){
+					$scope.$emit('UNLOAD');
 					$route.reload();
 				}, 200);
 			}else{
 				$scope.error = true;
 				$scope.errMsg = response.error;
+				$scope.$emit('UNLOAD');
 				alert(response.error);
 			}
 		});
 	}
  }]);
 socialApp.controller('RequestedListForResident', ['$scope','$http', function($scope, $http){
+	
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Amenities = [];

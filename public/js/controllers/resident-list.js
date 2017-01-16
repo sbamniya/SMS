@@ -1,6 +1,6 @@
 /*For Manager*/
 socialApp.controller('residentList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
 	    var id = atob($routeParams.blockID);
 		$scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server
@@ -59,7 +59,7 @@ socialApp.controller('residentList',['$scope', '$http', '$location', '$compile',
 
 /*For Manager*/
 socialApp.controller('tenantsList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         var id = atob($routeParams.blockID);
         $scope.dtColumns = [
             DTColumnBuilder.newColumn("flat_number", "Flat Number").notSortable(), 
@@ -124,7 +124,7 @@ socialApp.controller('tenantsList',['$scope', '$http', '$location', '$compile','
 
 
 socialApp.controller('residentInfo', ['$scope','$routeParams', '$location','$http', function($scope, $routeParams, $location,$http){
-    /*$scope.$emit('LOAD');*/
+    $scope.$emit('LOAD');
     var id = '';
     if (!angular.isUndefined($routeParams.blockID)) {
         id = atob($routeParams.blockID);

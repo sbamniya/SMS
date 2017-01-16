@@ -5,6 +5,7 @@ socialApp.controller('AdminDashboard', ['$scope','$http', function($scope, $http
 	chart1.data = [
 	       ['Component', 'Complaints'],
 	    ];
+
     $http.post('/getComplaintsStatusForAdmin').success(function(res){
     	if (res.hasOwnProperty('success')) {
     		angular.forEach(res.success, function(data, key){
@@ -24,12 +25,11 @@ socialApp.controller('AdminDashboard', ['$scope','$http', function($scope, $http
 		    $scope.chart = chart1;
     	}
     });
-
-	
 }]);
+
 /*Society Manager*/
 socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compile', '$routeParams', '$route', function ($scope, $http,$location, $compile, $routeParams,$route) {
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		var chart1 = {};
 		var id = window.atob($routeParams.blockID);
 		$scope.flatInfo = {
@@ -116,6 +116,9 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 		$scope.flatDetails = function(flat_id, type, flat_number){
 			$scope.success = false;
 			$scope.Error = false;
+
+			$scope.$emit('LOAD');
+
 			$scope.flatInfo = {
 				flat_id : flat_id,
 				flat_type : type,
@@ -134,6 +137,7 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 				}else{
 					$scope.flatInfo.parking_slots = [];
 				}
+				$scope.$emit('UNLOAD');
 			});
 		}
 
@@ -151,7 +155,7 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 					return;
 				}
 			}
-			
+			$scope.$emit('LOAD');
 			$http.post('/updateFlatDetails', $scope.flatInfo).success(function(res){
 				if (res.hasOwnProperty('success')) {
 					$scope.Error = false;
@@ -162,6 +166,7 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 					$scope.success =false;
 					$scope.ErrorMsg = res.error;
 				}
+				$scope.$emit('UNLOAD');
 				/*angular.element('#myModal').css('display', 'none');
 				$route.reload();*/
 			});
@@ -169,8 +174,8 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 		}
 
 		$scope.GetFlatDetails = function(flat_id){
+			$scope.$emit('LOAD');
 			$http.post('/getFlatDetails', {flat_id:flat_id}).success(function(response){
-				console.log(response);
 				if (response.hasOwnProperty('success')) {
 					var res = response.success;
 					$scope.flatsFullDetails = res;
@@ -205,6 +210,7 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 					alert('Error');
 					return false;
 				}
+				$scope.$emit('UNLOAD');
 			})
 		}
 
@@ -224,9 +230,9 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 }]);
 
 /*For resident*/
-socialApp.controller('residentDashboard', ['$scope','$http', function($scope, $http){
+socialApp.controller('residentDashboard', ['$scope','$http','$timeout', function($scope, $http, $timeout){
 	var chart1 = {};
-    
+    $scope.$emit('LOAD');
     var resolved = '';
     var pending = '';
     var under_surveillance = '';
@@ -258,6 +264,9 @@ socialApp.controller('residentDashboard', ['$scope','$http', function($scope, $h
 		    };
 
 		    $scope.chart = chart1;
+		    $timeout(function(){
+		    	$scope.$emit('UNLOAD');
+		    }, 1500);
     	}
     });
 

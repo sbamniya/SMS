@@ -1,36 +1,33 @@
-
 /*For Login*/
-
 socialApp.controller('login',['$scope', '$http', '$location', '$compile', function ($scope, $http,$location, $compile) {
 		$scope.noError = true;
         
 		$scope.loginAction = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			$http.post("/login", $scope.admin).success(function(response,status,headers,config){
 
 		            if (response.error) 
 		            {
 		            	$scope.noError = false;	
 		            	$scope.ErrorMessage = response.error;
-                  $scope.$emit('UNLOAD');
-		            }
+                }
 		            else
 		            {
                   window.localStorage.setItem('userDetails', JSON.stringify(response.success));
                   $scope.$emit('UNLOAD');
 		            	$location.path("/dashboard");
 		            }
-        	}); 
+        	    $scope.$emit('UNLOAD');
+          }); 
 		}
 }]);
 
 /*For Forget password*/
 socialApp.controller('resetPasswordController',['$scope', '$http', function ($scope, $http) {
- 	
-  $scope.noError = true;  
+ 	$scope.noError = true;  
   $scope.noSuccess = true;
   $scope.resetPassword = function(){
-    /*$scope.$emit('LOAD');*/
+    $scope.$emit('LOAD');
     $http.post("/resetPasswordProcess", {email : $scope.useremail}).success(function(response,status,headers,config){
   		  if(response.hasOwnProperty('success'))
       {   
@@ -42,8 +39,9 @@ socialApp.controller('resetPasswordController',['$scope', '$http', function ($sc
         $scope.noSuccess = true;
         $scope.noError = false;
         $scope.ErrorMessage = response.error;
-        $scope.$emit('UNLOAD');
+        
       }
+      $scope.$emit('UNLOAD');
     });     
   }
 }]);
@@ -51,7 +49,7 @@ socialApp.controller('resetPasswordController',['$scope', '$http', function ($sc
 
 /*For password reset*/
 socialApp.controller('newPasswordController',['$scope','$http','$location','$routeParams', function ($scope, $http, $location, $routeParams) {
-      /*$scope.$emit('LOAD');*/
+      $scope.$emit('LOAD');
       var token =  $routeParams.token;
       var id = $routeParams.id;
       
@@ -70,7 +68,7 @@ socialApp.controller('newPasswordController',['$scope','$http','$location','$rou
             }
         }); 
      $scope.updatePassword = function(){
-          /*$scope.$emit('LOAD');*/
+         $scope.$emit('LOAD');
          var pass = $scope.userPassword;
          var confirmPass = $scope.confirmPassword;
          var id = $scope.userid;
@@ -84,14 +82,13 @@ socialApp.controller('newPasswordController',['$scope','$http','$location','$rou
              $scope.ErrorMessage = 'Please Enter Same Password';
              $scope.$emit('UNLOAD');
          }else{
-            /*$scope.$emit('LOAD');*/
-             $http.post('/updatePassword', {id:id, pass:pass}).success(function(response,status,headers,config){
+              $http.post('/updatePassword', {id:id, pass:pass}).success(function(response,status,headers,config){
+                $scope.$emit('UNLOAD');
                 if (response.error) 
                 {
                     $scope.noError = false;
                     $scope.noSuccess = true;
                     $scope.ErrorMessage = response.error;
-                    $scope.$emit('UNLOAD');
                 }
                 else if(response.hasOwnProperty('succes'))
                 {
@@ -107,29 +104,34 @@ socialApp.controller('newPasswordController',['$scope','$http','$location','$rou
 
 
 socialApp.controller('residentLogin', ['$scope','$http','$location', function($scope, $http, $location){
-        /*$scope.$emit('LOAD');*/
+        
         $scope.forget_url = "resident-reset-password";
         $scope.titleContent = " Enter Your Username and Password to log on:";
         $scope.userPlaceholder = "Username...";
         $scope.noError = true;
-        $http.get("/authentication/Resident").success(function(response,status,headers,config){
+        var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+        if (userDetails!=null) {
+            $scope.$emit('LOAD');
+            $http.get("/authentication/Resident").success(function(response,status,headers,config){
 
-             if(response.status =='success'){
-                $location.path("/resident-dashboard");
-             }else{
-                
-             }
-             $scope.$emit('UNLOAD');
-        });
+               if(response.status =='success'){
+                  $location.path("/resident-dashboard");
+               }else{
+                  
+               }
+               $scope.$emit('UNLOAD');
+          });
+        }
+        
         $scope.loginAction = function(){
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             $http.post("/resident-login", $scope.user).success(function(response,status,headers,config){
-
+                    $scope.$emit('UNLOAD');
                     if (response.error) 
                     {
                         $scope.noError = false; 
                         $scope.ErrorMessage = response.error;
-                        $scope.$emit('UNLOAD');
+                        
                     }
                     else
                     {
@@ -152,7 +154,7 @@ socialApp.controller('residentRessetPassword',['$scope', '$http', function ($sco
     $scope.noSuccess = true;
 
     $scope.resetPassword = function(){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         $http.post("/resident-resetPasswordProcess", {email : $scope.useremail}).success(function(response,status,headers,config){
           
             if(response.hasOwnProperty('success')){
@@ -160,15 +162,14 @@ socialApp.controller('residentRessetPassword',['$scope', '$http', function ($sco
                 $scope.noSuccess = false;
                 $scope.noError = true;
                 $scope.successMessage = response.success;
-                $scope.$emit('UNLOAD');
-            
             }else{
-                
                 $scope.noSuccess = true;
                 $scope.noError = false;
                 $scope.ErrorMessage = response.error;
                 $scope.$emit('UNLOAD');
             }
+            $scope.$emit('UNLOAD');
+            
         });     
     }
 }]);
@@ -176,28 +177,28 @@ socialApp.controller('residentRessetPassword',['$scope', '$http', function ($sco
 
 /*For Staff Login*/
 socialApp.controller('staffLogin', ['$scope','$http','$location', function($scope, $http, $location){
-        /*$scope.$emit('LOAD');*/
-        $scope.forget_url = "";
-        $scope.titleContent = "Enter Your Email and Password to log on:";
-        $scope.userPlaceholder = "Email...";
-        $scope.noError = true;
-        $scope.loginAction = function(){
-            /*$scope.$emit('LOAD');*/
-            $http.post("/staff-login", $scope.user).success(function(response,status,headers,config){
+    /*$scope.$emit('LOAD');*/
+    $scope.forget_url = "";
+    $scope.titleContent = "Enter Your Email and Password to log on:";
+    $scope.userPlaceholder = "Email...";
+    $scope.noError = true;
+    $scope.loginAction = function(){
+        $scope.$emit('LOAD');
+        $http.post("/staff-login", $scope.user).success(function(response,status,headers,config){
 
-                    if (response.error) 
-                    {
-                        $scope.noError = false; 
-                        $scope.ErrorMessage = response.error;
-                        $scope.$emit('UNLOAD');
-                    }
-                    else
-                    {
-                        
-                        window.localStorage.setItem('userDetails', JSON.stringify(response.success));
-                        $scope.$emit('UNLOAD');
-                        $location.path("/visitors-for-staff");
-                    }
-            }); 
-        }
+                if (response.error) 
+                {
+                    $scope.noError = false; 
+                    $scope.ErrorMessage = response.error;
+                    $scope.$emit('UNLOAD');
+                }
+                else
+                {
+                    
+                    window.localStorage.setItem('userDetails', JSON.stringify(response.success));
+                    $scope.$emit('UNLOAD');
+                    $location.path("/visitors-for-staff");
+                }
+        }); 
+    }
 }]);

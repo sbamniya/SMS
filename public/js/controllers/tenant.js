@@ -1,7 +1,6 @@
 socialApp.controller('tenantAssign', ['$scope','Upload','$http','$timeout','$location','fileUpload', function($scope, Upload,$http, $timeout, $location, fileUpload){
 	var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
-    //$scope.noTenant = true;
-    //console.log(userDetail)
+    $scope.$emit('LOAD');
 	$scope.tenant = {
 		name: '',
 		move_in_date: new Date(),
@@ -15,8 +14,10 @@ socialApp.controller('tenantAssign', ['$scope','Upload','$http','$timeout','$loc
     }
     $http.post('/knowTenantAssignment', {id: userDetail.id}).success(function(response){
         $scope.noTenant = response.success;
+        $scope.$emit('UNLOAD');
     });
 	$scope.upload_cover = function (dataUrl, name, type) {
+
         Upload.upload({
             url: '/uploadPhoto',
             data: {
@@ -53,10 +54,11 @@ socialApp.controller('tenantAssign', ['$scope','Upload','$http','$timeout','$loc
             });
     }
     $scope.updateTenant = function(){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
     	$http.post('/addTenant', $scope.tenant).success(function(response){
+            $scope.$emit('UNLOAD');
     		if (response.hasOwnProperty('success')) {
-    			$scope.$emit('UNLOAD');
+    			
     			$location.path('/tenant-meta-details/'+btoa(response.lastInsertId));
     		}
     	});
@@ -72,13 +74,13 @@ socialApp.controller('tenantOtherInfo', ['$scope','$http','$timeout','$location'
         tenant_id: tenantId
     }
     $scope.updateTenant= function(){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         var url = '/updateTenantMeta';
         $http.post(url, $scope.tenant).success(function(response){
+            $scope.$emit('UNLOAD');
             if (response.hasOwnProperty('success')) {
                 $location.path('/all-tenant');
             }
-            $scope.$emit('UNLOAD');
         });
     }
 }]);
@@ -92,7 +94,7 @@ socialApp.controller('tenantProfile', ['$scope','$http', function($scope, $http)
 		}
 }]);
 socialApp.controller('AllTenantOfResident', ['$scope', '$http', '$location', '$compile','$route','$window', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$filter', function ($scope, $http,$location, $compile, $route, $window, $timeout,DTOptionsBuilder,DTColumnBuilder, $filter){
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
         $scope.tenantsFilter = 'All';
         var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
 		$scope.dtColumns = [
@@ -153,7 +155,7 @@ socialApp.controller('AllTenantOfResident', ['$scope', '$http', '$location', '$c
         function actionsHtml(data, type, full, meta) {
             $d = full;
             var str = '<a href="javascript:void(0)" ng-click="printDetails('+$d.id+')" title="View Deatils"><i class="fa fa-info" style="margin: 2px !important"></i></a>';
-            str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';
+            /*str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';*/
             if (!$d.resident_status) {
                 str +=' | <a href="#" ng-click="assignTenantId('+$d.id+')" data-toggle="modal" data-target="#myModal" title="Left Flat"><i class="fa fa-sign-out"></i></a>';
             }
@@ -174,8 +176,7 @@ socialApp.controller('AllTenantOfResident', ['$scope', '$http', '$location', '$c
 
         $scope.tenantMoveOut = function(){
             var move_out_date = $scope.move_out_date;
-            
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             $http.post('/tenantMoveOut', {id: $scope.tenantID, move_out_date: move_out_date}).success(function(response){
                 $scope.$emit('UNLOAD');
                 angular.element('#myModal').modal('hide');
@@ -189,7 +190,7 @@ socialApp.controller('AllTenantOfResident', ['$scope', '$http', '$location', '$c
 }]);
 
 socialApp.controller('bechelorsTenantOfResident', ['$scope', '$http', '$location', '$compile','$route','$window', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$filter', function ($scope, $http,$location, $compile, $route, $window, $timeout,DTOptionsBuilder,DTColumnBuilder, $filter){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         $scope.tenantsFilter = 'Bechelor';
         var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
         $scope.dtColumns = [
@@ -252,7 +253,7 @@ socialApp.controller('bechelorsTenantOfResident', ['$scope', '$http', '$location
         function actionsHtml(data, type, full, meta) {
             $d = full;
             var str = '<a href="javascript:void(0)" ng-click="printDetails('+$d.id+')" title="View Deatils"><i class="fa fa-info" style="margin: 2px !important"></i></a>';
-            str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';
+            /*str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';*/
             if (!$d.resident_status) {
                 str +=' | <a href="#" ng-click="assignTenantId('+$d.id+')" data-toggle="modal" data-target="#myModal" title="Left Flat"><i class="fa fa-sign-out"></i></a>';
             }
@@ -274,7 +275,7 @@ socialApp.controller('bechelorsTenantOfResident', ['$scope', '$http', '$location
         $scope.tenantMoveOut = function(){
             var move_out_date = $scope.move_out_date;
             
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             $http.post('/tenantMoveOut', {id: $scope.tenantID, move_out_date: move_out_date}).success(function(response){
                 $scope.$emit('UNLOAD');
                 angular.element('#myModal').modal('hide');
@@ -287,7 +288,7 @@ socialApp.controller('bechelorsTenantOfResident', ['$scope', '$http', '$location
         }
 }]);
 socialApp.controller('familiesTenantOfResident', ['$scope', '$http', '$location', '$compile','$route','$window', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$filter', function ($scope, $http,$location, $compile, $route, $window, $timeout,DTOptionsBuilder,DTColumnBuilder, $filter){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         $scope.tenantsFilter = 'Family';
         var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
         $scope.dtColumns = [
@@ -350,7 +351,7 @@ socialApp.controller('familiesTenantOfResident', ['$scope', '$http', '$location'
         function actionsHtml(data, type, full, meta) {
             $d = full;
             var str = '<a href="javascript:void(0)" ng-click="printDetails('+$d.id+')" title="View Deatils"><i class="fa fa-info" style="margin: 2px !important"></i></a>';
-            str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';
+            /*str +=' | <a href="javascript:void(0)" ng-click="generateInvoice('+$d.id+')" title="Generate Invoice"><i class="fa fa-envelope" style="margin: 2px !important"></i></a>';*/
             if (!$d.resident_status) {
                 str +=' | <a href="#" ng-click="assignTenantId('+$d.id+')" data-toggle="modal" data-target="#myModal" title="Left Flat"><i class="fa fa-sign-out"></i></a>';
             }
@@ -372,7 +373,7 @@ socialApp.controller('familiesTenantOfResident', ['$scope', '$http', '$location'
         $scope.tenantMoveOut = function(){
             var move_out_date = $scope.move_out_date;
             
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             $http.post('/tenantMoveOut', {id: $scope.tenantID, move_out_date: move_out_date}).success(function(response){
                 $scope.$emit('UNLOAD');
                 angular.element('#myModal').modal('hide');
@@ -386,7 +387,7 @@ socialApp.controller('familiesTenantOfResident', ['$scope', '$http', '$location'
 }]);
 
 socialApp.controller('tenantDetailView', ['$scope','$http', '$location','$routeParams','$window', function($scope, $http, $location, $routeParams, $window){
-    /*$scope.$emit('LOAD');*/
+    $scope.$emit('LOAD');
     var tenantId = atob($routeParams.tenantID);
     $scope.tenantDetail = {};
     $http.post('/tenantDetail', {id:tenantId}).success(function(response){

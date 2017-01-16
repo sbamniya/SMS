@@ -6,10 +6,8 @@ socialApp.controller('logComplaint', ['$scope','$http','$location', '$routeParam
 		suggestion:''
 	};
 	$scope.addComplaint = function(){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
 		var url = '/addComplaint';
-		
-		
 		$http.post(url, $scope.complaint).success(function(response,status,headers,config){
             $scope.$emit('UNLOAD');
 			if(response.hasOwnProperty('success')){
@@ -23,7 +21,7 @@ socialApp.controller('logComplaint', ['$scope','$http','$location', '$routeParam
 		
 }]);
 socialApp.controller('complaintList',['$scope', '$http', '$location', '$compile','$route', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$window', function ($scope, $http,$location, $compile, $route, $timeout,DTOptionsBuilder,DTColumnBuilder,$window) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
 	    var residentId = JSON.parse(window.localStorage.getItem('userDetails'));
 		var id = residentId.id;
 		$scope.dtColumns = [
@@ -97,7 +95,7 @@ socialApp.controller('complaintList',['$scope', '$http', '$location', '$compile'
 }]);
 /*Print Complaint Form*/
 socialApp.controller('fullComplaintForm', ['$scope','$http','$location', '$routeParams','$timeout', '$window', function($scope, $http, $location, $routeParams, $timeout, $window){
-        
+        $scope.$emit('LOAD');
         var complaintId = atob($routeParams.complaintID);
         var url = '/getcomplaintDetail';
         $scope.complaintDetail = {};
@@ -120,6 +118,7 @@ socialApp.controller('fullComplaintForm', ['$scope','$http','$location', '$route
                 if ($scope.complaintDetail.status==2) {
                     $scope.complaintDetail.status = 'Resolved';
                 }
+                $scope.$emit('UNLOAD');
                 $timeout($window.print, 0);
             }
             
@@ -129,7 +128,7 @@ socialApp.controller('fullComplaintForm', ['$scope','$http','$location', '$route
 
 /*For Society Manager*/
 socialApp.controller('pendingComplaintList',['$scope', '$http', '$location', '$compile','$route', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$routeParams','$window','$route', function ($scope, $http,$location, $compile, $route, $timeout,DTOptionsBuilder,DTColumnBuilder, $routeParams, $window, $route) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         var residentId = JSON.parse(window.localStorage.getItem('userDetails'));
         var id = residentId.id;
         var block_id = atob($routeParams.blockID);
@@ -208,15 +207,16 @@ socialApp.controller('pendingComplaintList',['$scope', '$http', '$location', '$c
             var returnVal = confirm(text);
 
             if (returnVal) {
-                /*$scope.$emit('LOAD');*/
+                $scope.$emit('LOAD');
                 $http.post('/updatecomplaint', {id: id, status: status, comment: comment}).success(function(response){
-                    $scope.$emit('UNLOAD');
+                    
                     angular.element('#myModal').modal('hide');
                     angular.element('body').removeClass('modal-open');
                     angular.element('.modal-backdrop').remove();
                     if (response.hasOwnProperty('success')) {
                         $route.reload();
                     }
+                    $scope.$emit('UNLOAD');
                 })    
             }
             
@@ -224,9 +224,7 @@ socialApp.controller('pendingComplaintList',['$scope', '$http', '$location', '$c
 }]);
 
 socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compile','$route', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$routeParams','$window','$route', function ($scope, $http,$location, $compile, $route, $timeout,DTOptionsBuilder,DTColumnBuilder, $routeParams, $window, $route) {
-    /*$scope.$emit('LOAD');*/
-
-
+    $scope.$emit('LOAD');
     var residentId = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = residentId.id;
     var block_id = atob($routeParams.blockID);
@@ -298,21 +296,24 @@ socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compil
         var comment = $scope.comment;
         var returnVal = confirm('Has this complaint sort ?');
         if (returnVal) {
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             $http.post('/updatecomplaint', {id: id, status: 2, comment: comment}).success(function(response){
-                $scope.$emit('UNLOAD');
+                
                 angular.element('#myModal').modal('hide');
                 angular.element('body').removeClass('modal-open');
                 angular.element('.modal-backdrop').remove();
                 if (response.hasOwnProperty('success')) {
                     $route.reload();
                 }
+                $scope.$emit('UNLOAD');
             })    
         }
         
     }
 
     $scope.SendStatusReport = function(){
+        $scope.$emit('LOAD');
+
         var complaint_id = $scope.ComplaintUpdateID;
         var comment = $scope.StatusData;
         var data = {
@@ -322,6 +323,7 @@ socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compil
         url = '/survillanceComplaintsStatusForResident';
         $http.post(url, data).success(function(response){
             $timeout(function(){
+                    $scope.$emit('UNLOAD');
                     $route.reload();
             }, 500);
         });
@@ -329,7 +331,7 @@ socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compil
 }]);
 
 socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$compile','$route', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$routeParams','$window', function ($scope, $http,$location, $compile, $route, $timeout,DTOptionsBuilder,DTColumnBuilder, $routeParams, $window) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         var residentId = JSON.parse(window.localStorage.getItem('userDetails'));
         var id = residentId.id;
         var block_id = atob($routeParams.blockID);
@@ -367,7 +369,7 @@ socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$
                     log.push(value);
 
                 });
-                /*$scope.$emit('LOAD');*/
+                $scope.$emit('UNLOAD');
                 return log;
             }
         })
@@ -398,6 +400,8 @@ socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$
 }]);
 
 socialApp.controller('viewComplaintDetails', ['$scope','$http', '$routeParams','$location', '$window', function($scope, $http, $routeParams, $location, $window){
+        $scope.$emit('LOAD');
+
         var complaintId = atob($routeParams.complaintID);
         $scope.complaintId = $routeParams.complaintID;
         var url = '/getcomplaintDetail';
@@ -421,6 +425,7 @@ socialApp.controller('viewComplaintDetails', ['$scope','$http', '$routeParams','
                 if ($scope.complaintDetail.status==2) {
                     $scope.complaintDetail.status = 'Resolved';
                 }
+                $scope.$emit('UNLOAD');
             }
             
         });

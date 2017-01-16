@@ -1,5 +1,6 @@
 socialApp.controller('addStaff', ['$scope','$http','$routeParams','fileUpload','$location', function($scope,$http, $routeParams, fileUpload, $location){
 	var blockID = atob($routeParams.blockID);
+	$scope.$emit('LOAD');
 	$scope.staff = {
 		AvailiableFlats: []
 	};
@@ -11,6 +12,7 @@ socialApp.controller('addStaff', ['$scope','$http','$routeParams','fileUpload','
 		if (response.hasOwnProperty('status') && response.status=='200') {
 			$scope.staff_type = response.data;
 		}
+		$scope.$emit('UNLOAD');
 	});
 	$http.post('/AllFlatsOfBlock', {id: blockID}).success(function(response){
 		
@@ -24,11 +26,12 @@ socialApp.controller('addStaff', ['$scope','$http','$routeParams','fileUpload','
         if (angular.isUndefined(file)) {
            return;
         }
-
+        $scope.$emit('LOAD');
         var uploadUrl = "/uploadPhoto";
         var res = fileUpload.uploadFileToUrl(file, uploadUrl);
         res.success(function(response){
             $scope.staff.id_image = response.photoId;
+            $scope.$emit('UNLOAD');
         });
 	};
 	
@@ -56,6 +59,7 @@ socialApp.controller('addStaff', ['$scope','$http','$routeParams','fileUpload','
 			$scope.noFlatSelect = true;
 			return;
 		}
+		$scope.$emit('LOAD');
 		var availiable_for = '';
 		var len = $scope.staff.AvailiableFlats.length-1;
 		angular.forEach($scope.staff.AvailiableFlats, function(item, key){
@@ -76,12 +80,13 @@ socialApp.controller('addStaff', ['$scope','$http','$routeParams','fileUpload','
 				$scope.errorShow = true;
 				$scope.error = res.error;
 			}
+			$scope.$emit('UNLOAD');
 		});
 	}
 }]);
 
 socialApp.controller('listStaff',  ['$scope', '$http', '$location', '$compile','$route','$window', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$filter','$routeParams', function ($scope, $http,$location, $compile, $route, $window, $timeout,DTOptionsBuilder,DTColumnBuilder, $filter, $routeParams){
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
         var userDetail = JSON.parse(window.localStorage.getItem('userDetails'));
         $scope.dtColumns = [
         	DTColumnBuilder.newColumn("id", "Staff ID").notSortable(),
@@ -158,9 +163,11 @@ socialApp.controller('deleteStaff', ['$scope','$location', '$http','$routeParams
 	$scope.Password = '';
 	var staff_id = atob($routeParams.staff_id);
 	$scope.LoginAndDelete = function(){
+		$scope.$emit('LOAD');
 		$http.post('/society-login', {userName: userDetails.email, password: $scope.Password}).success(function(response){
 			if (response.hasOwnProperty('success')) {
 				$http.post('/deleteStaff', {id: staff_id}).success(function(res){
+					$scope.$emit('UNLOAD');
 					if (res.hasOwnProperty('success')) {
 						$location.path('/staff-list/'+$routeParams.blockID);
 					}
@@ -169,6 +176,7 @@ socialApp.controller('deleteStaff', ['$scope','$location', '$http','$routeParams
 			}else{
 				$scope.errorMsg = response.error;
 				$scope.error = true;
+				$scope.$emit('UNLOAD');
 			}
 		})
 	};
@@ -178,6 +186,7 @@ socialApp.controller('staffDetails', ['$scope','$http','$routeParams','$location
 	var member_id = atob($routeParams.staff_id);
 	$scope.member = {};
 	$scope.flats = [];
+	$scope.$emit('LOAD');
 	$http.post('/getStaffDetails', {id: member_id}).success(function(res){
 		if (res.hasOwnProperty('success')) {
 			$scope.member = res.success;
@@ -190,6 +199,7 @@ socialApp.controller('staffDetails', ['$scope','$http','$routeParams','$location
 			var availiable_for = res.success.availible_for;
 			var data = availiable_for.split(',');
 			if ($scope.member.staff_type==1 || $scope.member.staff_type=='Whole Block') {
+				$scope.$emit('UNLOAD');
 				$scope.staff_type_flats = false;
 			}else{
 				$scope.staff_type_flats = true;
@@ -198,14 +208,14 @@ socialApp.controller('staffDetails', ['$scope','$http','$routeParams','$location
 					$http.post('/getFlatDetails', {flat_id: flat_id}).success(function(response){
 						if (response.hasOwnProperty('success')) {
 							$scope.flats.push(response.success);
-							
 						}
-
 					});
+					$scope.$emit('UNLOAD');
 				}
 
 			}
 		}else{
+			$scope.$emit('UNLOAD');
 			$location.path('/404');
 		}
 	});
@@ -366,17 +376,18 @@ socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$ht
 	var block_id = atob($routeParams.blockID);
 	$scope.AllStaffMemeber = [];
 	$scope.today = new Date();
-
+	$scope.$emit('LOAD');
 	$http.post('/staffListByBlockSimple', {blockID: block_id}).success(function(response){
 		if (response.hasOwnProperty('data')) {
 			$scope.AllStaffMemeber = response.data;
 		}
+		$scope.$emit('UNLOAD');
 	});
 	$scope.attandance = {
 		block_id: block_id
 	}
 	$scope.SearchData = function(){
-		
+		$scope.$emit('LOAD');
 		$http.post('/attandanceForManager', $scope.attandance).success(function(response){
 			
 			if (response.hasOwnProperty('success')) {
@@ -384,7 +395,7 @@ socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$ht
 			}else{
 				$scope.attandanceData = [];
 			}
-			console.log($scope.attandanceData)
+			$scope.$emit('UNLOAD');
 		});
 	}
 }]);

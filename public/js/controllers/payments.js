@@ -60,7 +60,7 @@ socialApp.controller('PayDues', ['$scope','$http','$timeout','sha256','$location
 
 	$scope.Facilities = [];
 	$scope.Amenities = [];
-
+	$scope.$emit('LOAD');
 	$http.post('/residentAllFacilityMaintainance',{resident_id: id} ).success(function(response){
 		
 		if (response.hasOwnProperty('success')) {
@@ -105,6 +105,7 @@ socialApp.controller('PayDues', ['$scope','$http','$timeout','sha256','$location
 					});
 					$scope.totalPayableAmount += totalPayableForService;
 				}
+				$scope.$emit('UNLOAD');
 				/*if ($scope.Amenities.length>0 || $scope.Facilities.length>0) {
 					$scope.noData = false;
 				}*/
@@ -202,11 +203,11 @@ socialApp.controller('PayDues', ['$scope','$http','$timeout','sha256','$location
 }]);
 
 
-socialApp.controller('listTransaction', ['$scope','$http','$window', function($scope,$http,$window){
+socialApp.controller('listTransaction', ['$scope','$http','$window','$timeout', function($scope,$http,$window, $timeout){
 	$scope.transaction = [];
 	var transData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = transData.id;
-
+	$scope.$emit('LOAD');
 	$http.post('/displayPaymentDetails', {id: id}).success(function(response){
 		if (response.hasOwnProperty('status') && response.status==200) {
 			var transaction = response.data;
@@ -220,6 +221,10 @@ socialApp.controller('listTransaction', ['$scope','$http','$window', function($s
 		else{
 			alert(response.error);
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 1000);
+		
 	});
 	$scope.printReceipt = function(id){
 		var transID = btoa(id);
@@ -262,6 +267,7 @@ socialApp.controller('printReceipt', ['$scope','$http','$location', '$routeParam
 
 socialApp.controller('BlockIncomes', ['$scope','$http', '$routeParams','$route','$window', function($scope, $http, $routeParams, $route, $window){
 	/**/
+	$scope.$emit('LOAD');
 	var block_id = atob($routeParams.blockID);
 
 	$http.post('/transactionHistoryToManager', {id: block_id}).success(function(response){
@@ -274,10 +280,13 @@ socialApp.controller('BlockIncomes', ['$scope','$http', '$routeParams','$route',
 				log.push(value);
 			});
 			$scope.transaction = log;
+			$scope.$emit('UNLOAD');
 		}
 		else{
+			$scope.$emit('UNLOAD');
 			alert(response.error);
 		}
+
 	});
 	$scope.printReceipt = function(id){
 		var transID = btoa(id);
