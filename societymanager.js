@@ -124,13 +124,26 @@ exports.addManager=function(pool,randomstring,crypto, transporter){
                   }
 
               });
-              result.success="Manager Registered Successfully";
-              res.send(JSON.stringify(result));   
-              return;
-            };
+             if(rows.insertId>0){
+                 var manager_id = rows.insertId;
+                 var merchant_id = req.body.merchant_id;
+                 var marchant_key = req.body.marchant_key;
+                 var marchant_salt = req.body.marchant_salt;
+                 var Q = 'INSERT INTO society_manager_meta(`merchant_id`, `marchant_key`, `marchant_salt`, `manager_id`, `status`) VALUES ("'+merchant_id+'","'+marchant_key+'","'+marchant_salt+'","'+manager_id+'","1")';
+          pool.query(Q, function(err, rows, fields){
+            if (err){
+              console.log(err);
+              result.error= err;
+                }
+            else{
+                  result.success="Manager Registered Successfully";
+                  res.send(JSON.stringify(result));   
+                  return;
+                }
+             });
+           };
+           }
           });
-          
-          
         };
       };
     });

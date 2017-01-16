@@ -225,8 +225,8 @@
 
     app.post('/facilityRequestesForManager',facility.facilityRequestesForManager(pool));
 
-    /**/
-    app.post('/addVendor',vendor.addVendor(pool));  
+    /*vendor*/
+    app.post('/addVendor',vendor.addVendor(pool,transporter));  
     app.post('/listvendors',vendor.listvendors(pool));  
     app.post('/deleteVendor',vendor.deleteVendor(pool));  
     app.post('/updateVendor',vendor.updateVendor(pool));

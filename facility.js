@@ -141,7 +141,7 @@ exports.requestToManagerForFacility = function(pool,transporter){
                 return;
             }
             
-            var queryString = ' SELECT distinct SM.manager_name, SM.email as manager_email, concat(res.first_name, " ", res.last_name) as resident_name, flatm.flat_number, fm.facility_name  FROM residents as res INNER JOIN flat_master flatm ON res.flat_id = flatm.id INNER JOIN staff_master stMast ON flatM.block_id = stMast.block_id INNER JOIN block_master BM ON BM.block_manager = flatm.block_id INNER JOIN society_manager SM ON SM.id = BM.block_manager INNER JOIN facility_master fm on fm.block_id = bm.id WHERE fm.id = "'+facility_id+'"';
+            var queryString = 'SELECT SM.manager_name, SM.email as manager_email, concat(res.first_name, " ", res.last_name) as resident_name, flatm.flat_number, fm.facility_name FROM residents as res INNER JOIN flat_master flatm ON res.flat_id = flatm.id INNER JOIN block_master BM ON BM.id = flatm.block_id INNER JOIN society_manager SM ON SM.id = BM.block_manager INNER JOIN facility_master fm on fm.block_id = BM.id WHERE fm.id = "'+facility_id+'" and res.id="'+resident_id+'"';
             pool.query(queryString, function(err, rows, fields){
                         if (err)
                         {
