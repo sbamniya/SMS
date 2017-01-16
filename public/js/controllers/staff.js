@@ -221,7 +221,7 @@ socialApp.controller('staffDetails', ['$scope','$http','$routeParams','$location
 	});
 }]);
 
-socialApp.controller('RequestServent', ['$scope','$http','$location','$route', function($scope, $http, $location, $route){
+socialApp.controller('RequestServent', ['$scope','$http','$location','$route', '$timeout', function($scope, $http, $location, $route, $timeout){
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 
@@ -252,17 +252,22 @@ socialApp.controller('RequestServent', ['$scope','$http','$location','$route', f
 		});
 	}*/
 	$scope.services = [];
+	$scope.$emit('LOAD');
 	$http.post('/ListServices').success(function(response){
 		if (response.hasOwnProperty('success')) {
 			$scope.services = response.data;
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
 	});
 
 	$scope.RequestDetails = {};
 	$scope.RequestForService = function(){
 		$scope.RequestDetails.resident_id = id;
-		
+		$scope.$emit('LOAD');
 		$http.post('/service_request', $scope.RequestDetails).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$location.path('/resident-staff-request');
 			}
@@ -271,7 +276,7 @@ socialApp.controller('RequestServent', ['$scope','$http','$location','$route', f
 
 }]);
 
-socialApp.controller('staffListForRessident', ['$scope','$http', function($scope, $http){
+socialApp.controller('staffListForRessident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.AllRequests = [];
@@ -294,7 +299,7 @@ socialApp.controller('staffListForRessident', ['$scope','$http', function($scope
 			console.log($scope.AllRequests);
 		}
 	});*/
-	
+	$scope.$emit('LOAD');
 	$http.post('/listOfRequestedServicesToResident', {id: id}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			var log = [];
@@ -313,6 +318,9 @@ socialApp.controller('staffListForRessident', ['$scope','$http', function($scope
 			});
 			$scope.AllRequests = log;
 		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');	
+		}, 500);
 	});
 }]);
 

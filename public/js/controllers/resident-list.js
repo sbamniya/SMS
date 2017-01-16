@@ -162,11 +162,13 @@ socialApp.controller('residentInfo', ['$scope','$routeParams', '$location','$htt
 }]);
 
 /*For Admin*/
-socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$route',  function($scope, $http, $location, $route){
+socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$route','$timeout',  function($scope, $http, $location, $route, $timeout){
+     $scope.$emit('LOAD');
     $scope.societyList = [];
     $scope.blockList =[];
     $scope.TenantType = false;
     $http.get('/getAllSocieties').success(function(response){
+         $scope.$emit('UNLOAD');
         if (response.hasOwnProperty('success')) {
             $scope.societyList = response.success;
         }else{
@@ -175,6 +177,7 @@ socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$r
     });
 
     $scope.getBlocks = function(){
+         $scope.$emit('LOAD');
         $scope.blockList =[];
         $scope.blockId = '';
         $scope.dataAvail = false;
@@ -184,6 +187,7 @@ socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$r
             if (res.hasOwnProperty('success')) {
                 $scope.blockList = res.success;
             }
+            $scope.$emit('UNLOAD');
         });
     }
     $scope.CheckTypeOfResident = function(){
@@ -230,7 +234,7 @@ socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$r
             data.Group = Group;
             url = '/getTenatsForAdminByBlockId';
         }
-
+        $scope.$emit('LOAD');
         $http.post(url, data).success(function(response){
             if (response.hasOwnProperty('success')) {
                 res = response.success;
@@ -278,6 +282,9 @@ socialApp.controller('residentsListForAdmin', ['$scope','$http', '$location','$r
 
                 }
             }
+            $timeout(function(){
+                 $scope.$emit('UNLOAD');   
+            }, 1000);
         });
     }
 }]);

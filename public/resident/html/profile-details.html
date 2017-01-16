@@ -29,7 +29,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label class="profile-form-label">Contact No.</label>
-                <input type="text" class="form-control" placeholder="Enter Contact Number" name="contact_no" ng-model="user.contact_no" required>
+                <input type="text" minlength="10" maxlength="10" class="form-control" placeholder="Enter Contact Number" name="contact_no" ng-model="user.contact_no" required>
                 <p ng-show="profileUpdateForm.contact_no.$invalid && !profileUpdateForm.contact_no.$pristine" class="help-block red-text">Please enter contact number</p>
               </div>
             </div>
