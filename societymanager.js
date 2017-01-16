@@ -1,23 +1,19 @@
 exports.getmanagerList= function(pool){
    return function(req,res){  
-       
       var draw = req.query.draw;
       var start = req.query.start;
       var length = req.query.length;
       var search_key = req.query.search.value;
       var end = parseInt(start) + parseInt(length);
-      
       var pageSize = length != null ? parseInt(length) : 0;
       var skip = start != null ? parseInt(start) : 0;
       var recordsTotal = 0;
-
       res.setHeader('Content-Type', 'application/json');
       var result = {};
       var query = "select * from  `society_manager`";
       if(search_key!=''){
         query +=' WHERE manager_name like "%'+search_key+'%" or email like "%'+search_key+'%"';
       }
-
       query += " order by id desc";
         pool.query(query, function(err, rows, fields){
             if(err){
@@ -26,10 +22,8 @@ exports.getmanagerList= function(pool){
                 result.draw = draw;
                 recordsTotal = rows.length;
                 result.recordsTotal = recordsTotal;
-
                 var resultData = []
                 resultData.push(rows.slice(skip, parseInt(skip)+parseInt(pageSize)));
-
                 result.recordsFiltered = recordsTotal;
                 result.success = JSON.stringify(resultData[0]);
                 res.send(JSON.stringify(result));
@@ -40,12 +34,9 @@ exports.getmanagerList= function(pool){
 };
 exports.ActiveManagersList= function(pool){
    return function(req,res){  
-       
-      
       res.setHeader('Content-Type', 'application/json');
       var result = {};
       var query = "select * from  `society_manager` where status=1 order by id desc";
-     
       pool.query(query, function(err, rows, fields){
           if(err){
               console.log(err);
@@ -122,7 +113,6 @@ exports.addManager=function(pool,randomstring,crypto, transporter){
                   {
                     console.log('Message sent');
                   }
-
               });
              if(rows.insertId>0){
                  var manager_id = rows.insertId;
@@ -168,9 +158,7 @@ exports.societyBlockList= function(pool){
               return;
             }
         });
-
      };
-
   };
    exports.checkForSocietyManager= function(pool){
            return function(req,res){  
@@ -202,7 +190,6 @@ exports.societyBlockList= function(pool){
               });
            
            };
-
         };
 exports.deleteManager = function(pool){
   return function(req,res){
@@ -224,29 +211,26 @@ exports.deleteManager = function(pool){
   };
 };
 exports.updatePassword=  function(crypto,pool){
-        return function(req,res)
-        {
-            sess=req.session;
-            var id =sess.userID;
-            var newpass = req.body.pass;
-            var passwordn = crypto.createHash('md5').update(newpass).digest("hex");
-            var result = {};
-            var queryString = 'UPDATE society_manager SET  password ="'+passwordn+'",forget_token=""  where id = "'+id+'"';
-            
-            pool.query(queryString, function(err, rows, fields)  {
-                     if (err){
-                         result.error= err;
-                         res.setHeader('Content-Type', 'application/json');
-                         res.send(JSON.stringify(result));   
-                     }
-                     else
-                     {  
-                            result.succes = "Your Password has been changed successfully.";
-                            res.setHeader('Content-Type', 'application/json');
-                            res.send(JSON.stringify(result));       
-                     }
-              });
-        
-
+  return function(req,res)
+  {
+    sess=req.session;
+    var id =sess.userID;
+    var newpass = req.body.pass;
+    var passwordn = crypto.createHash('md5').update(newpass).digest("hex");
+    var result = {};
+    var queryString = 'UPDATE society_manager SET  password ="'+passwordn+'",forget_token=""  where id = "'+id+'"';
+    pool.query(queryString, function(err, rows, fields)  {
+      if (err){
+        result.error= err;
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(result));   
+      }
+      else
+      {  
+        result.succes = "Your Password has been changed successfully.";
+        res.setHeader('Content-Type', 'application/json');
+        res.send(JSON.stringify(result));       
+      }
+    });
   };
 };
