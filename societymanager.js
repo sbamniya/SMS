@@ -141,7 +141,7 @@ exports.addManager=function(pool,randomstring,crypto, transporter){
                   return;
                 }
              });
-           };
+            };
            }
           });
         };

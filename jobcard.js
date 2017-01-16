@@ -12,8 +12,9 @@ exports.addJobcard = function(pool){
         var description             = req.body.description;
         var start_date              = req.body.start_date;
         var end_date                = req.body.end_date;
+        var charge                  = req.body.charge;  
 
-        var Q = 'INSERT INTO job_card_master(`vendor_id`, `category_id`, `block_id`, `job_card_type`, `contract_type`,`start_date`,`end_date`, `total_visits`,`visits_left`, `approximate_visit_date`, `reccuring_days`,`description`, `status`) VALUES ("'+vendor_id+'","'+category_id+'","'+block_id+'","'+type+'","'+contract_type+'","'+start_date+'","'+end_date+'","'+total_visits+'", "'+total_visits+'","'+approximate_visit_date+'","'+reccuring_days+'","'+description+'","0")';
+        var Q = 'INSERT INTO job_card_master(`vendor_id`, `category_id`, `block_id`, `job_card_type`, `contract_type`,`start_date`,`end_date`, `total_visits`,`visits_left`, `approximate_visit_date`, `reccuring_days`,`charge`,`description`, `status`) VALUES ("'+vendor_id+'","'+category_id+'","'+block_id+'","'+type+'","'+contract_type+'","'+start_date+'","'+end_date+'","'+total_visits+'", "'+total_visits+'","'+approximate_visit_date+'","'+reccuring_days+'","'+charge+'","'+description+'","0")';
         pool.query(Q,function(err,rows){
             if(err){
                 console.log(err);
