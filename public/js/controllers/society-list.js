@@ -1,6 +1,6 @@
 
 socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','$route', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder','$window','$routeParams', function ($scope, $http,$location, $compile, $route, $timeout,DTOptionsBuilder,DTColumnBuilder, $window, $routeParams) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
 	    $scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server 
             DTColumnBuilder.newColumn("logo_img", "Logo Image").notSortable(),
@@ -26,7 +26,10 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
                     item.logo_img = '<img src="uploads/'+item.general_img+'" width="100px"/>';
                     log.push(item);
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 500);
+                
                 return log;
       		}
         })
@@ -54,14 +57,6 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
         }
        
 		$scope.deleteSociety = function(id){
-           /* 
-           $http.get('http://deltabee.com/devkayass/API/request.php?method=allpost').success(function(response){
-                console.log(response);
-
-                
-            });
-            return;
-            */
             var returnVal = confirm('Are You Sure ?');
             if (!returnVal) {
                 return;
@@ -72,6 +67,7 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
 		}
         $scope.Password = '';
         $scope.LoginAndDelete = function(){
+            $scope.$emit('LOAD');
             var id = atob($routeParams.societyId);
             var password = $scope.Password;
             var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
@@ -80,7 +76,6 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
                 password: password
             };
             $http.post('/login', adminDetail).success(function(response){
-                console.log(response);
                 if (response.hasOwnProperty('success')) {
                     $http.post('/deleteSociety', {id: id}).success(function(response){
                         $scope.$emit('UNLOAD');
@@ -92,6 +87,7 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
                         
                     });
                 }else{
+                    $scope.$emit('UNLOAD');
                     $scope.error = true;
                     $scope.errorMsg = response.error;
                 }

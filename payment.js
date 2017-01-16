@@ -28,7 +28,10 @@ exports.addPaymentDetails = function(pool){
         var resident_id             = data.udf1;
         var transaction_status      = data.status;
         var status                  = 1;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 4a6f1e74d83424e43df490c5c06b640aa3fdccad
         var proInfo = JSON.parse(productinfo);
         var productstr = JSON.stringify(proInfo);
 

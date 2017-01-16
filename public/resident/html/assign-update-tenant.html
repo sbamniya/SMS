@@ -35,7 +35,7 @@
             <div class="col-sm-6">
               <div class="form-group">
                 <label >Move In Date(*)</label>
-                <input type="date" class="form-control" name="last_name" ng-model="tenant.move_in_date" required>
+                <input type="text" datepicker data-mindate="{{today}}" placeholder="Select Date" class="form-control" name="last_name" ng-model="tenant.move_in_date" required>
                 <p ng-show="profileUpdateForm.last_name.$invalid && !profileUpdateForm.last_name.$pristine" class="help-block red-text">Please enter last name</p>
               </div>
             </div>
