@@ -2,10 +2,8 @@ exports.getStaffTypes = function(pool){
     return function(req,res){  
         var result = {};
         res.setHeader('Content-Type', 'application/json');
-
         var queryString = "select * from staff_type where status=1"
         pool.query(queryString, function(err, rows, fields) {
-
             if (err)
             {
                 result.error= err;
@@ -25,7 +23,6 @@ exports.addStaff = function(pool, transporter, randomstring){
         var result = {};
         res.setHeader('Content-Type', 'application/json');
         var request = req.body;
-        
         var description = request.description;
         var availiable_for = request.availiable_for;
         var contact = request.contact;
@@ -102,19 +99,16 @@ exports.staffListByBlock= function(pool){
         var length = req.query.length;
         var search_key = req.query.search.value;
         var end = parseInt(start) + parseInt(length);
-
         var pageSize = length != null ? parseInt(length) : 0;
         var skip = start != null ? parseInt(start) : 0;
         var recordsTotal = 0;
         var block_id = req.query.blockID;
-
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var query = "select sm.*, st.staff_type as type from staff_master sm inner join staff_type st on st.id=sm.staff_for where sm.block_id = '"+block_id+"'";
         if(search_key!=''){
           query +=' and (sm.name like "%'+search_key+'%" or sm.contact_number like  "%'+search_key+'%" or sm.email like  "%'+search_key+'%" or sm.id like  "%'+search_key+'%")';
         }
-
         query += " order by sm.id desc";
         pool.query(query, function(err, rows, fields){
             if(err){
@@ -142,7 +136,6 @@ exports.staffListByBlockSimple = function(pool){
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var query = "select sm.*, st.staff_type as type from staff_master sm inner join staff_type st on st.id=sm.staff_for where sm.block_id = '"+block_id+"'";
-        
         query += " order by sm.id desc";
         pool.query(query, function(err, rows, fields){
             if(err){
@@ -162,7 +155,6 @@ exports.deleteStaff = function(pool){
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var query = "delete from staff_master where id = '"+id+"'";
-        
         pool.query(query, function(err, rows, fields){
             if(err){
                 console.log(err);
@@ -180,7 +172,6 @@ exports.getStaffDetails = function(pool){
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var query = "select sm.*, st.staff_type as type from staff_master sm inner join staff_type st on st.id=sm.staff_for where sm.id = '"+id+"'";
-        
         pool.query(query, function(err, rows, fields){
             if(err){
                 console.log(err);
@@ -199,21 +190,17 @@ exports.getStaffDetails = function(pool){
 exports.staffLogin = function(crypto ,pool){
     return function(req,res){
         sess=req.session;
-
         var user_name= req.body.userName;
         var password = req.body.password;
         var queryString = 'SELECT sm.* FROM staff_master sm INNER join block_master bm on bm.id = sm.block_id INNER join society_master sMas on sMas.id = bm.parent_id where email = "'+user_name+'"';
         var result = {};
-
         pool.query(queryString, function(err, rows, fields) {
-
             if (err)
             {
                 result.error= err;
             }
             else
             {
-
                 if(rows.length==0)
                 {
                     result.error= "Memeber not Exist.";
@@ -253,7 +240,6 @@ exports.servantsList=function(pool){
         var staff_type = 2;
         var resident_id = req.body.id;
         var QueryString = 'SELECT stMast.* FROM residents as res INNER JOIN flat_master flatm ON res.flat_id = flatm.id INNER JOIN staff_master stMast ON flatM.block_id = stMast.block_id  WHERE res.id = "'+resident_id+'" and stMast.staff_for = "'+staff_type+'" and FIND_IN_SET(res.flat_id, availible_for)';
-
         pool.query(QueryString,function(err,rows){
             if(err){
                 $result.error = err;
@@ -271,7 +257,6 @@ exports.servantsList=function(pool){
 exports.sendDetailstoManager=function(pool,transporter){
     return function(req,res){
         var host = req.protocol+'://'+req.headers.host+'/';
-
         var result;
         res.setHeader('Content-Type', 'application/json');
         var resident_id = req.body.resident_id;
@@ -289,19 +274,16 @@ exports.sendDetailstoManager=function(pool,transporter){
                     res.send(JSON.stringify(result)); 
                     return;
                 }
-                
                 var QueryString = "select * from staff_master where staff_for ='"+staff_type+"'and id='"+staff_id+"'";
                 pool.query(QueryString,function(err, row, fields){
                    if(err){
                         result.error = err;
                         res.send(JSON.stringify(result));   
                         return;
-                        
                     }else{
                         var staff_name = row[0].name;
                         var staff_contact_number = row[0].contact_number;
                         var staff_email = row[0].email;
-
                         var queryString = 'SELECT distinct SM.manager_name, SM.email as manager_email, concat(res.first_name, " ", res.last_name) as resident_name, flatm.flat_number  FROM residents as res INNER JOIN flat_master flatm ON res.flat_id = flatm.id INNER JOIN staff_master stMast ON flatM.block_id = stMast.block_id INNER JOIN block_master BM ON BM.block_manager = flatm.block_id INNER JOIN society_manager SM ON SM.id = BM.block_manager  WHERE res.id = "'+resident_id+'"'
                         pool.query(queryString, function(err, rows, fields){
                             if (err)
@@ -385,7 +367,6 @@ exports.sendApproveDetails = function(pool,transporter){
                     to: resident_email,
                     subject: 'Your request is approved',
                     html: 'Hello '+resident_name+' !<br/><br/>You request for '+staff_name+' as servant has been approved by your block manager.<br/><br/> Thank you '
-
                 }, 
                 function(error, response) 
                 {
@@ -441,9 +422,7 @@ exports.staffListForResident= function(pool){
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var resident_id = 1;//req.body.id;
-
         var querystring = 'select sm.name, sm.contact_number, sm.email, sr.manager_comment, DATE_FORMAT(sr.request_date, "%d %M, %Y") as request_date, DATE_FORMAT(sr.response_date, "%d %M, %Y") as response_date, sr.status from staff_request as sr INNER JOIN staff_master sm ON sr.staff_id = sm.id where sr.resident_id="'+resident_id+'"';
-
         pool.query(querystring,function(err,rows){
             if(err){
                 result.error = err;
@@ -466,20 +445,17 @@ exports.ManagerLoginForArroveServent= function(pool, crypto){
         var username = req.body.userName;
         var password = req.body.password;
         var staff_req_id = req.body.staff_req_id;
-
         var querystring='select sMang.password, sMang.status from society_manager sMang INNER join block_master bm on sMang.id = bm.block_manager INNER join staff_master sMas on sMas.block_id = bm.id INNER join staff_request sr on sr.staff_id = sMas.id where sr.id="'+staff_req_id+'" and sMang.email="'+username+'"';
         pool.query(querystring,function(err,row){
             if(err){
                 result.error=err;
                 console.log(err);
             }else{
-
                 if (row.length==0) {
                     result.error = "You Are not authorized to approve request";
                     res.send(JSON.stringify(result));
                     return;
                 }
-
                 var passwordn = crypto.createHash('md5').update(password).digest("hex");
                 if (passwordn == row[0].password) {
                     result.success = "Password Match !";
@@ -509,13 +485,11 @@ exports.ManagerLoginForArroveFacility= function(pool, crypto){
                 result.error=err;
                 console.log(err);
             }else{
-
                 if (row.length==0) {
                     result.error = "You Are not authorized to approve request";
                     res.send(JSON.stringify(result));
                     return;
                 }
-
                 var passwordn = crypto.createHash('md5').update(password).digest("hex");
                 if (passwordn == row[0].password) {
                     result.success = "Password Match !";
@@ -589,9 +563,7 @@ exports.attandanceForManager= function(pool){
         if (typeof up_date!='undefined' && typeof to_date!='undefined' && up_date!='' && to_date!='') {
             where += ' and sa.curr_date between "'+up_date+'" and "'+to_date+'"';
         }
-
         var querystring ='select sm.name as staff_name, smEn.name as entry_security, smEx.name as exist_security, sa.* from staff_attandance sa INNER JOIN staff_master sm ON sa.staff_id = sm.id INNER join staff_master smEn on sa.in_entry = smEn.id INNER join staff_master smEx on smEx.id = sa.out_entry '+where;
-       
         pool.query(querystring,function(err,rows){
             if(err){
                     console.log(err); 
@@ -611,7 +583,6 @@ exports.staffRequestesForManager= function(pool){
         var result = {};
         var block_id = req.body.block_id;
         var querystring ='select sm.*, sr.request_date, sr.id as request_id, concat(r.first_name," ",r.last_name) as resident_name, r.contact_no as resident_contact_number, sr.status as status, fm.flat_number from staff_master sm INNER JOIN staff_request sr ON sm.id = sr.staff_id INNER JOIN residents r ON sr.resident_id = r.id INNER JOIN flat_master fm ON r.flat_id = fm.id where fm.block_id = "'+block_id+'"';
-        
         pool.query(querystring,function(err,rows){
             if(err){
                     console.log(err); 

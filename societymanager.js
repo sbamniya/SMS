@@ -162,18 +162,16 @@ exports.societyBlockList= function(pool){
   };
    exports.checkForSocietyManager= function(pool){
            return function(req,res){  
-                    var managerId =req.body.managerId;
-                    var blockId =req.body.block_id;
-                    res.setHeader('Content-Type', 'application/json');
-                    var result = {};
-                    var query = "select sm.*, bm.id as block_id from  society_master sm INNER JOIN block_master bm on bm.parent_id=sm.id where sm.society_manager = '"+managerId+"' and bm.id = '"+blockId+"' and sm.status =1 "; 
-
-              pool.query(query, function(err, rows, fields){
+              var managerId =req.body.managerId;
+              var blockId =req.body.block_id;
+              res.setHeader('Content-Type', 'application/json');
+              var result = {};
+              var query = "select sm.*, bm.id as block_id from  society_master sm INNER JOIN block_master bm on bm.parent_id=sm.id where sm.society_manager = '"+managerId+"' and bm.id = '"+blockId+"' and sm.status =1 "; 
+               pool.query(query, function(err, rows, fields){
                   if(err)
                  {
                     console.log('error');
                   }
-                  
                   else
                   {
                        if(rows.length>0)
