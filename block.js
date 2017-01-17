@@ -155,6 +155,6 @@ exports.getSingleBlock= function(pool,slug){
                 res.send(JSON.stringify(result));
                 return;
             }
-        });s
+        });
     }
 };
