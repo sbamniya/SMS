@@ -51,16 +51,13 @@ exports.addVisitorsByResident = function(pool, transporter){
         var no_of_person = data.no_of_person;
         var resident_id = data.resident_id;
         var type = data.type;
-
         var date = new Date(move_in_date);
         var month = parseInt(date.getMonth());
         var count = parseInt('1');
         var newMonth = month + count;
         var newDate = date.getDate()+'-'+newMonth+'-'+date.getFullYear();
         var datForDb = date.getFullYear()+'-'+newMonth+'-'+date.getDate()+' 00:00:00';
-
         res.setHeader('Content-Type', 'application/json');
-
         var queryString = "SELECT sm.*, bm.name as block_name, fm.flat_number, concat(r.first_name, ' ', r.last_name) as resident_name from residents r INNER JOIN flat_master fm on r.flat_id = fm.id INNER JOIN block_master bm on bm.id = fm.block_id inner JOIN society_manager sm on sm.id = bm.block_manager WHERE r.id = '"+resident_id+"'";
         pool.query(queryString, function(err, rows, fields) {
             if (err){
@@ -81,11 +78,9 @@ exports.addVisitorsByResident = function(pool, transporter){
                             if (error){
                                 console.log(error);
                             }else{
-                                
-                            }
+                        }
                     });
                     var query = 'insert into visitor_master(name, contact_no, email, type, no_of_persons, resident_id, estimate_arival_date_time, status) values("'+name+'", "'+contact_no+'", "'+email+'","'+type+'", "'+no_of_person+'", "'+resident_id+'", "'+datForDb+'", "1")';
-
                     pool.query(query, function(err, resp){
                         if (err) {
                             console.log(err);
@@ -111,9 +106,7 @@ exports.addVisitorsByResident = function(pool, transporter){
                         }
                     });
                 }
-               
             }
-            
         });
     };
 };
@@ -121,9 +114,7 @@ exports.addVisitorsByResident = function(pool, transporter){
 exports.addVisitorsByStaff = function(pool, transporter){
     return function(req,res){  
         var result = {};
-        
         var data = req.body;
-        
         var contact_no = data.contact_no;
         var email = data.email;
         var arrival_date_time = data.arrival_date_time;
@@ -132,16 +123,13 @@ exports.addVisitorsByStaff = function(pool, transporter){
         var resident_id = data.resident_id;
         var type = data.type;
         var updated_by = data.updated_by;
-
         var date = new Date(arrival_date_time);
         var month = parseInt(date.getMonth());
         var count = parseInt('1');
         var newMonth = month + count;
         var newDate = date.getDate()+'-'+newMonth+'-'+date.getFullYear();
         var datForDb = date.getFullYear()+'-'+newMonth+'-'+date.getDate()+' 00:00:00';
-
         res.setHeader('Content-Type', 'application/json');
-
         var queryString = "SELECT sm.*, bm.name as block_name, fm.flat_number, concat(r.first_name, ' ', r.last_name) as resident_name from residents r INNER JOIN flat_master fm on r.flat_id = fm.id INNER JOIN block_master bm on bm.id = fm.block_id inner JOIN society_manager sm on sm.id = bm.block_manager WHERE r.id = '"+resident_id+"'";
         pool.query(queryString, function(err, rows, fields) {
             if (err){
@@ -206,7 +194,6 @@ exports.getVisitorDetail = function(pool){
         var result = {};
         var id = req.body.id;
         res.setHeader('Content-Type', 'application/json');
-
         var queryString = "SELECT vm.*, concat(r.first_name, ' ', r.last_name) as resident_name, r.contact_no as resident_contact, r.email as resident_email, fm.flat_number FROM visitor_master vm INNER JOIN residents r on r.id=vm.resident_id INNER JOIN flat_master fm on fm.id=r.flat_id WHERE vm.id='"+id+"' GROUP by vm.id";
         pool.query(queryString, function(err, rows, fields) {
             if (err)
@@ -216,8 +203,7 @@ exports.getVisitorDetail = function(pool){
             }
             else
             {
-                
-                if (rows.length>0) {
+               if (rows.length>0) {
                     result.status = '200';
                     result.data = rows[0];
                 }else{
@@ -233,14 +219,11 @@ exports.UpdateVisitorDetails = function(pool, transporter){
     return function(req,res){  
         var result = {};
         var data = req.body;
-
         res.setHeader('Content-Type', 'application/json');
-
         var id = data.id;
         var updated_by = data.updated_by;
         var comment = data.comment;
         var leaving_date_time = data.leaving_date_time;
-
         var queryString = "update visitor_master set depart_date_time='"+leaving_date_time+"', staff_comment='"+comment+"', updated_by='"+updated_by+"', status='3' WHERE id='"+id+"'";
         pool.query(queryString, function(err, rows, fields) {
             if (err)
@@ -250,10 +233,8 @@ exports.UpdateVisitorDetails = function(pool, transporter){
             }
             else
             {
-                
                 result.status = '200';
                 result.data = "Updated Successfully !";
-                
             }
             res.send(JSON.stringify(result)); 
         });
@@ -264,9 +245,7 @@ exports.UpdateVisitorEntryDetails = function(pool, transporter){
     return function(req,res){  
         var result = {};
         var data = req.body;
-
         res.setHeader('Content-Type', 'application/json');
-
         var id = data.id;
         var updated_by = data.updated_by;
         var entry_date_time = data.entry_date_time;
