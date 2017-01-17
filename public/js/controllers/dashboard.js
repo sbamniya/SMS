@@ -32,7 +32,7 @@ socialApp.controller('AdminDashboard', ['$scope','$http','$timeout', function($s
 }]);
 
 /*Society Manager*/
-socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compile', '$routeParams', '$route', function ($scope, $http,$location, $compile, $routeParams,$route) {
+socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compile', '$routeParams', '$route', '$timeout', function ($scope, $http,$location, $compile, $routeParams,$route, $timeout) {
 		$scope.$emit('LOAD');
 		var chart1 = {};
 		var id = window.atob($routeParams.blockID);
@@ -76,9 +76,9 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 						}
 					});
 				}
-				$http.post('/getComplaintsStatusForManager', {id: id}).success(function(res){
 
-			    	if (res.hasOwnProperty('success')) {
+				$http.post('/getComplaintsStatusForManager', {id: id}).success(function(res){
+					if (res.hasOwnProperty('success')) {
 			    		resolved = res.success.Resolved;
 						pending = res.success.Pending;
 						under_surveillance = res.success.Under_Surveillance;
@@ -105,7 +105,9 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 			    });
 				$scope.block.parent_id = window.btoa($scope.block.parent_id);
 				$scope.block.id = window.btoa($scope.block.id);
-				$scope.$emit('UNLOAD');
+				$timeout(function(){
+			    	$scope.$emit('UNLOAD');
+			    }, 1000);
 			}else{
 				$scope.$emit('UNLOAD');
 				$location.path('/404');

@@ -58,7 +58,9 @@ socialApp.controller('complaintList',['$scope', '$http', '$location', '$compile'
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 1000);
                 return log;
       		}
         })
@@ -167,7 +169,9 @@ socialApp.controller('pendingComplaintList',['$scope', '$http', '$location', '$c
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 1000);
                 return log;
             }
         })
@@ -263,7 +267,9 @@ socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compil
                 log.push(value);
 
             });
-            $scope.$emit('UNLOAD');
+            $timeout(function(){
+                $scope.$emit('UNLOAD');
+            }, 1000);
             return log;
         }
     })
@@ -369,7 +375,9 @@ socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 1000);
                 return log;
             }
         })
@@ -399,7 +407,7 @@ socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$
 
 }]);
 
-socialApp.controller('viewComplaintDetails', ['$scope','$http', '$routeParams','$location', '$window', function($scope, $http, $routeParams, $location, $window){
+socialApp.controller('viewComplaintDetails', ['$scope','$http', '$routeParams','$location', '$window','$timeout', function($scope, $http, $routeParams, $location, $window, $timeout){
         $scope.$emit('LOAD');
 
         var complaintId = atob($routeParams.complaintID);
@@ -425,7 +433,9 @@ socialApp.controller('viewComplaintDetails', ['$scope','$http', '$routeParams','
                 if ($scope.complaintDetail.status==2) {
                     $scope.complaintDetail.status = 'Resolved';
                 }
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 500);
             }
             
         });

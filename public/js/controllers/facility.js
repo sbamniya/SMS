@@ -23,7 +23,9 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 		if (response.hasOwnProperty('success')) {
 			$scope.facilities = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 1000);
 	});
 
 	$scope.deleteFacility = function(id){
@@ -33,10 +35,11 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 		}
 		$scope.$emit('LOAD');
 		$http.post('/deleteFacilities', {id: id, block_id: block_id}).success(function(response){
+			$scope.$emit('UNLOAD');
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
-			$scope.$emit('UNLOAD');
+			
 		});
 	}
 	$scope.facilityDetail = {
@@ -85,7 +88,9 @@ socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route
 				$scope.AllRequests.push(item);
 			});
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 1000);
 		
 	});
 

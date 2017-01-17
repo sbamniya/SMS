@@ -88,7 +88,9 @@ socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$
 		}else{
 			alert(response.error);
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 1000);
 	});
 }]);
 
@@ -165,7 +167,9 @@ socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function
 				$scope.visitor.estimate_arival_date_time = $scope.visitor.arival_date_time;
 			}
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 500);
 	});
 
 }]);
@@ -191,6 +195,8 @@ socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routePara
 				$scope.AllVisitors.push(item);
 			});
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 1000);
 	});
 }]);
