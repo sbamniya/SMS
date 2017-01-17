@@ -1,5 +1,5 @@
 socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-		$scope.$emit('LOAD');
+		/*$scope.$emit('LOAD');*/
         $scope.managers = {};
 		$scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server 
@@ -36,8 +36,11 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
                     }
                     log.push(item);
                 });
-                $scope.$emit('UNLOAD');
+                
                 return log;
+                /*$timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 2500);*/
       		}
         })
         .withOption('processing', true) //for show progress bar
@@ -60,12 +63,13 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
         }
        
 		$scope.deleteManager = function(id){
-            /*$scope.$emit('LOAD');*/
+            
             var returnVal = confirm('Are You Sure ?');
             if (!returnVal) {
                 return;
             }
 			var url = '/deleteManager';
+            $scope.$emit('LOAD');
 			$http.post(url, {id: id}).success(function(response){
                 $scope.$emit('UNLOAD');
 				$route.reload();

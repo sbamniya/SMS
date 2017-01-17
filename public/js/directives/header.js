@@ -8,12 +8,12 @@ socialApp.directive('header', ['$compile', '$http', '$location', '$route', funct
             scope.headerOption = false;
             scope.activetab = $route.current.activetab;
             var userDetails = window.localStorage.getItem('userDetails');
-            if (scope.userDetail == null) {
+            if (userDetails == null) {
                 $location.path("/admin-login");
             } else {
-                $scope.$emit('LOAD');
+                scope.$emit('LOAD');
                 $http.get("/authentication/admin").success(function(response, status, headers, config) {
-                    $scope.$emit('UNLOAD');
+                    scope.$emit('UNLOAD');
                     if (response.status == 'success') {
 
                     } else {
@@ -32,7 +32,7 @@ socialApp.directive('header', ['$compile', '$http', '$location', '$route', funct
                 i++;
             }
             scope.logOut = function() {
-                $scope.$emit('LOAD');
+                scope.$emit('LOAD');
                 $http.get("/logout", { logout: 'admin' }).success(function(response, status, headers, config) {
                     scope.$emit('UNLOAD');
                     window.localStorage.removeItem('userDetails');
