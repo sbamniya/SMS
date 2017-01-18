@@ -149,7 +149,6 @@
     app.get('/getAllSocieties', society.getAllSocieties(pool));
     app.post('/getBySocietyId', society.getBySocietyId(pool));
     app.post('/deleteSociety', society.deleteSociety(pool));
-
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
 
@@ -169,6 +168,7 @@
     app.post('/checkForSocietyManager', societymanager.checkForSocietyManager(pool));
     app.post('/society-updatePassword', societymanager.updatePassword(crypto, pool));
     app.post('/paymentInfoToResident', societymanager.paymentInfoToResident(pool));
+    app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
 
 
     /*Flat Management*/
