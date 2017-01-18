@@ -100,15 +100,15 @@ socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', f
 
 socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$route', '$timeout', function($scope, $http, $location,$routeParams, $route, $timeout){
     $scope.$emit('LOAD');
+    var block_id = atob($routeParams.blockID);
     $scope.VendorDues={
         block_id: block_id
     };
-    var block_id = atob($routeParams.blockID);
+    console.log($scope.VendorDues);
     $http.post('/paymentDuesFromManager',{block_id: block_id}).success(function(response){
-        console.log(response);
         if(response.hasOwnProperty('succes'))
         {
-            $scope.VendorDues=response.data;
+            $scope.VendorDues = response.data;
         }
         $scope.$emit("UNLOAD");
     });
