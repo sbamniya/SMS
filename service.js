@@ -13,9 +13,15 @@ exports.service_request = function(pool) {
         minutes = minutes < 10 ? '0' + minutes : minutes;
         var strTime = hours + ':' + minutes;
         var month = parseInt(date.getMonth());
+<<<<<<< HEAD
         var req_date = date.getFullYear() + "-" + (month + 1) + "-" + date.getDate() + "  " + strTime;
 
         var queryString = 'INSERT INTO service_request( service_type ,resident_id,date,status, resident_comment) VALUES("' + service_id + '" ,"' + resident_id + '","' + req_date + '","0", "' + resident_comment + '")';
+=======
+        var req_date = date.getFullYear() +"-"+ (month+1) + "-" + date.getDate() + "  " + strTime;
+
+        var queryString='INSERT INTO service_request( service_type ,resident_id,date,status, resident_comment) VALUES("'+service_id+'" ,"'+resident_id+'","'+req_date+'","0", "'+resident_comment+'")';
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
         var result = {};
         pool.query(queryString, function(err, rows, fields) {
             if (err) {
@@ -25,8 +31,12 @@ exports.service_request = function(pool) {
                 result.success = "service requested successfully";
                 res.send(JSON.stringify(result));
             }
+<<<<<<< HEAD
 
         });
+=======
+        });  
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
     };
 };
 
@@ -45,7 +55,11 @@ exports.requestedServicesListToAdmin = function(pool) {
                 res.send(JSON.stringify(result));
             }
 
+<<<<<<< HEAD
         });
+=======
+        });  
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
     };
 };
 
@@ -64,8 +78,12 @@ exports.addService = function(pool) {
                 result.success = "service inserted successfully";
                 res.send(JSON.stringify(result));
             }
+<<<<<<< HEAD
 
         });
+=======
+        });  
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
     };
 };
 
@@ -83,12 +101,21 @@ exports.deleteService = function(pool) {
                 result.success = "service Deleted successfully";
                 res.send(JSON.stringify(result));
             }
+<<<<<<< HEAD
 
         });
     };
 };
 exports.ListServices = function(pool) {
     return function(req, res) {
+=======
+        });  
+    };
+};
+
+exports.ListServices = function(pool){
+    return function(req,res){
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
         res.setHeader('Content-Type', 'application/json');
         var queryString = 'select * from service_master';
         var result = {};
@@ -101,6 +128,7 @@ exports.ListServices = function(pool) {
                 result.data = rows;
                 res.send(JSON.stringify(result));
             }
+<<<<<<< HEAD
 
         });
     };
@@ -128,11 +156,41 @@ exports.updateServiceRequestStatus = function(pool) {
             } else {
                 result.success = "Service Status Updated Successfully";
                 res.send(JSON.stringify(result));
+=======
+        });                                   
+    };
+};
+
+exports.updateServiceRequestStatus= function(pool){
+    return function(req,res){
+        res.setHeader('Content-Type', 'application/json');
+        $data = req.body;
+        var request_id = $data.id; 
+        var status= $data.status;
+        var comment= $data.comment;
+        var result = {};
+        var setData = ' status="'+status+'"';
+        if (status==2) {
+            setData += ', admin_comment="'+comment+'"';
+        }
+
+        var query='UPDATE service_request SET '+setData+' WHERE id="'+request_id+'"';
+        console.log(query);
+        pool.query(query, function(err, rows, fields){
+            if(err){
+                console.log(err);
+                result.error = err;
+            }
+            else{
+                result.success = "Service Status Updated Successfully";
+                res.send(JSON.stringify(result)); 
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65
             }
         });
     }
 }
 
+<<<<<<< HEAD
 exports.listOfRequestedServicesToResident = function(pool) {
     return function(req, res) {
         res.setHeader('Content-Type', 'application/json');
@@ -154,3 +212,27 @@ exports.listOfRequestedServicesToResident = function(pool) {
         });
     }
 }
+=======
+exports.listOfRequestedServicesToResident = function(pool){
+    return function(req,res){
+        res.setHeader('Content-Type', 'application/json');
+
+        var  resident_id = req.body.id; 
+        var result = {};
+        var Q='select sm.id, sm.service_name, sr.* from service_master sm INNER JOIN service_request sr ON sm.id = sr.service_type where sr.resident_id = "'+resident_id+'" ';
+
+        pool.query(Q, function(err, rows, fields){
+
+            if(err){
+                console.log(err);
+                result.error = err;
+            }
+            else{
+                result.data = rows ;  
+                result.success = "Service Displayed Successfully" ;
+                res.send(JSON.stringify(result)); 
+            }
+        });
+    } 
+}
+>>>>>>> 78e788477447abb40e32d3fa5b78c09e20deab65

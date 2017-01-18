@@ -1,10 +1,10 @@
 exports.addPaymentDetails = function(pool){
- return function(req, res){
+    return function(req, res){
         console.log(req.body);
-  	    var result                  = {};
+        var result                  = {};
         var data                    = JSON.parse(JSON.stringify(req.body));
         var merchantTransactionId   = data.txnid;
-        
+
         var mihpayid                = data.mihpayid;
         var paymentId               = data.encryptedPaymentId;
         var mode                    = data.mode;
@@ -28,57 +28,61 @@ exports.addPaymentDetails = function(pool){
         var resident_id             = data.udf1;
         var transaction_status      = data.status;
         var status                  = 1;
+// <<<<<<< HEAD
+
+// =======
+// >>>>>>> 4a6f1e74d83424e43df490c5c06b640aa3fdccad
         var proInfo = JSON.parse(productinfo);
         var productstr = JSON.stringify(proInfo);
 
         for(var i=0; i<proInfo.length; i++){
-            
+
             var type = proInfo[i].type;
-        	var id = proInfo[i].id;
-        	
-        	var Query = '';
+            var id = proInfo[i].id;
+
+            var Query = '';
             var tableName = '';
             var setData = '';
             var where = '';
-        	if (type=='Facility') {
+            if (type=='Facility') {
                 tableName = 'facility_request';
                 setData = 'status=2';
                 where = 'id ="'+id+'"';
 
                 var Q = 'update facility_request set last_payment_date=now() where '+where;
                 pool.query(Q, function(err){
-                    if (err) {
-                        console.log(err);
-                    }
+                if (err) {
+                console.log(err);
+                }
                 });
 
-        	}else if (type=='Amenity') {
+            }else if (type=='Amenity') {
                 tableName = 'amenity_request';
                 setData = 'status=2';
                 where = 'id ="'+id+'"';
-        	}else{
+            }else{
 
-        	}
-        	Query = 'update '+tableName+' set '+setData+' where '+where;
-        	pool.query(Query, function(err, rows){
-        		if (err) {
-        			console.log(err);
-        		}
-        	});
+            }
+            Query = 'update '+tableName+' set '+setData+' where '+where;
+            pool.query(Query, function(err, rows){
+                if (err) {
+                    console.log(err);
+                }
+            });
         }
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId,transaction_status, resident_id, status], function(err,rows){
-			if(err){
-				console.log(err);
-			}else{
+            if(err){
+                console.log(err);
+            }else{
                 var host = req.protocol+'://'+req.headers.host+'/';
-				setTimeout(function(){
+                setTimeout(function(){
                     res.writeHead(301, {
                         Location: host
                     });
                     res.end();
                 },2000)
-				
-			}      
+
+            }      
         })
     }
 }
@@ -107,16 +111,16 @@ exports.paymentReceipt = function(pool){
         var trasaction_id = req.body.id;
         var Q = 'select th.*,concat(r.first_name," ",r.last_name) as resident_name,bm.name,th.email as email,th.phone as phone_number,fm.flat_number,sm.manager_name,sm.email as manager_email from transaction_history th INNER JOIN residents r ON th.resident_id = r.id INNER JOIN flat_master fm ON fm.id = r.flat_id  INNER JOIN block_master bm ON bm.id= fm.block_id INNER JOIN society_manager sm ON bm.block_manager = sm.id where th.id="'+trasaction_id+'"';
         pool.query(Q,function(err,rows){
-             if(err)
-          {
-              result.error = err;
-          }
-        else
-          {
-            result.data=rows[0];  
-            result.success = "Payment Receipt displayed successfully";
-            res.send(JSON.stringify(result)); 
-          };
+            if(err)
+            {
+                result.error = err;
+            }
+            else
+            {
+                result.data=rows[0];  
+                result.success = "Payment Receipt displayed successfully";
+                res.send(JSON.stringify(result)); 
+            };
         })
     }
 }
@@ -128,16 +132,16 @@ exports.transactionHistoryToManager = function(pool){
         var block_id = req.body.id;
         var Q = 'SELECT tr.*, concat(r.first_name, " ", r.last_name) as resident_name, fm.flat_number, bm.name from transaction_history tr INNER JOIN residents r on r.id = tr.resident_id INNER JOIN flat_master fm on fm.id = r.flat_id INNER JOIN block_master bm on bm.id= fm.block_id INNER JOIN society_manager sm on sm.id = bm.block_manager where bm.id = "'+block_id+'"';
         pool.query(Q,function(err,rows){
-             if(err)
-          {
-              result.error = err;
-          }
-        else
-          {
-            result.data=rows;  
-            result.success = "displayed successfully";
-            res.send(JSON.stringify(result)); 
-          };
+            if(err)
+            {
+                result.error = err;
+            }
+            else
+            {
+                result.data=rows;  
+                result.success = "displayed successfully";
+                res.send(JSON.stringify(result)); 
+            };
         })
     }
 }
@@ -149,16 +153,16 @@ exports.getAmenityName = function(pool){
         var id = req.body.id;
         var Q = 'select aminity_name as name from amenities_master where id ="'+id+'"';
         pool.query(Q,function(err,rows){
-             if(err)
-          {
-              result.error = err;
-          }
-        else
-          {
-            result.data = rows[0];  
-            result.success = "displayed successfully";
-            res.send(JSON.stringify(result)); 
-          };
+            if(err)
+            {
+                result.error = err;
+            }
+            else
+            {
+                result.data = rows[0];  
+                result.success = "displayed successfully";
+                res.send(JSON.stringify(result)); 
+            };
         })
     }
 }
@@ -170,16 +174,16 @@ exports.getFacilityName = function(pool){
         var id = req.body.id;
         var Q = 'select facility_name as name from facility_master where id ="'+id+'"';
         pool.query(Q,function(err,rows){
-             if(err)
-          {
-              result.error = err;
-          }
-        else
-          {
-            result.data = rows[0];  
-            result.success = "displayed successfully";
-            res.send(JSON.stringify(result)); 
-          };
+            if(err)
+            {
+                result.error = err;
+            }
+            else
+            {
+                result.data = rows[0];  
+                result.success = "displayed successfully";
+                res.send(JSON.stringify(result)); 
+            };
         })
     }
 }
