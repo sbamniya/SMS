@@ -58,7 +58,9 @@ socialApp.controller('complaintList',['$scope', '$http', '$location', '$compile'
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
       		}
         })
@@ -167,7 +169,9 @@ socialApp.controller('pendingComplaintList',['$scope', '$http', '$location', '$c
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
             }
         })
@@ -263,7 +267,9 @@ socialApp.controller('usComplaintList',['$scope', '$http', '$location', '$compil
                 log.push(value);
 
             });
-            $scope.$emit('UNLOAD');
+            $timeout(function(){
+                $scope.$emit('UNLOAD');
+            },1000)
             return log;
         }
     })
@@ -369,7 +375,9 @@ socialApp.controller('resolvedComplaintList',['$scope', '$http', '$location', '$
                     log.push(value);
 
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
             }
         })

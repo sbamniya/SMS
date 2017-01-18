@@ -126,7 +126,9 @@ socialApp.controller('listStaff',  ['$scope', '$http', '$location', '$compile','
                         log.push(item);
                     }
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+					$scope.$emit('UNLOAD');
+				},1000)
                 return log;
             }
         })
@@ -389,7 +391,9 @@ socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$ht
 		if (response.hasOwnProperty('data')) {
 			$scope.AllStaffMemeber = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000)
 	});
 	$scope.attandance = {
 		block_id: block_id

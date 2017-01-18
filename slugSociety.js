@@ -68,7 +68,6 @@ exports.checkSlug = function(slug,moment,async,pool){
                     next();
                 });
         },function(err){
-
         });
     };
 };

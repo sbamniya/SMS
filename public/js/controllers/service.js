@@ -19,7 +19,9 @@ socialApp.controller('serviceList', ['$scope','$http','$routeParams','$route','$
 		if (response.hasOwnProperty('success')) {
 			$scope.services = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000);
 	});
 	$scope.updateData = {};
 	$scope.setId = function(id){
@@ -51,7 +53,9 @@ socialApp.controller('serviceAll', ['$scope', '$http','$route', function($scope,
 		if (response.hasOwnProperty('success')) {
 			$scope.services = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000);
 	});
 
 	$scope.deleteService = function(service_id){

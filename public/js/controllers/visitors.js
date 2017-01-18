@@ -18,7 +18,9 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
 		}else{
 			alert(response.error);
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000)
 	});
 	$scope.visitorDetails = {};
 	$scope.leaveSociety = function(visitor_id, no_of_persons){
@@ -191,6 +193,8 @@ socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routePara
 				$scope.AllVisitors.push(item);
 			});
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000);
 	});
 }]);

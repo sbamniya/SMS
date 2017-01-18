@@ -34,7 +34,7 @@ socialApp.controller('residentList',['$scope', '$http', '$location', '$compile',
                     }
                     log.push(value);
                 });
-                $scope.$emit('UNLOAD');
+                 $scope.$emit('UNLOAD');
                 return log;
       		}
         })
@@ -99,7 +99,9 @@ socialApp.controller('tenantsList',['$scope', '$http', '$location', '$compile','
                     value.move_in_date = move_in_date.getDate()+'-'+move_in_date.getMonth()+'-'+move_in_date.getFullYear();
                     log.push(value);
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000);
                 return log;
             }
         })

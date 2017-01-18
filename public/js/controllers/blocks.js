@@ -34,12 +34,13 @@ socialApp.controller('block',['$scope', '$http', '$location', '$compile','Upload
 		$scope.ActiveManagers = [];
 
 		/*Get list of managers*/
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		$http.get('/ActiveManagersList').success(function(response){
 
 			$scope.ActiveManagers = JSON.parse(response.success);
-			$scope.$emit('UNLOAD');
-			
+			$timeout(function(){
+				$scope.$emit('UNLOAD');
+			},1000);
 		});
 		$scope.addMoreBlock = function(){
 
@@ -105,7 +106,7 @@ socialApp.controller('editBlock',['$scope', '$http', '$location', '$compile','Up
 		});
 		$scope.ActiveManagers = [];
 		/*Get list of managers*/
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		$http.get('/ActiveManagersList').success(function(response){
 			$scope.ActiveManagers = JSON.parse(response.success);
 			$scope.$emit('UNLOAD');
@@ -160,7 +161,7 @@ socialApp.controller('selectBlock',['$scope', '$http', '$location', '$compile', 
 
 /*Manage Flats*/
 socialApp.controller('flats',['$scope', '$http', '$location', '$compile', '$timeout','$routeParams', function ($scope, $http,$location, $compile, $timeout, $routeParams) {
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		var id = window.atob($routeParams.blockID);
 		
 		$scope.flat = {};
@@ -199,7 +200,7 @@ socialApp.controller('flats',['$scope', '$http', '$location', '$compile', '$time
 			$scope.$emit('UNLOAD');
 		});
 		$scope.msStructfunc = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			$baseStruct = $scope.blockStorey[0];
 			$baseFlatDetails = $scope.flat;
 			$scope.synchFlatType = true;
@@ -211,7 +212,7 @@ socialApp.controller('flats',['$scope', '$http', '$location', '$compile', '$time
 			$scope.$emit('UNLOAD');
 		}
 		$scope.openDetailedForm = function(noOfFlats, index, _that){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 
 			if(angular.isUndefined(_that))
 			{
@@ -255,7 +256,7 @@ socialApp.controller('flats',['$scope', '$http', '$location', '$compile', '$time
 		}
 
 		$scope.addFlats = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			var block_id = $scope.flat.block_id;
 			var totalFlatsByAdmin = $scope.flat.numberOfFlats;
 			var count = 0;
@@ -303,7 +304,7 @@ socialApp.controller('flats',['$scope', '$http', '$location', '$compile', '$time
 		}
 }]);
 socialApp.controller('addResident', ['$scope','$http', '$routeParams','$location', function($scope, $http,$routeParams, $location){
-		/*$scope.$emit('LOAD');*/
+		$scope.$emit('LOAD');
 		var blockID = $routeParams.blockID;
 		var flatID = window.atob($routeParams.flatID);
 		
@@ -319,7 +320,7 @@ socialApp.controller('addResident', ['$scope','$http', '$routeParams','$location
 			}
 		});
 		$scope.addResident = function(){
-			/*$scope.$emit('LOAD');*/
+			$scope.$emit('LOAD');
 			$http.post('/addResident', {id: flatID, email: $scope.resident.email}).success(function(response){
 				$scope.$emit('UNLOAD');
 				if (response.hasOwnProperty('success')) {

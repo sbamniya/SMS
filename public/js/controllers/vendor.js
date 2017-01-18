@@ -42,7 +42,9 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 		if (response.hasOwnProperty('success')) {
 			$scope.vendors = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');	
+		},1000)
 	});
 
 	$scope.deleteVendor = function(vendor_id){
@@ -55,7 +57,9 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 			if (response.hasOwnProperty('success')) {
 				$route.reload();
 			}
-			$scope.$emit('UNLOAD');
+			$timeout(function(){
+				$scope.$emit('UNLOAD');
+			},1000)
 		});
 	}
 	$scope.updateId = function(vendor_id, vendor_name, email, contact, description){
@@ -85,7 +89,9 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 				$scope.ErrorMsg = "Some Error Ocuured While Updating Data !";
 				$scope.success = false;
 			}
-			$scope.$emit('UNLOAD');
+			$timeout(function(){
+				$scope.$emit('UNLOAD');
+			},1000)
 		});
 	}
 }]);

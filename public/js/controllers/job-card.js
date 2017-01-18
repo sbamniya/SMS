@@ -26,8 +26,6 @@ socialApp.controller('CreateJobCard', ['$scope','$routeParams','$http','$locatio
 		});
 	});
 		
-
-		
 	$scope.addMaintainance = function(){
 		$scope.$emit('LOAD');
 		if($scope.maintainance.job_card_type==1){
@@ -38,6 +36,7 @@ socialApp.controller('CreateJobCard', ['$scope','$routeParams','$http','$locatio
         }
         if($scope.maintainance.contract_type==1){
             $scope.maintainance.approximate_visit_date = 0;
+            $scope.maintainance.reccuring_days='';
         }
 		$http.post('/addJobcard', $scope.maintainance).success(function(response){
 			$scope.$emit('UNLOAD');
@@ -68,7 +67,6 @@ socialApp.controller('RecurrentJobCard', ['$scope','$routeParams','$http','$rout
 					$scope.jobcard.push(item);
 				});
 			}
-			
 		}
 		$scope.$emit('UNLOAD');
 	});

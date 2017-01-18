@@ -23,7 +23,9 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 		if (response.hasOwnProperty('success')) {
 			$scope.facilities = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000);
 	});
 
 	$scope.deleteFacility = function(id){

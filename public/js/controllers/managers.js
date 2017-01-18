@@ -36,7 +36,9 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
                     }
                     log.push(item);
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
       		}
         })
@@ -60,7 +62,7 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
         }
        
 		$scope.deleteManager = function(id){
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             var returnVal = confirm('Are You Sure ?');
             if (!returnVal) {
                 return;
@@ -87,9 +89,27 @@ socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', f
 				}else{
 					$scope.formError = response.error;
 					$scope.formErrorShow = true;
-                    $scope.$emit('UNLOAD');
+                    $timeout(function(){
+                        $scope.$emit('UNLOAD');    
+                    },2000);
 				}
 				
 			});
 		}
+}]);
+
+socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$route', '$timeout', function($scope, $http, $location,$routeParams, $route, $timeout){
+    $scope.$emit('LOAD');
+    $scope.VendorDues={
+        block_id: block_id
+    };
+    var block_id = atob($routeParams.blockID);
+    $http.post('/paymentDuesFromManager',{block_id: block_id}).success(function(response){
+        console.log(response);
+        if(response.hasOwnProperty('succes'))
+        {
+            $scope.VendorDues=response.data;
+        }
+        $scope.$emit("UNLOAD");
+    });
 }]);
