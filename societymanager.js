@@ -90,8 +90,8 @@ exports.addManager = function(pool, randomstring, crypto, transporter) {
                             return;
                         } else {
                             transporter.sendMail({
-                      
-         from: 'kalika.deltabee@gmail.com',
+
+                                from: 'kalika.deltabee@gmail.com',
                                 to: email,
                                 subject: 'Check  Id & Password',
                                 html: 'Hey ' + manager_name + '<br/>Your id is: ' + email + '<br/>Your password is: ' + text + ' '
@@ -186,6 +186,7 @@ exports.deleteManager = function(pool) {
 
     };
 };
+
 exports.updatePassword = function(crypto, pool) {
     return function(req, res) {
         sess = req.session;
@@ -201,6 +202,27 @@ exports.updatePassword = function(crypto, pool) {
                 res.send(JSON.stringify(result));
             } else {
                 result.succes = "Your Password has been changed successfully.";
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            }
+        });
+    };
+};
+
+exports.paymentInfoToResident = function(pool) {
+    return function(req, res) {
+        var block_id = req.body.block_id;
+        var result = {};
+        var queryString = 'select sm.manager_name,sm.email,smm.merchant_id,smm.marchant_key,smm.marchant_salt from society_manager_meta smm INNER JOIN society_manager sm ON sm.id = smm.manager_id INNER JOIN block_master bm ON sm.id = bm.block_manager where bm.id = "' + block_id + '" ';
+        pool.query(queryString, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+                res.setHeader('Content-Type', 'application/json');
+                res.send(JSON.stringify(result));
+            } else {
+                result.data = rows[0];
+                result.succes = "Display marchant data successfully.";
                 res.setHeader('Content-Type', 'application/json');
                 res.send(JSON.stringify(result));
             }
