@@ -101,15 +101,37 @@ socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', f
 socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$route', '$timeout', function($scope, $http, $location,$routeParams, $route, $timeout){
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
-    $scope.VendorDues={
-        block_id: block_id
-    };
+    $scope.VendorDues=[];
     console.log($scope.VendorDues);
     $http.post('/paymentDuesFromManager',{block_id: block_id}).success(function(response){
         if(response.hasOwnProperty('succes'))
         {
-            $scope.VendorDues = response.data;
+           if (response.hasOwnProperty('data')) {
+                angular.forEach(response.data, function(item, key){
+                    item.enc_id = btoa(item.job_card_id);
+                    if (item.job_card_type==2) {
+                        item.job_card_type = "Recurring";
+                    }else{
+                        item.job_card_type = "Onetime";
+                    }
+                    if(item.contract_type==1)
+                    {
+                        item.contract_type="Periodic";
+                    }
+                    else if(item.contract_type==2)
+                    {
+                        item.contract_type="A.M.C";
+                    }
+                    else if(item.contract_type==0)
+                    {
+                        item.contract_type="__";
+                    }
+                    $scope.VendorDues.push(item);
+                });
+            } 
+            //$scope.VendorDues = response.data;
         }
         $scope.$emit("UNLOAD");
     });
 }]);
+
