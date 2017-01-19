@@ -124,7 +124,7 @@ socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$rout
                     }
                     else if(item.contract_type==0)
                     {
-                        item.contract_type="__";
+                        item.contract_type="Onetime";
                     }
                     $scope.VendorDues.push(item);
                 });
@@ -133,5 +133,72 @@ socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$rout
         }
         $scope.$emit("UNLOAD");
     });
+    $scope.cashDetail = [];
+    $scope.payCash = function(id){
+        $scope.$emit('LOAD');
+        $scope.cashDetail.id = id;
+        $http.post('/paymentDuesFromManagerForUpdate', {id: id}).success(function(response){
+            console.log(response);
+            if (response.hasOwnProperty('success')) {
+
+                $scope.cashDetail.vendor_name = response.data.vendor_name;
+                $scope.cashDetail.job_card_type = response.data.job_card_type;
+                $scope.cashDetail.category = response.data.category;
+                $scope.cashDetail.contract_type = response.data.contract_type;
+                $scope.cashDetail.charge = response.data.charge;
+                
+                if($scope.cashDetail.job_card_type==1){
+                    $scope.cashDetail.job_card_type="Onetime";
+                }
+                else if($scope.cashDetail.job_card_type==2){
+                    $scope.cashDetail.job_card_type="Recurring";
+                }
+                if($scope.cashDetail.contract_type==0){
+                    $scope.cashDetail.contract_type="One time";
+                }
+                else if($scope.cashDetail.contract_type==1){
+                    $scope.cashDetail.contract_type="Periodic";
+                }
+                else if($scope.cashDetail.contract_type==2){
+                    $scope.cashDetail.contract_type="A.M.C.";
+                }
+            }
+            $scope.$emit('UNLOAD');
+        });
+    }
 }]);
 
+/*$scope.updateId = function(id){
+        $scope.$emit('LOAD');
+        $scope.facilityDetail.id = id;
+        $http.post('/getSingleFacility', {id: id}).success(function(response){
+            if (response.hasOwnProperty('success')) {
+                $scope.facilityDetail.facility_name = response.data.facility_name;
+                $scope.facilityDetail.charges = response.data.charges;
+                $scope.facilityDetail.description = response.data.description;
+            }
+            $scope.$emit('UNLOAD');
+        });
+    }
+
+    $scope.updateFacilityDetails = function(){
+        $scope.$emit('LOAD');
+        $http.post('/updateFacility', $scope.facilityDetail).success(function(response){
+            if (response.hasOwnProperty('success')){
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                    $route.reload();
+                }, 500);
+            }
+        });
+    }
+    $scope.updateId = function(vendor_id, vendor_name, email, contact, description){
+        $scope.updateData = {
+            id: vendor_id,
+            vendor_name: vendor_name,
+            email: email,
+            contact: contact,
+            description: description
+        }
+    }
+    */

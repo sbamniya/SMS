@@ -238,7 +238,7 @@ exports.paymentDuesFromManager = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var block_id = req.body.block_id;
         var result = {};
-        var queryString = 'select vm.vendor_name,vm.email,vm.contact,vm.merchant_id,vm.merchant_key,vm.merchant_salt,jm.contract_type,jm.job_card_type,jm.start_date,jm.charge,mm.category from vendor_master vm INNER JOIN job_card_master jm ON vm.id = jm.vendor_id INNER JOIN maintainace_category_master mm ON mm.id = jm.category_id where jm.block_id = "' + block_id + '"';
+        var queryString = 'select vm.vendor_name,vm.email,vm.contact,vm.merchant_id,vm.merchant_key,vm.merchant_salt,vm.payuavailable,jm.id ,jm.contract_type,jm.job_card_type,jm.start_date,jm.charge,mm.category from vendor_master vm INNER JOIN job_card_master jm ON vm.id = jm.vendor_id INNER JOIN maintainace_category_master mm ON mm.id = jm.category_id where jm.block_id = "' + block_id + '"';
         pool.query(queryString, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -246,6 +246,25 @@ exports.paymentDuesFromManager = function(pool) {
             } else {
                 result.data = rows;
                 result.succes = "Display Due data to manager successfully.";
+                res.send(JSON.stringify(result));
+            }
+        });
+    };
+};
+
+exports.paymentDuesFromManagerForUpdate = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var job_id = req.body.id;
+        var result = {};
+        var queryString = 'select vm.vendor_name,vm.email,vm.contact,vm.merchant_id,vm.merchant_key,vm.merchant_salt,vm.payuavailable,jm.id ,jm.contract_type,jm.job_card_type,jm.start_date,jm.charge,mm.category from vendor_master vm INNER JOIN job_card_master jm ON vm.id = jm.vendor_id INNER JOIN maintainace_category_master mm ON mm.id = jm.category_id where jm.id = "' + job_id + '"';
+        pool.query(queryString, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.data = rows[0];
+                result.success = " successfully.";
                 res.send(JSON.stringify(result));
             }
         });

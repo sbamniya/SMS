@@ -166,6 +166,7 @@
     app.post('/checkForSocietyManager', societymanager.checkForSocietyManager(pool));
     app.post('/society-updatePassword',societymanager.updatePassword(crypto,pool));
     app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
+    app.post('/paymentDuesFromManagerForUpdate', societymanager.paymentDuesFromManagerForUpdate(pool));
     
     /*Flat Management*/
     app.post('/addFlat', flat.addFlat(pool)); 
