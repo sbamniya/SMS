@@ -7,7 +7,18 @@ exports.addVendor = function(pool, transporter) {
         var id_proof = req.body.id_proof;
         var block_id = req.body.block_id;
         var description = req.body.description;
-        var result = {}
+        var payuavailable = req.body.payuavailable;
+        var merchant_id = req.body.merchant_id;
+        var merchant_key = req.body.merchant_key;
+        var merchant_salt = req.body.merchant_salt;
+
+        if (typeof(payuavailable) === "undefined") {
+            payuavailable = 0;
+            merchant_id = "";
+            merchant_key = "";
+            merchant_salt = "";
+        }
+        var result = {};
         var queryString = "select * from image_temp where id='" + id_proof + "'";
         pool.query(queryString, function(err, rows, fields) {
             if (err) {
@@ -16,7 +27,7 @@ exports.addVendor = function(pool, transporter) {
             } else {
                 if (rows.length > 0) {
                     var id_imageName = rows[0].imgName;
-                    var Q = 'INSERT INTO vendor_master ( `vendor_name`, `email`, `contact`, `id_poof`, `status`, `block_id`, `description`) VALUES ("' + vandor_name + '","' + email + '","' + contact + '","' + id_imageName + '","1", "' + block_id + '", "' + description + '")';
+                    var Q = 'INSERT INTO vendor_master ( `vendor_name`, `email`, `contact`, `id_poof`, `merchant_id`, `merchant_key`, `payuavailable`,`merchant_salt`, `status`, `block_id`, `description`) VALUES ("' + vandor_name + '","' + email + '","' + contact + '","' + id_imageName + '","' + merchant_id + '","' + merchant_key + '","' + payuavailable + '","' + merchant_salt + '","1", "' + block_id + '", "' + description + '")';
                     pool.query(Q, function(err, rows, fields) {
                         if (err) {
                             console.log(err);
@@ -52,6 +63,7 @@ exports.addVendor = function(pool, transporter) {
         });
     }
 }
+
 
 exports.listvendors = function(pool) {
     return function(req, res) {
