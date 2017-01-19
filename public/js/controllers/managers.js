@@ -36,7 +36,9 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
                     }
                     log.push(item);
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
       		}
         })
@@ -60,7 +62,7 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
         }
        
 		$scope.deleteManager = function(id){
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
             var returnVal = confirm('Are You Sure ?');
             if (!returnVal) {
                 return;
@@ -87,9 +89,49 @@ socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', f
 				}else{
 					$scope.formError = response.error;
 					$scope.formErrorShow = true;
-                    $scope.$emit('UNLOAD');
+                    $timeout(function(){
+                        $scope.$emit('UNLOAD');    
+                    },2000);
 				}
 				
 			});
 		}
 }]);
+
+socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$route', '$timeout', function($scope, $http, $location,$routeParams, $route, $timeout){
+    $scope.$emit('LOAD');
+    var block_id = atob($routeParams.blockID);
+    $scope.VendorDues=[];
+    console.log($scope.VendorDues);
+    $http.post('/paymentDuesFromManager',{block_id: block_id}).success(function(response){
+        if(response.hasOwnProperty('succes'))
+        {
+           if (response.hasOwnProperty('data')) {
+                angular.forEach(response.data, function(item, key){
+                    item.enc_id = btoa(item.job_card_id);
+                    if (item.job_card_type==2) {
+                        item.job_card_type = "Recurring";
+                    }else{
+                        item.job_card_type = "Onetime";
+                    }
+                    if(item.contract_type==1)
+                    {
+                        item.contract_type="Periodic";
+                    }
+                    else if(item.contract_type==2)
+                    {
+                        item.contract_type="A.M.C";
+                    }
+                    else if(item.contract_type==0)
+                    {
+                        item.contract_type="__";
+                    }
+                    $scope.VendorDues.push(item);
+                });
+            } 
+            //$scope.VendorDues = response.data;
+        }
+        $scope.$emit("UNLOAD");
+    });
+}]);
+

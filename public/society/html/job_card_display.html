@@ -28,6 +28,7 @@
                             <th>Vendor Name</th>
                             <th>Job Card Type</th>
                             <th>Starting Date</th>
+                            <th>Charge</th>
                             <th>Description</th>
                             <th>Action</th>
                         </thead>
@@ -38,6 +39,7 @@
                                 <td>{{facility.vendor_name}}</td>
                                 <td>{{facility.job_card_type}}</td>
                                 <td>{{facility.start_date |date: 'dd MMMM, yyyy'}}</td>
+                                <td>{{facility.charge}}</td>
                                 <td>{{facility.description}}</td>
                                 <td><a href="javascript:void(0)" ng-click="print(facility.job_card_id)"><i class="fa fa-print"></i></a> | <a href="#/view-job-card/{{id}}/{{facility.enc_id}}"><i class="fa fa-eye"></i></a> | <a href="javascript:void(0)" ng-click="deleteJob(facility.job_card_id)"><i class="fa fa-trash"></i></a></td>
                             </tr>

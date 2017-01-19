@@ -137,7 +137,10 @@ socialApp.controller('AllTenantOfResident', ['$scope', '$http', '$location', '$c
                     }
                     log.push(item);
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },500)
+                //$scope.$emit('UNLOAD');
                 return log;
       		}
         })
@@ -235,7 +238,9 @@ socialApp.controller('bechelorsTenantOfResident', ['$scope', '$http', '$location
                         log.push(item);
                     }
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return log;
             }
         })
@@ -333,7 +338,9 @@ socialApp.controller('familiesTenantOfResident', ['$scope', '$http', '$location'
                         log.push(item);
                     }
                 });
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000);
                 return log;
             }
         })

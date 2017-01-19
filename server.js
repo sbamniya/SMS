@@ -169,7 +169,8 @@
     app.get('/societyBlockList', societymanager.societyBlockList(pool));
     app.post('/checkForSocietyManager', societymanager.checkForSocietyManager(pool));
     app.post('/society-updatePassword',societymanager.updatePassword(crypto,pool));
-
+    app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
+    
     /*Flat Management*/
     app.post('/addFlat', flat.addFlat(pool)); 
     app.post('/getFlatList', flat.getFlatList(pool));

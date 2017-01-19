@@ -1,6 +1,6 @@
 
 socialApp.controller('blockList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-        /*$scope.$emit('LOAD');*/
+        $scope.$emit('LOAD');
 	    var id = $routeParams.id;
 		$scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server 
@@ -22,7 +22,9 @@ socialApp.controller('blockList',['$scope', '$http', '$location', '$compile','$r
             },
             dataSrc: function (res) { 
                 var generateResponse = JSON.parse(res.success);
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
                 return generateResponse;
       		}
         })
@@ -44,10 +46,12 @@ socialApp.controller('blockList',['$scope', '$http', '$location', '$compile','$r
         }
         
 		$scope.deleteBlock = function(id){
-            /*$scope.$emit('LOAD');*/
+            $scope.$emit('LOAD');
 			var url = '/deleteBlock';
 			$http.post(url, {id: id}).success(function(response){
-                $scope.$emit('UNLOAD');
+                $timeout(function(){
+                    $scope.$emit('UNLOAD');
+                },1000)
 				$route.reload();
 			});
 		}

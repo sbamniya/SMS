@@ -7,7 +7,22 @@ exports.addVendor = function(pool, transporter) {
         var id_proof = req.body.id_proof;
         var block_id = req.body.block_id;
         var description = req.body.description;
+<<<<<<< HEAD
         var result = {}
+=======
+        var payuavailable = req.body.payuavailable;
+        var merchant_id = req.body.merchant_id;
+        var merchant_key = req.body.merchant_key;
+        var merchant_salt = req.body.merchant_salt;
+
+        if (typeof(payuavailable) === "undefined") {
+            payuavailable = 0;
+            merchant_id = "";
+            merchant_key = "";
+            merchant_salt = "";
+        }
+        var result = {};
+>>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
         var queryString = "select * from image_temp where id='" + id_proof + "'";
         pool.query(queryString, function(err, rows, fields) {
             if (err) {
@@ -16,7 +31,11 @@ exports.addVendor = function(pool, transporter) {
             } else {
                 if (rows.length > 0) {
                     var id_imageName = rows[0].imgName;
+<<<<<<< HEAD
                     var Q = 'INSERT INTO vendor_master ( `vendor_name`, `email`, `contact`, `id_poof`, `status`, `block_id`, `description`) VALUES ("' + vandor_name + '","' + email + '","' + contact + '","' + id_imageName + '","1", "' + block_id + '", "' + description + '")';
+=======
+                    var Q = 'INSERT INTO vendor_master ( `vendor_name`, `email`, `contact`, `id_poof`, `merchant_id`, `merchant_key`, `payuavailable`,`merchant_salt`, `status`, `block_id`, `description`) VALUES ("' + vandor_name + '","' + email + '","' + contact + '","' + id_imageName + '","' + merchant_id + '","' + merchant_key + '","' + payuavailable + '","' + merchant_salt + '","1", "' + block_id + '", "' + description + '")';
+>>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
                     pool.query(Q, function(err, rows, fields) {
                         if (err) {
                             console.log(err);
@@ -95,9 +114,19 @@ exports.updateVendor = function(pool) {
         var description = req.body.description;
         var vendor_name = req.body.vendor_name;
         var vendor_email = req.body.email;
+<<<<<<< HEAD
         var contact = req.body.contact;
         var result = {};
         var querystring = 'update vendor_master SET vendor_name = "' + vendor_name + '", email = "' + vendor_email + '",contact ="' + contact + '",description="' + description + '" where id="' + vendor_id + '"';
+=======
+        var merchant_id = req.body.merchant_id;
+        var merchant_key = req.body.merchant_key;
+        var merchant_salt = req.body.merchant_salt;
+        var contact = req.body.contact;
+        var payuavailable = req.body.payuavailable;
+        var result = {};
+        var querystring = 'update vendor_master SET vendor_name = "' + vendor_name + '", email = "' + vendor_email + '",contact ="' + contact + '",merchant_id = "' + merchant_id + '",merchant_key = "' + merchant_key + '",merchant_salt = "' + merchant_salt + '",description="' + description + '",payuavailable = "' + payuavailable + '" where id="' + vendor_id + '"';
+>>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -108,6 +137,7 @@ exports.updateVendor = function(pool) {
             };
         });
     }
+<<<<<<< HEAD
 }
 exports.vendorEntryByStaff = function(pool) {
     return function(req, res) {
@@ -142,4 +172,6 @@ exports.vendorEntryByStaff = function(pool) {
             }
         });
     }
+=======
+>>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
 }

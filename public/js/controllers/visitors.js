@@ -18,7 +18,9 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
 		}else{
 			alert(response.error);
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		},1000)
 	});
 	$scope.visitorDetails = {};
 	$scope.leaveSociety = function(visitor_id, no_of_persons){
@@ -196,7 +198,12 @@ socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routePara
 			});
 		}
 		$timeout(function(){
+<<<<<<< HEAD
             $scope.$emit('UNLOAD');
         }, 1000);
+=======
+			$scope.$emit('UNLOAD');
+		},1000);
+>>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
 	});
 }]);
