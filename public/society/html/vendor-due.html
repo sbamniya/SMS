@@ -17,7 +17,6 @@
             </ol>
         </div>
     </div>
-
     <div class="row">
       <div class="col-sm-12">
           <div class="row">
@@ -26,112 +25,63 @@
               <div class="table-responsive">
                 <table id="entry-grid" width="100%">
                   <thead>
-                      <th>Job Card ID</th>
-                      <th>Vendor Name </th>
+                      <th>Select</th>
                       <th>Job Card Type</th>
                       <th>Maintainance Category</th>
                       <th>Contract Type</th>
                       <th>Starting Date</th>
                       <th>Charge</th>
-                      <th>Pay</th>
-                      <th>Action</th>
+                      <th>Total Charge</th>
                   </thead>
                   <tbody>
                       <!-- <tr ng-show="noData">
                         <td colspan="9" align="center">No Due</td>
                       </tr> -->
                       <tr ng-repeat="req in VendorDues">
-                          <td>{{req.id}}</td>
-                          <td>{{req.vendor_name}}</td>
+                          <td><input type="checkbox" ng-true-value="'{{req.charges}}'"></td>
                           <td>{{req.job_card_type}}</td>
                           <td>{{req.category}}</td>
                           <td>{{req.contract_type}}</td>
                           <td>{{req.start_date | date:'dd MMM, yyyy'}}</td>
+                          <!-- <td>{{req.recurring_peroid}}</td> -->
                           <td>{{req.charge}}</td>
-                          <td>
-                              <select name="type" class="form-control" ng-model="type">
-                                <option value="">-Select-</option>
-                                <option value="1" ng-show="req.payuavailable==1">Pay Using PayUMoney </option>
-                                <option value="2">Pay By Cash </option>
-                                <option value="3">Pay By Cheque </option>
-                              </select>
-                          </td>
-                          <td><button type="button" ng-show="type==1" class="btn btn-success"  data-toggle="modal" data-target="#myModal" ng-click="payCash(req.id)">Submit</button></td>
+                          <td>0</td>
+                          <!--<td>{{req.charges + 0}}</td>
+                          <!-- <td><div class="alert alert-danger" ng-show="req.availFcaility">No</div><div class="alert alert-success"  ng-hide="req.availFcaility">Yes</div></td> -->
+                      </tr>
+                      
+                      <tr>
+                        <td colspan="8"><b>Total Due Payable Amount</b></td>
+                        <td><b>{{totalPayable}}</b></td>
                       </tr>
                   </tbody>
                 </table>
               </div>
             </div>
           </div>
+        
+          <form name="paymentFrm" action="https://test.payu.in/_payment" method="post">
+            <div>
+              <input type="hidden" name="key" value="{{paymentDetails.key}}" />
+              <input type="hidden" name="hash" value="{{paymentDetails.hash}}"/>
+              <input type="hidden" name="txnid" value="{{paymentDetails.txnid}}" />
+              <input type="hidden" name="amount" value="{{totalPayable}}" />
+              <input type="hidden" name="firstname" value="{{paymentDetails.firstname}}" />
+              <input type="hidden" name="email" value="{{paymentDetails.email}}" />
+              <input type="hidden" name="phone" value="{{paymentDetails.phone}}" /></td>
+              <input type="hidden" name="productinfo" value="{{paymentDetails.productinfo}}">
+              <input type="hidden" name="surl" value="{{paymentDetails.surl}}">
+              <input type="hidden" name="furl" value="{{paymentDetails.furl}}">
+              <input type="hidden" name="udf1" value="{{paymentDetails.udf1}}">
+              <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                  <button type="button" class="pull-right btn btn-success" ng-click="pay($event)">Pay Using PayUMoney</button>
+                </div>
+            </div>
+          </form>
       </div>
-    </div>
-  </div>
-</div>
-<div id="myModal" class="modal fade">
- <div class="modal-dialog">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h4 class="modal-title">Cash Payment Details</h4>
-        </div>
-        <div class="modal-body">
-            <form name="updateFaciilityDetail">
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label  class="pull-left">Vendor Name </label>
-                            <input class="form-control" type="text" placeholder="Enter Vendor Name" name="vandorName" ng-model="cashDetail.vendor_name" required>
-                            <p ng-show="updateFaciilityDetail.vandorName.$invalid && !updateFaciilityDetail.vandorName.$pristine" class="help-block red-text">Please enter vendor name</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label  class="pull-left">Job Card Type </label>
-                            <input class="form-control" type="text" placeholder="Enter Job Card Type" name="jobtype" ng-model="cashDetail.job_card_type" required>
-                            <p ng-show="updateFaciilityDetail.jobtype.$invalid && !updateFaciilityDetail.jobtype.$pristine" class="help-block red-text">Please enter job card type</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label  class="pull-left">Maintainance Category</label>
-                            <input class="form-control" type="text" placeholder="Enter maintainance Category" name="maintainanceCat" ng-model="cashDetail.category" required>
-                            <p ng-show="updateFaciilityDetail.maintainanceCat.$invalid && !updateFaciilityDetail.maintainanceCat.$pristine" class="help-block red-text">Please enter maintainance category</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label class="pull-left">Payment Date</label>
-                            <input class="form-control" type="text" datetimepicker placeholder="Plz Select Date" name="date" required>
-                            <p ng-show="updateFaciilityDetail.date.$invalid && !updateFaciilityDetail.date.$pristine" class="help-block red-text">Please enter Payment date</p>
-                        </div>
-                    </div>
-                </div>  
-                <div class="row">
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label  class="pull-left">Contract Type</label>
-                            <input class="form-control" type="text" placeholder="Enter Contract Type" name="contracttype" ng-model="cashDetail.contract_type" required>
-                            <p ng-show="updateFaciilityDetail.contracttype.$invalid && !updateFaciilityDetail.contracttype.$pristine" class="help-block red-text">Please enter Contract Type</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="form-group">
-                            <label  class="pull-left">Charge</label>
-                            <input class="form-control" min="0" type="number" placeholder="Enter Charge" name="chargev" ng-model="cashDetail.charge" required>
-                            <p ng-show="updateFaciilityDetail.chargev.$invalid && !updateFaciilityDetail.chargev.$pristine" class="help-block red-text">Please enter Charge</p>
-                        </div>
-                    </div>
-                </div>
-                
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" ng-disabled="updateFaciilityDetail.$invalid" ng-click="submitPayDetails()" class="btn btn-success" data-dismiss="modal">Submit</button>
-            <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>  
     </div>
   </div>
 </div>

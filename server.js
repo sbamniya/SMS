@@ -174,11 +174,7 @@
     app.post('/society-updatePassword', societymanager.updatePassword(crypto, pool));
     app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
     app.post('/paymentDuesFromManagerForUpdate', societymanager.paymentDuesFromManagerForUpdate(pool));
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 8f4a967435330cbc9f890ecf5e7993b9f103be33
     /*Flat Management*/
     app.post('/addFlat', flat.addFlat(pool));
     app.post('/getFlatList', flat.getFlatList(pool));

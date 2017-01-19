@@ -253,8 +253,4 @@ exports.paymentDuesFromManagerForUpdate = function(pool) {
             }
         });
     };
-<<<<<<< HEAD
 };
-=======
-};
->>>>>>> 8f4a967435330cbc9f890ecf5e7993b9f103be33
