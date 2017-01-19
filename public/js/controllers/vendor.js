@@ -42,7 +42,9 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 		if (response.hasOwnProperty('success')) {
 			$scope.vendors = response.data;
 		}
-		$scope.$emit('UNLOAD');
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 1000);
 	});
 
 	$scope.deleteVendor = function(vendor_id){
@@ -79,7 +81,7 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 				$scope.successMsg = "Details Updated Successfully !";
 				$timeout(function(){
 					$route.reload();
-				}, 2000);
+				}, 1000);
 			}else{
 				$scope.Error = true;
 				$scope.ErrorMsg = "Some Error Ocuured While Updating Data !";
@@ -88,4 +90,65 @@ socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '
 			$scope.$emit('UNLOAD');
 		});
 	}
+}]);
+
+socialApp.controller('VendorEntryExit', ['$scope','$http','$timeout', '$location', function($scope, $http, $timeout, $location){
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	var SatffID = userData.id;
+	$scope.staffData = {
+		staff_id: SatffID
+	};
+	$scope.jobcards = [];
+
+	$scope.$emit('LOAD');
+	$http.post('/listvendors', {block_id: blockId}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			$scope.vendors = response.data;
+		}
+		$scope.$emit('UNLOAD');
+	});
+
+	$scope.getJobCards = function(){
+		var id = $scope.staffData.vendor_id;
+		if (id!='' && angular.isDefined(id)) {
+			$scope.$emit('LOAD');
+			$http.post('/getJobCardsByVendorID', {vendor_id: id}).success(function(res){
+				if (res.hasOwnProperty('sucess')) {
+					$scope.jobcards = res.data;
+				}
+				$scope.$emit('UNLOAD');
+			})
+		}else{
+			$scope.staffData.job_card_id ='';
+			$scope.jobcards = [];
+		}
+	}
+
+	$scope.vendorEntry = function(){
+		var data = $scope.staffData;
+		$http.post('/vendorEntryByStaff', data).success(function(res){
+			if (res.hasOwnProperty('success')) {
+				$location.path('/visitors-for-staff')
+			}else{
+				$scope.Error = true;
+				$scope.ErrorMsg = res.error;
+			}
+		})
+	}
+}]);
+
+
+socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
+	/*$scope.$emit('LOAD');
+	$http.post('/listvendors', {block_id: blockId}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			$scope.vendors = response.data;
+		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
+		
+	});
+*/
 }]);

@@ -70,7 +70,7 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
     }
 }]);
 
-socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$http){
+socialApp.controller('visitorsForResident', ['$scope','$http','$timeout', function($scope,$http,$timeout){
 	$scope.AllVisitors = [];
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userData.id;
@@ -94,7 +94,7 @@ socialApp.controller('visitorsForResident', ['$scope','$http', function($scope,$
 	});
 }]);
 
-socialApp.controller('AddVisitorResident', ['$scope','$http','$location', function($scope, $http, $location){
+socialApp.controller('AddVisitorResident', ['$scope','$http','$location','$timeout', function($scope, $http, $location, $timeout){
 
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userData.id;
@@ -116,7 +116,7 @@ socialApp.controller('AddVisitorResident', ['$scope','$http','$location', functi
 	}
 }]);
 
-socialApp.controller('AddVisitorStaff', ['$scope','$http','$location','$filter', function($scope, $http, $location, $filter){
+socialApp.controller('AddVisitorStaff', ['$scope','$http','$location','$filter','$timeout', function($scope, $http, $location, $filter, $timeout){
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var block_id = userData.block_id;
 	$scope.visitor = {};
@@ -148,7 +148,7 @@ socialApp.controller('AddVisitorStaff', ['$scope','$http','$location','$filter',
 }]);
 
 
-socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function($scope, $http, $routeParams){
+socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams','$timeout', function($scope, $http, $routeParams, $timeout){
 	$scope.visitor = {};
 	$scope.$emit('LOAD');
 	var id = atob($routeParams.visitorID);
@@ -174,7 +174,7 @@ socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams', function
 
 }]);
 
-socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routeParams','DTOptionsBuilder', function($scope, $http,$routeParams, DTOptionsBuilder){
+socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routeParams','DTOptionsBuilder','$timeout', function($scope, $http,$routeParams, DTOptionsBuilder, $timeout){
 	$scope.AllVisitors = [];
 	var id = atob($routeParams.blockID);
 	$scope.$emit('LOAD');
