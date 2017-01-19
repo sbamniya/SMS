@@ -97,7 +97,7 @@ socialApp.controller('societyList',['$scope', '$http', '$location', '$compile','
 }]);
 
 socialApp.controller('societyListByID',['$scope', '$http', '$location', '$compile','$route', '$timeout','$routeParams', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $timeout, $routeParams, DTOptionsBuilder, DTColumnBuilder) {
-        $scope.$emit('LOAD');
+        /*$scope.$emit('LOAD');*/
         var id = window.atob($routeParams.id);
         $scope.societyDetails = {};
         
@@ -112,7 +112,7 @@ socialApp.controller('societyListByID',['$scope', '$http', '$location', '$compil
             }
             $scope.$emit('UNLOAD');
         });
-        $scope.$emit('LOAD');
+        /*$scope.$emit('LOAD');*/
         $scope.dtColumns = [
             DTColumnBuilder.newColumn("name", "Name").notSortable(),
             DTColumnBuilder.newColumn("society_name", "Society").notSortable(),
@@ -132,9 +132,7 @@ socialApp.controller('societyListByID',['$scope', '$http', '$location', '$compil
             },
             dataSrc: function (res) { 
                 var generateResponse = JSON.parse(res.success);
-                $timeout(function(){
-                    $scope.$emit('UNLOAD');
-                },1000)
+                $scope.$emit('UNLOAD');
                 return generateResponse;
             }
         })
@@ -157,7 +155,7 @@ socialApp.controller('societyListByID',['$scope', '$http', '$location', '$compil
         }
         
         $scope.deleteBlock = function(id){
-            $scope.$emit('LOAD');
+            /*$scope.$emit('LOAD');*/
             var url = '/deleteBlock';
             $http.post(url, {id: id}).success(function(response){
                 $scope.$emit('UNLOAD');
@@ -165,7 +163,7 @@ socialApp.controller('societyListByID',['$scope', '$http', '$location', '$compil
             });
         }
         $scope.deleteSociety = function(id){
-            $scope.$emit('LOAD');
+            /*$scope.$emit('LOAD');*/
             var url = '/deleteSociety';
             $http.post(url, {id: id}).success(function(response){
                 $scope.$emit('UNLOAD');

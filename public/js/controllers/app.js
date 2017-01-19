@@ -324,11 +324,6 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider){
         templateUrl : 'society/html/expense.html',
         activetab: 'MoneyManager',
         title: "Block Expenses | Manager"
-    }).when('/vendor-due/:blockID', {
-        controller: 'Due',
-        templateUrl : 'society/html/vendor-due.html',
-        activetab: 'MoneyManager',
-        title: "Block Expenses | Manager"
     });
 
     /*Routes for Front*/
@@ -492,6 +487,16 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider){
         controller: 'printReceipt',
         activetab: 'MoneyManager',
         title: 'Money Manager Transaction | Resident'
+    }).when('/familiy-members', {
+        templateUrl : 'resident/html/familiy-members.html',
+        controller: 'FamilyMembers',
+        activetab: 'Familiy',
+        title: 'Familiy Members | Resident'
+    }).when('/add-new-family-member', {
+        templateUrl : 'resident/html/add-new-family-member.html',
+        controller: 'AddNewFamilyMembers',
+        activetab: 'Familiy',
+        title: 'Add New Familiy Members | Resident'
     });
 
     /*For Security*/
@@ -524,8 +529,23 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider){
         templateUrl : 'staff/html/staff-entry.html',
         activetab: 'StaffEntry',
         title: "Staff Entry | Staff Member"
+    }).when('/vendors-entry', {
+        controller: 'VendorEntryExit',
+        templateUrl : 'staff/html/vendor-entry.html',
+        activetab: 'VendorEntry',
+        title: "Vendor Entry | Staff Member"
+    }).when('/vendors-entry-view', {
+        controller: 'VendorEntryView',
+        templateUrl : 'staff/html/vendors.html',
+        activetab: 'VendorEntry',
+        title: "Vendor Entry | Staff Member"
+    }).when('/vendors-in-view', {
+        controller: 'VendorEntryExit',
+        templateUrl : 'staff/html/vendors.html',
+        activetab: 'VendorEntry',
+        title: "Vendor Entry | Staff Member"
     });
-
+    
     /*Routes for 404*/
     $routeProvider.when('/404', {
         templateUrl : 'front/html/404.html',

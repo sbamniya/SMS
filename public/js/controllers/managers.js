@@ -1,5 +1,5 @@
 socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','$route','$routeParams', '$timeout', 'DTOptionsBuilder', 'DTColumnBuilder', function ($scope, $http,$location, $compile, $route, $routeParams, $timeout,DTOptionsBuilder,DTColumnBuilder) {
-		$scope.$emit('LOAD');
+		/*$scope.$emit('LOAD');*/
         $scope.managers = {};
 		$scope.dtColumns = [
             //here We will add .withOption('name','column_name') for send column name to the server 
@@ -36,10 +36,11 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
                     }
                     log.push(item);
                 });
-                $timeout(function(){
-                    $scope.$emit('UNLOAD');
-                },1000)
+                
                 return log;
+                /*$timeout(function(){
+                    $scope.$emit('UNLOAD');
+                }, 2500);*/
       		}
         })
         .withOption('processing', true) //for show progress bar
@@ -62,12 +63,13 @@ socialApp.controller('managerList',['$scope', '$http', '$location', '$compile','
         }
        
 		$scope.deleteManager = function(id){
-            $scope.$emit('LOAD');
+            
             var returnVal = confirm('Are You Sure ?');
             if (!returnVal) {
                 return;
             }
 			var url = '/deleteManager';
+            $scope.$emit('LOAD');
 			$http.post(url, {id: id}).success(function(response){
                 $scope.$emit('UNLOAD');
 				$route.reload();
@@ -89,13 +91,12 @@ socialApp.controller('addManager',['$scope', '$http', '$location', '$compile', f
 				}else{
 					$scope.formError = response.error;
 					$scope.formErrorShow = true;
-                    $timeout(function(){
-                        $scope.$emit('UNLOAD');    
-                    },2000);
+                    $scope.$emit('UNLOAD');
 				}
 				
 			});
 		}
+<<<<<<< HEAD
 }]);
 
 socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$route', '$timeout', function($scope, $http, $location,$routeParams, $route, $timeout){
@@ -202,3 +203,6 @@ socialApp.controller('Due', ['$scope','$http','$location','$routeParams', '$rout
         }
     }
     */
+=======
+}]);
+>>>>>>> 8f4a967435330cbc9f890ecf5e7993b9f103be33

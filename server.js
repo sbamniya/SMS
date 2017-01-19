@@ -1,19 +1,21 @@
-    var express  = require('express');
-    var app      = express();                               // create our app w/ express
-    var morgan = require('morgan');             // log requests to the console (express4)
-    var url = require('url'); 
+    var express = require('express');
+    var app = express(); // create our app w/ express
+    var router = express.Router();
+
+    var morgan = require('morgan'); // log requests to the console (express4)
+    var url = require('url');
     var stormpath = require('express-stormpath');
     var nodemailer = require('nodemailer');
     var smtpTransport = require('nodemailer-smtp-transport');
     var router = require("./routes");
-    var multer = require('multer'); 
-    var mysql = require('mysql');                     // mongoose for mysql
+    var multer = require('multer');
+    var mysql = require('mysql'); // mongoose for mysql
     var connection = require('express-myconnection');
-    
-    var querystring = require('querystring'); 
+
+    var querystring = require('querystring');
     var http = require('https');
 
-    var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
+    var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
     var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
     var crypto = require('crypto');
     var session = require('express-session');
@@ -50,46 +52,51 @@
     var maintainace_category_master = require('./maintanance_category');
     var payment = require('./payment.js');
 
-    var loop = require('node-while-loop');
-   
-    app.use(express.static(__dirname + '/public'));// set the static files location /public/img will be /img for users
-    
-    app.use(morgan('dev'));  // log every request to the console
-    app.use(multer({dest: './uploads'}));
-   
-    app.use(bodyParser.urlencoded({'extended':'true'}));
-   
-    app.use(url); 
+    var family = require('./family.js');
 
-    app.use(bodyParser.json());  
+    var loop = require('node-while-loop');
+
+    app.use(express.static(__dirname + '/public')); // set the static files location /public/img will be /img for users
+
+    app.use(morgan('dev')); // log every request to the console
+    app.use(multer({ dest: './uploads' }));
+
+    app.use(bodyParser.urlencoded({ 'extended': 'true' }));
+
+    app.use(url);
+
+    app.use(bodyParser.json());
     // parse application/json
-    
-    app.use(bodyParser.json({ type: 'application/vnd.api+json' })); 
+
+    app.use(bodyParser.json({ type: 'application/vnd.api+json' }));
     // parse  app.use(methodOverride());
-   
-    
-    app.use(session({secret: 'ssshhhhh',saveUninitialized: true,
-                 resave: true}));
+
+
+    app.use(session({
+        secret: 'ssshhhhh',
+        saveUninitialized: true,
+        resave: true
+    }));
     /*Mail Setup*/
-       var transporter = nodemailer.createTransport(smtpTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            auth: {
-                user: 'kalika.deltabee@gmail.com',
-                pass: 'Delta09098888!@#'
-            }
-        })); 
-   
+    var transporter = nodemailer.createTransport(smtpTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        auth: {
+            user: 'kalika.deltabee@gmail.com',
+            pass: 'Delta09098888!@#'
+        }
+    }));
+
     /*Routing Handler for resident*/
-    app.post('/resident-login', resident.login(crypto,pool));
-    app.post('/resident-resetPasswordProcess',resident.resetPasswordProcess(transporter,randomstring,pool));
-    app.post('/resident-confirmToken',resident.confirmToken(pool));
-    app.post('/resident-updatePassword',resident.updatePassword(crypto,pool));
+    app.post('/resident-login', resident.login(crypto, pool));
+    app.post('/resident-resetPasswordProcess', resident.resetPasswordProcess(transporter, randomstring, pool));
+    app.post('/resident-confirmToken', resident.confirmToken(pool));
+    app.post('/resident-updatePassword', resident.updatePassword(crypto, pool));
     app.get('/getresidentList', resident.getresidentList(pool));
 
     app.post('/getSimpleResidentListOfBlock', resident.getSimpleResidentListOfBlock(pool));
 
-    app.post('/addResident',resident.addResident(pool, randomstring,crypto, transporter));
+    app.post('/addResident', resident.addResident(pool, randomstring, crypto, transporter));
     app.post('/getFlatResident', resident.getFlatResident(pool));
     app.get('/getresidentInfo', resident.getresidentInfo(pool));
     app.post('/residentProfile', resident.residentProfile(pool));
@@ -99,20 +106,20 @@
 
 
     app.post('/knowTenantAssignment', resident.knowTenantAssignment(pool));
-    app.post('/addTenant',resident.addTenant(pool,step));
+    app.post('/addTenant', resident.addTenant(pool, step));
     app.post('/updateTenantMeta', resident.updateTenantMeta(pool));
     app.post('/tenantMoveOut', resident.tenantMoveOut(pool));
 
-    
+
     app.get('/getTenantList', resident.getTenantList(pool));
-    app.post('/tenantDetail',resident.tenantDetail(pool));
-    app.get('/neighbourList',resident.neighbourList(pool));
+    app.post('/tenantDetail', resident.tenantDetail(pool));
+    app.get('/neighbourList', resident.neighbourList(pool));
     app.get('/tenantList', resident.tenantList(pool));
 
 
 
     /*Complaints APIs*/
-    app.post('/addComplaint', complaint.addComplaint(pool)); 
+    app.post('/addComplaint', complaint.addComplaint(pool));
     app.post('/getcomplaintDetail', complaint.getcomplaintDetail(pool));
     app.get('/getcomplaintList', complaint.getcomplaintList(pool));
     app.get('/complaintToManager', complaint.complaintToManager(pool));
@@ -121,23 +128,23 @@
     app.post('/getComplaintsStatusForResident', complaint.getComplaintsStatusForResident(pool));
     app.post('/getComplaintsStatusForManager', complaint.getComplaintsStatusForManager(pool));
     app.post('/getComplaintsStatusForAdmin', complaint.getComplaintsStatusForAdmin(pool));
-    app.post('/survillanceComplaintsStatusForResident', complaint.survillanceComplaintsStatusForResident(pool,transporter));
-    
+    app.post('/survillanceComplaintsStatusForResident', complaint.survillanceComplaintsStatusForResident(pool, transporter));
+
     /*Admin login & other functionality*/
-    app.post('/login', admin.login(crypto,pool));
+    app.post('/login', admin.login(crypto, pool));
     app.get('/authentication/:access', admin.authenticated);
-    app.get('/logout', admin.logout); 
-    app.post('/resetPasswordProcess',admin.resetPasswordProcess(transporter,randomstring,pool));
-    app.post('/confirmToken',admin.confirmToken(pool));
-    app.post('/updatePassword',admin.updatePassword(crypto,pool));
+    app.get('/logout', admin.logout);
+    app.post('/resetPasswordProcess', admin.resetPasswordProcess(transporter, randomstring, pool));
+    app.post('/confirmToken', admin.confirmToken(pool));
+    app.post('/updatePassword', admin.updatePassword(crypto, pool));
 
 
     /* Slug Society and other functionality */
-    app.post('/checkSlug', slugSociety.checkSlug(slug,moment,async,pool));
-    app.post('/addSlug', slugSociety.addSlug(slug,moment,async,pool));
-    app.post('/addSociety', society.addSociety(formidable,fs,pool,step));
-    app.post('/uploadPhoto', photoUpload.uploadPhoto(formidable,fs,pool));
-    app.post('/getSlug', society.getSlug(pool,slug));
+    app.post('/checkSlug', slugSociety.checkSlug(slug, moment, async, pool));
+    app.post('/addSlug', slugSociety.addSlug(slug, moment, async, pool));
+    app.post('/addSociety', society.addSociety(formidable, fs, pool, step));
+    app.post('/uploadPhoto', photoUpload.uploadPhoto(formidable, fs, pool));
+    app.post('/getSlug', society.getSlug(pool, slug));
 
     /*Society Management*/
     app.post('/getSocietyDetail', society.getSocietyDetail(pool));
@@ -150,7 +157,7 @@
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
 
-     /*Block Management*/
+    /*Block Management*/
     app.get('/getblockList', block.getblockList(pool));
     app.post('/editBlock', block.editBlock(pool));
     app.post('/addBlock', block.addBlock(pool));
@@ -160,26 +167,30 @@
     /*Society Manager functionality*/
     app.get('/getmanagerList', societymanager.getmanagerList(pool));
     app.get('/ActiveManagersList', societymanager.ActiveManagersList(pool));
-    app.post('/addManager', societymanager.addManager(pool,randomstring,crypto, transporter));
+    app.post('/addManager', societymanager.addManager(pool, randomstring, crypto, transporter));
     app.post('/deleteManager', societymanager.deleteManager(pool));
     app.get('/societyBlockList', societymanager.societyBlockList(pool));
     app.post('/checkForSocietyManager', societymanager.checkForSocietyManager(pool));
-    app.post('/society-updatePassword',societymanager.updatePassword(crypto,pool));
+    app.post('/society-updatePassword', societymanager.updatePassword(crypto, pool));
     app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
     app.post('/paymentDuesFromManagerForUpdate', societymanager.paymentDuesFromManagerForUpdate(pool));
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> 8f4a967435330cbc9f890ecf5e7993b9f103be33
     /*Flat Management*/
-    app.post('/addFlat', flat.addFlat(pool)); 
+    app.post('/addFlat', flat.addFlat(pool));
     app.post('/getFlatList', flat.getFlatList(pool));
     app.post('/AllFlatsOfBlock', flat.AllFlatsOfBlock(pool));
     app.post('/updateFlatDetails', flat.updateFlatDetails(pool));
     app.post('/getFlatDetails', flat.getFlatDetails(pool));
 
     /*Society login*/
-    app.post('/society-login', societylogin.login(crypto,pool));
-    app.post('/society-resetPasswordProcess',societylogin.resetPasswordProcess(transporter,randomstring,pool));
-    app.post('/society-confirmToken',societylogin.confirmToken(pool));
-    app.post('/societyManager-updatePassword',societylogin.updatePassword(crypto,pool));
+    app.post('/society-login', societylogin.login(crypto, pool));
+    app.post('/society-resetPasswordProcess', societylogin.resetPasswordProcess(transporter, randomstring, pool));
+    app.post('/society-confirmToken', societylogin.confirmToken(pool));
+    app.post('/societyManager-updatePassword', societylogin.updatePassword(crypto, pool));
 
 
     /*Staff*/
@@ -189,17 +200,17 @@
     app.post('/staffListByBlockSimple', staff.staffListByBlockSimple(pool));
     app.post('/deleteStaff', staff.deleteStaff(pool));
     app.post('/getStaffDetails', staff.getStaffDetails(pool));
-    app.post('/sendDetailstoManager',staff.sendDetailstoManager(pool,transporter));
-    app.post('/sendApproveDetails',staff.sendApproveDetails(pool,transporter));
-    app.post('/ManagerLoginForArroveServent',staff.ManagerLoginForArroveServent(pool, crypto));
-    app.post('/ManagerLoginForArroveFacility',staff.ManagerLoginForArroveFacility(pool, crypto));
-    
-    app.post('/staffListForResident',staff.staffListForResident(pool));
-    app.post('/staffRequestesForManager',staff.staffRequestesForManager(pool));
+    app.post('/sendDetailstoManager', staff.sendDetailstoManager(pool, transporter));
+    app.post('/sendApproveDetails', staff.sendApproveDetails(pool, transporter));
+    app.post('/ManagerLoginForArroveServent', staff.ManagerLoginForArroveServent(pool, crypto));
+    app.post('/ManagerLoginForArroveFacility', staff.ManagerLoginForArroveFacility(pool, crypto));
+
+    app.post('/staffListForResident', staff.staffListForResident(pool));
+    app.post('/staffRequestesForManager', staff.staffRequestesForManager(pool));
     /*Staff Action (Login & Etc)*/
-    app.post('/staff-login', staff.staffLogin(crypto ,pool));
-    app.post('/staffAttendance',staff.staffAttendance(pool));
-    app.post('/attandanceForManager',staff.attandanceForManager(pool));
+    app.post('/staff-login', staff.staffLogin(crypto, pool));
+    app.post('/staffAttendance', staff.staffAttendance(pool));
+    app.post('/attandanceForManager', staff.attandanceForManager(pool));
 
     /*Visitor Section*/
     app.post('/getVisitorsForStaff', visitor.getVisitorsForStaff(pool));
@@ -209,74 +220,78 @@
     app.post('/getVisitorDetail', visitor.getVisitorDetail(pool));
     app.post('/UpdateVisitorDetails', visitor.UpdateVisitorDetails(pool, transporter));
     app.post('/UpdateVisitorEntryDetails', visitor.UpdateVisitorEntryDetails(pool, transporter));
-     app.post('/ExternalVisitorsForManager',visitor.ExternalVisitorsForManager(pool));
-    
+    app.post('/ExternalVisitorsForManager', visitor.ExternalVisitorsForManager(pool));
+
     /*Servent*/
-    app.post('/servantsList',staff.servantsList(pool));
+    app.post('/servantsList', staff.servantsList(pool));
 
     /*Facility*/
-    app.post('/addFacility',facility.addFacility(pool));
-    app.post('/listFacilities',facility.listFacilities(pool));
-    app.post('/getSingleFacility',facility.getSingleFacility(pool));
-    app.post('/deleteFacilities',facility.deleteFacilities(pool));
-    app.post('/updateFacility',facility.updateFacility(pool));
-    app.post('/requestToManagerForFacility',facility.requestToManagerForFacility(pool,transporter));
-    app.post('/sendApproveDetailsToResidentAboutFacility',facility.sendApproveDetailsToResidentAboutFacility(pool,transporter));
-    app.post('/listOfFacilitiesForResident',facility.listOfFacilitiesForResident(pool));
-    app.post('/listOfRequestedFacilitiesForResident',facility.listOfRequestedFacilitiesForResident(pool));
+    app.post('/addFacility', facility.addFacility(pool));
+    app.post('/listFacilities', facility.listFacilities(pool));
+    app.post('/getSingleFacility', facility.getSingleFacility(pool));
+    app.post('/deleteFacilities', facility.deleteFacilities(pool));
+    app.post('/updateFacility', facility.updateFacility(pool));
+    app.post('/requestToManagerForFacility', facility.requestToManagerForFacility(pool, transporter));
+    app.post('/sendApproveDetailsToResidentAboutFacility', facility.sendApproveDetailsToResidentAboutFacility(pool, transporter));
+    app.post('/listOfFacilitiesForResident', facility.listOfFacilitiesForResident(pool));
+    app.post('/listOfRequestedFacilitiesForResident', facility.listOfRequestedFacilitiesForResident(pool));
 
-    app.post('/facilityRequestesForManager',facility.facilityRequestesForManager(pool));
+    app.post('/facilityRequestesForManager', facility.facilityRequestesForManager(pool));
 
     /*vendor*/
-    app.post('/addVendor',vendor.addVendor(pool,transporter));  
-    app.post('/listvendors',vendor.listvendors(pool));  
-    app.post('/deleteVendor',vendor.deleteVendor(pool));  
-    app.post('/updateVendor',vendor.updateVendor(pool));
+    app.post('/addVendor', vendor.addVendor(pool, transporter));
+    app.post('/listvendors', vendor.listvendors(pool));
+    app.post('/deleteVendor', vendor.deleteVendor(pool));
+    app.post('/updateVendor', vendor.updateVendor(pool));
+    app.post('/vendorEntryByStaff', vendor.vendorEntryByStaff(pool));
+
 
     /*parking management*/
-    app.post('/addParking',parking.addParking(pool));  
-    app.get('/getParkingList',parking.getParkingList(pool));  
-    app.post('/deleteAssingParking',parking.deleteAssingParking(pool));  
-    app.post('/assingParking',parking.assingParking(pool));
+    app.post('/addParking', parking.addParking(pool));
+    app.get('/getParkingList', parking.getParkingList(pool));
+    app.post('/deleteAssingParking', parking.deleteAssingParking(pool));
+    app.post('/assingParking', parking.assingParking(pool));
 
     /*Service*/
-    app.post('/service_request',services.service_request(pool));
-    app.post('/requestedServicesListToAdmin',services.requestedServicesListToAdmin(pool));
-    app.post('/addService',services.addService(pool));
-    app.post('/deleteService',services.deleteService(pool));
-    app.post('/ListServices',services.ListServices(pool));
-    app.post('/updateServiceRequestStatus',services.updateServiceRequestStatus(pool));
-    app.post('/listOfRequestedServicesToResident',services.listOfRequestedServicesToResident(pool));
+    app.post('/service_request', services.service_request(pool));
+    app.post('/requestedServicesListToAdmin', services.requestedServicesListToAdmin(pool));
+    app.post('/addService', services.addService(pool));
+    app.post('/deleteService', services.deleteService(pool));
+    app.post('/ListServices', services.ListServices(pool));
+    app.post('/updateServiceRequestStatus', services.updateServiceRequestStatus(pool));
+    app.post('/listOfRequestedServicesToResident', services.listOfRequestedServicesToResident(pool));
 
     /*Notice*/
-    app.post('/insertNotice',notice.insertNotice(pool, transporter));
-    app.post('/listOfNoticeToManager',notice.listOfNoticeToManager(pool));
-    app.post('/sentNoticeToResidents',notice.sentNoticeToResidents(pool, transporter));
+    app.post('/insertNotice', notice.insertNotice(pool, transporter));
+    app.post('/listOfNoticeToManager', notice.listOfNoticeToManager(pool));
+    app.post('/sentNoticeToResidents', notice.sentNoticeToResidents(pool, transporter));
 
     /*Amenities*/
-    app.post('/addAmenities',amenities.addAmenities(pool));
-    app.post('/listAmenities',amenities.listAmenities(pool));
-    app.post('/getSingleAmility',amenities.getSingleAmility(pool));
-    app.post('/deleteAmenities',amenities.deleteAmenities(pool));
-    app.post('/updateAmenities',amenities.updateAmenities(pool));
-    app.post('/listOfAmenitiesForResident',amenities.listOfAmenitiesForResident(pool));
-    app.post('/requestToManagerForAmenities',amenities.requestToManagerForAmenities(pool,transporter));
-    app.post('/listOfRequestedAmenitiesForResident',amenities.listOfRequestedAmenitiesForResident(pool));
-    app.post('/requestedResidentForAmenitiesToManager',amenities.requestedResidentForAmenitiesToManager(pool));
-    app.post('/sendApproveDetailsToResidentAboutAmenities',amenities.sendApproveDetailsToResidentAboutAmenities(pool,transporter));
-    app.post('/checkDateForAmenity',amenities.checkDateForAmenity(pool));
+    app.post('/addAmenities', amenities.addAmenities(pool));
+    app.post('/listAmenities', amenities.listAmenities(pool));
+    app.post('/getSingleAmility', amenities.getSingleAmility(pool));
+    app.post('/deleteAmenities', amenities.deleteAmenities(pool));
+    app.post('/updateAmenities', amenities.updateAmenities(pool));
+    app.post('/listOfAmenitiesForResident', amenities.listOfAmenitiesForResident(pool));
+    app.post('/requestToManagerForAmenities', amenities.requestToManagerForAmenities(pool, transporter));
+    app.post('/listOfRequestedAmenitiesForResident', amenities.listOfRequestedAmenitiesForResident(pool));
+    app.post('/requestedResidentForAmenitiesToManager', amenities.requestedResidentForAmenitiesToManager(pool));
+    app.post('/sendApproveDetailsToResidentAboutAmenities', amenities.sendApproveDetailsToResidentAboutAmenities(pool, transporter));
+    app.post('/checkDateForAmenity', amenities.checkDateForAmenity(pool));
 
     /*Money Management*/
-    app.post('/residentAllFacilityMaintainance',money_management.residentAllFacilityMaintainance(pool));
-    app.post('/residentAllAmenityMaintainance',money_management.residentAllAmenityMaintainance(pool));
+    app.post('/residentAllFacilityMaintainance', money_management.residentAllFacilityMaintainance(pool));
+    app.post('/residentAllAmenityMaintainance', money_management.residentAllAmenityMaintainance(pool));
 
-    /*JOb Card*/
-    app.post('/addJobcard',jobcard.addJobcard(pool));
-    app.post('/allCategory',maintainace_category_master.allCategory(pool));
-    app.post('/jobcardDetails',jobcard.jobcardDetails(pool));
-    app.post('/deleteJobcardStatus',jobcard.deleteJobcardStatus(pool));
-    app.post('/singlejobcardDetailsWithVendor',jobcard.singlejobcardDetailsWithVendor(pool));
-    app.post('/jobcardDetailsForPrint',jobcard.jobcardDetailsForPrint(pool));
+    /*Job Card*/
+    app.post('/addJobcard', jobcard.addJobcard(pool));
+    app.post('/allCategory', maintainace_category_master.allCategory(pool));
+    app.post('/jobcardDetails', jobcard.jobcardDetails(pool));
+    app.post('/deleteJobcardStatus', jobcard.deleteJobcardStatus(pool));
+    app.post('/singlejobcardDetailsWithVendor', jobcard.singlejobcardDetailsWithVendor(pool));
+    app.post('/jobcardDetailsForPrint', jobcard.jobcardDetailsForPrint(pool));
+    app.post('/getJobCardsByVendorID', jobcard.getJobCardsByVendorID(pool));
+
 
     app.post('/payment-success', payment.addPaymentDetails(pool));
     app.post('/payment-fail', payment.addPaymentDetails(pool));
@@ -287,9 +302,11 @@
     app.post('/getFacilityName', payment.getFacilityName(pool));
     app.post('/getAmenityName', payment.getAmenityName(pool));
 
-     
+    app.post('/addFamilyMember', family.addFamilyMember(pool));
+    app.post('/getFamiliyMembersForresident', family.getFamiliyMembersForresident(pool));
+
     /*Create Hash*/
-    app.post('/createHash', function(req, res){
+    app.post('/createHash', function(req, res) {
         var data = req.body.string;
         var $data = crypto.createHash('sha512').update(data).digest("hex")
         res.send($data);
@@ -297,7 +314,6 @@
 
     /*Routing Handler*/
     app.use(app.router);
-    
+
     app.listen(process.env.PORT || 2000);
     console.log("App listening on port 2000");
-	

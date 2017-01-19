@@ -64,6 +64,7 @@ exports.addVendor = function(pool, transporter) {
     }
 }
 
+
 exports.listvendors = function(pool) {
     return function(req, res) {
         res.setHeader('Content-Type', 'application/json');
@@ -121,6 +122,41 @@ exports.updateVendor = function(pool) {
                 result.success = "vendor updated successfully";
                 res.send(JSON.stringify(result));
             };
+        });
+    }
+}
+
+exports.vendorEntryByStaff = function(pool) {
+    return function(req, res) {
+        var data = req.body;
+        res.setHeader('Content-Type', 'application/json');
+        var job_card_id = data.job_card_id;
+        var staff_id = data.staff_id;
+        var time_in = data.time_in;
+        var vendor_id = data.vendor_id;
+        var ip = req.connection.remoteAddress;
+        var date = new Date();
+        var in_date_time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + time_in;
+        var query = 'select * from vendor_entries where vendor_id="' + vendor_id + '" and status=0';
+        /*and cast(in_date_time as date)=CURDATE()*/
+        pool.query(query, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+            } else {
+                if (rows.length > 0) {
+                    res.send({ error: 'This Vendor Is Already In !' });
+                } else {
+                    var Q = 'INSERT into vendor_entries(vendor_id, job_card_id, in_date_time, in_ip, in_security, status) VALUES("' + vendor_id + '", "' + job_card_id + '", "' + in_date_time + '", "' + ip + '", "' + staff_id + '", "0")';
+                    pool.query(Q, function(error, rows, fields) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            res.send({ success: 'Data Inserted Successfully!' });
+                        }
+                    });
+                }
+
+            }
         });
     }
 }

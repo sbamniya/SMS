@@ -25,7 +25,21 @@
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
             <li>
-                 <a href="#/visitors-for-staff" ng-class="{active: activetab == 'Visitors'}"><i class="fa fa-fw fa-users"></i>Visitors</a>
+                <a href="#/visitors-for-staff" ng-class="{active: activetab == 'Visitors'}"><i class="fa fa-fw fa-users"></i>External Visitors</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-class="{active: activetab == 'VendorEntry'}" data-toggle="collapse" data-target="#defsdfsdmos"><i class="fa fa-users"></i>Vendors Entry  <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="defsdfsdmos" class="collapse" ng-class="{in: activetab == 'VendorEntry'}">
+                    <li>
+                        <a href="#/vendors-entry"><i class="fa fa-circle-o"></i>New Entry</a>
+                    </li>
+                    <li>
+                        <a href="#/vendors-in-view"><i class="fa fa-circle-o"></i>In Vendors</a>
+                    </li>
+                    <li>
+                        <a href="#/vendors-entry-view"><i class="fa fa-circle-o"></i>View Entries</a>
+                    </li>
+                </ul>
             </li>
             <li>
                 <a href="#/staff-entry" ng-class="{active: activetab == 'StaffEntry'}"><i class="fa fa-users"></i>Staff Attandance</a>
