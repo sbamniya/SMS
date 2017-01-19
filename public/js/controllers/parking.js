@@ -1,5 +1,5 @@
 socialApp.controller('parking',['$scope', '$http', '$location', '$compile', '$timeout','$routeParams', function ($scope, $http,$location, $compile, $timeout, $routeParams) {
-		$scope.$emit('LOAD');
+		/*$scope.$emit('LOAD');*/
 		var id = window.atob($routeParams.blockID);
 		$scope.flat = {};
 		$scope.flat.flatNumber = [];
@@ -37,7 +37,7 @@ socialApp.controller('parking',['$scope', '$http', '$location', '$compile', '$ti
 			$scope.$emit('UNLOAD');
 		});
 		$scope.openDetailedForm = function(noOfFlats, index, _that){
-			$scope.$emit('LOAD');
+			/*$scope.$emit('LOAD');*/
 
 			if(angular.isUndefined(_that))
 			{
@@ -53,7 +53,8 @@ socialApp.controller('parking',['$scope', '$http', '$location', '$compile', '$ti
 			}else{
 				$scope.flat.flatType[number] = $scope.flat.flatType[1];
 			}
-	
+			
+		
 			for (var i = 1; i <= noOfFlats; i++) {
 
 				$scope.flat.flatNumber[number][i] = number+'0'+i; 
@@ -80,7 +81,7 @@ socialApp.controller('parking',['$scope', '$http', '$location', '$compile', '$ti
 		}
 
 		$scope.addParkingSlots = function(){
-			$scope.$emit('LOAD');
+			/*$scope.$emit('LOAD');*/
 			var block_id = $scope.flat.block_id;
 			var totalFlatsByAdmin =10;// $scope.flat.numberOfFlats;
 			var count = 0;
@@ -117,7 +118,6 @@ socialApp.controller('parking',['$scope', '$http', '$location', '$compile', '$ti
 }]);
 
 socialApp.controller('parkingList', ['$scope','$http','$routeParams', function($scope, $http,$routeParams){
-	
 	var block_id = window.atob($routeParams.blockID);
 	$scope.parkingArr = [];
 	$scope.manageBtn = true;

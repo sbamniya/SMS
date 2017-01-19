@@ -13,7 +13,6 @@ exports.addJobcard = function(pool){
         var start_date              = req.body.start_date;
         var end_date                = req.body.end_date;
         var charge                  = req.body.charge;  
-        var pay_type                = req.body.pay_type;
 
         var Q = 'INSERT INTO job_card_master(`vendor_id`, `category_id`, `block_id`, `job_card_type`, `contract_type`,`start_date`,`end_date`, `total_visits`,`visits_left`, `approximate_visit_date`, `reccuring_days`,`charge`,`description`, `status`) VALUES ("'+vendor_id+'","'+category_id+'","'+block_id+'","'+type+'","'+contract_type+'","'+start_date+'","'+end_date+'","'+total_visits+'", "'+total_visits+'","'+approximate_visit_date+'","'+reccuring_days+'","'+charge+'","'+description+'","0")';
         pool.query(Q,function(err,rows){
@@ -21,18 +20,8 @@ exports.addJobcard = function(pool){
                 console.log(err);
                 result.error = err;
             }else{
-                if (rows.insertId > 0) {
-                    var Q = 'INSERT INTO expenses (`jod_id`, `charge`, `pay_type`, `status`) VALUES ("' + rows.insertId + '","' + charge + '","' + pay_type + '","-1")';
-                    pool.query(Q, function(err, rows) {
-                        if (err) {
-                            console.log(err);
-                            result.error = err;
-                        } else {
-                            result.success = "JobCard added successfully";
-                            res.send(JSON.stringify(result));
-                        }
-                    });
-                }
+                result.success="JobCard added successfully";
+                res.send(JSON.stringify(result));
             }
         });
     }

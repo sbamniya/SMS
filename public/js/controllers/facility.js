@@ -24,13 +24,8 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 			$scope.facilities = response.data;
 		}
 		$timeout(function(){
-<<<<<<< HEAD
             $scope.$emit('UNLOAD');
         }, 1000);
-=======
-			$scope.$emit('UNLOAD');
-		},1000);
->>>>>>> 227fe70108a12159e16a75a3b9c395b86f7fd44d
 	});
 
 	$scope.deleteFacility = function(id){

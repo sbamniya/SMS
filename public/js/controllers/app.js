@@ -324,11 +324,6 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider){
         templateUrl : 'society/html/expense.html',
         activetab: 'MoneyManager',
         title: "Block Expenses | Manager"
-    }).when('/vendor-due/:blockID', {
-        controller: 'Due',
-        templateUrl : 'society/html/vendor-due.html',
-        activetab: 'MoneyManager',
-        title: "Block Expenses | Manager"
     });
 
     /*Routes for Front*/

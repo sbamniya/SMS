@@ -298,15 +298,3 @@ socialApp.controller('BlockIncomes', ['$scope','$http', '$routeParams','$route',
 socialApp.controller('Expenses', ['$scope','$http','$location', '$route', '$timeout', function($scope, $http, $location, $route, $timeout){
 	
 }]);
-
-// socialApp.controller('Due', ['$scope','$http','$location', '$route', '$timeout', function($scope, $http, $location, $route, $timeout){
-// 	var block_id = atob($routeParams.blockID);
-
-// 	$scope.VendorDues=[];
-// 	$http.post('/paymentDuesFromManager',{block_id: block_id}).success(function(response){
-// 		if(response.hasOwnProperty('succes'))
-// 		{
-// 			$scope.VendorDues=response.data;
-// 		}
-// 	});
-// }]);
