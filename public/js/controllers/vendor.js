@@ -129,7 +129,6 @@ socialApp.controller('VendorEntryExit', ['$scope', '$http', '$timeout', '$locati
         }
     }
 
-<<<<<<< HEAD
 	$scope.vendorEntry = function(){
 		var data = $scope.staffData;
 		$scope.$emit('LOAD');
@@ -153,7 +152,7 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
 	$scope.vendors = [];
 
 	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
-=======
+
     $scope.vendorEntry = function() {
         var data = $scope.staffData;
         $http.post('/vendorEntryByStaff', data).success(function(res) {
@@ -167,66 +166,3 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
     }
 }]);
 
-
-socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
-    /*$scope.$emit('LOAD');
-	$http.post('/listvendors', {block_id: blockId}).success(function(response){
->>>>>>> 4845934183c3ec7f70b97111219858be3824c0ad
-		if (response.hasOwnProperty('success')) {
-			angular.forEach(response.data, function(item, key){
-				if (item.status==1) {
-					$scope.vendors.push(item);
-				}
-				
-			});
-		}
-		$timeout(function(){
-			$scope.$emit('UNLOAD');
-		}, 500);
-		
-	});
-
-}]);
-
-socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', function($scope, $http, $timeout, $route){
-	$scope.$emit('LOAD');
-	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
-	var blockId = userData.block_id;
-	$scope.vendors = [];
-	$scope.visitorDetails = {
-		staff_id: userData.id
-	};
-
-	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
-		if (response.hasOwnProperty('success')) {
-			angular.forEach(response.data, function(item, key){
-				if (item.status==0) {
-					$scope.vendors.push(item);
-				}
-				
-			});
-		}
-		$timeout(function(){
-			$scope.$emit('UNLOAD');
-		}, 500);
-		
-	});
-<<<<<<< HEAD
-	$scope.upadteId = function(id){
-		$scope.visitorDetails.id = id;
-	}
-	$scope.updateVisiterLeavingDetails = function(){
-		$scope.$emit('LOAD');
-		$http.post('/VendorExitDetailsByStaff', $scope.visitorDetails).success(function(response){
-			$timeout(function(){
-				$scope.$emit('UNLOAD');
-				$route.reload();
-			}, 500);
-		
-		})
-	}
-}]);
-=======
-*/
-}]);
->>>>>>> 4845934183c3ec7f70b97111219858be3824c0ad

@@ -235,7 +235,6 @@
     app.post('/facilityRequestesForManager', facility.facilityRequestesForManager(pool));
 
     /*vendor*/
-<<<<<<< HEAD
     app.post('/addVendor',vendor.addVendor(pool,transporter));  
     app.post('/listvendors',vendor.listvendors(pool));  
     app.post('/deleteVendor',vendor.deleteVendor(pool));  
@@ -243,14 +242,6 @@
     app.post('/vendorEntryByStaff',vendor.vendorEntryByStaff(pool));
     app.post('/listVendorsEntry',vendor.listVendorsEntry(pool));
     app.post('/VendorExitDetailsByStaff',vendor.VendorExitDetailsByStaff(pool));
-=======
-    app.post('/addVendor', vendor.addVendor(pool, transporter));
-    app.post('/listvendors', vendor.listvendors(pool));
-    app.post('/deleteVendor', vendor.deleteVendor(pool));
-    app.post('/updateVendor', vendor.updateVendor(pool));
-    app.post('/vendorEntryByStaff', vendor.vendorEntryByStaff(pool));
-
->>>>>>> 4845934183c3ec7f70b97111219858be3824c0ad
 
     /*parking management*/
     app.post('/addParking', parking.addParking(pool));

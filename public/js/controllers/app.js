@@ -544,13 +544,8 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         activetab: 'VendorEntry',
         title: "Vendor Entry | Staff Member"
     }).when('/vendors-in-view', {
-<<<<<<< HEAD
         controller: 'VendorsInView',
         templateUrl : 'staff/html/vendors-in.html',
-=======
-        controller: 'VendorEntryExit',
-        templateUrl: 'staff/html/vendors.html',
->>>>>>> 4845934183c3ec7f70b97111219858be3824c0ad
         activetab: 'VendorEntry',
         title: "Vendor Entry | Staff Member"
     });
