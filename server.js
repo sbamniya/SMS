@@ -235,6 +235,8 @@
     app.post('/deleteVendor',vendor.deleteVendor(pool));  
     app.post('/updateVendor',vendor.updateVendor(pool));
     app.post('/vendorEntryByStaff',vendor.vendorEntryByStaff(pool));
+    app.post('/listVendorsEntry',vendor.listVendorsEntry(pool));
+    app.post('/VendorExitDetailsByStaff',vendor.VendorExitDetailsByStaff(pool));
 
     
     /*parking management*/

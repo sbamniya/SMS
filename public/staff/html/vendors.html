@@ -21,23 +21,26 @@
                 <div class="table-responsive">
                     <table id="entry-grid" datatable="ng" width="100%">
                         <thead>
-                            <th>Vendor ID</th>
+                            <th>Vendor Visitor ID</th>
                             <th>Vendor Name</th>
                             <th>For Job Card</th>
                             <th>In Date Time</th>
                             <th>In Entry Security</th>
                             <th>Out Date Time</th>
                             <th>Out Entry Security</th>
+                            <th>Out Security Comment</th>
+                            
                         </thead>
                         <tbody>
-                            <tr ng-repeat="Visitor in AllVisitors">
+                            <tr ng-repeat="Visitor in vendors">
                                 <td>{{Visitor.id}}</td>
-                                <td>{{Visitor.flat_number}}</td>
-                                <td>{{Visitor.name}}</td>
-                                <td>{{Visitor.type}}</td>
-                                <td>{{Visitor.resident_name}}</td>
-                                <td>{{Visitor.no_of_persons}}</td>
-                                <td>{{Visitor.contact_no}}</td>
+                                <td>{{Visitor.vendor_name}}</td>
+                                <td>{{Visitor.job_card_id}}</td>
+                                <td>{{Visitor.in_date_time | date:'dd MMM, yyyy HH:mm:ss'}}</td>
+                                <td>{{Visitor.in_staff_name}}</td>
+                                <td>{{Visitor.out_date_time | date:'dd MMM, yyyy HH:mm:ss'}}</td>
+                                <td>{{Visitor.out_staff_name}}</td>
+                                <td>{{Visitor.staff_comment}}</td>
                             </tr>
                         </tbody>
                     </table>

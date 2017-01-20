@@ -127,9 +127,11 @@ socialApp.controller('VendorEntryExit', ['$scope','$http','$timeout', '$location
 
 	$scope.vendorEntry = function(){
 		var data = $scope.staffData;
+		$scope.$emit('LOAD');
 		$http.post('/vendorEntryByStaff', data).success(function(res){
+			$scope.$emit('UNLOAD');
 			if (res.hasOwnProperty('success')) {
-				$location.path('/visitors-for-staff')
+				$location.path('/vendors-in-view')
 			}else{
 				$scope.Error = true;
 				$scope.ErrorMsg = res.error;
@@ -140,15 +142,62 @@ socialApp.controller('VendorEntryExit', ['$scope','$http','$timeout', '$location
 
 
 socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
-	/*$scope.$emit('LOAD');
-	$http.post('/listvendors', {block_id: blockId}).success(function(response){
+	$scope.$emit('LOAD');
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	$scope.vendors = [];
+
+	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
 		if (response.hasOwnProperty('success')) {
-			$scope.vendors = response.data;
+			angular.forEach(response.data, function(item, key){
+				if (item.status==1) {
+					$scope.vendors.push(item);
+				}
+				
+			});
 		}
 		$timeout(function(){
 			$scope.$emit('UNLOAD');
 		}, 500);
 		
 	});
-*/
+
+}]);
+
+socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', function($scope, $http, $timeout, $route){
+	$scope.$emit('LOAD');
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	$scope.vendors = [];
+	$scope.visitorDetails = {
+		staff_id: userData.id
+	};
+
+	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			angular.forEach(response.data, function(item, key){
+				if (item.status==0) {
+					$scope.vendors.push(item);
+				}
+				
+			});
+		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
+		
+	});
+	$scope.upadteId = function(id){
+		$scope.visitorDetails.id = id;
+	}
+	$scope.updateVisiterLeavingDetails = function(){
+		$scope.$emit('LOAD');
+		$http.post('/VendorExitDetailsByStaff', $scope.visitorDetails).success(function(response){
+			$timeout(function(){
+				$scope.$emit('UNLOAD');
+				$route.reload();
+			}, 500);
+		
+		})
+	}
 }]);
