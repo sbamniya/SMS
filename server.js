@@ -288,7 +288,7 @@
     app.post('/jobcardDetailsForPrint', jobcard.jobcardDetailsForPrint(pool));
     app.post('/getJobCardsByVendorID', jobcard.getJobCardsByVendorID(pool));
 
-
+    /*payment management*/
     app.post('/payment-success', payment.addPaymentDetails(pool));
     app.post('/payment-fail', payment.addPaymentDetails(pool));
 
@@ -297,7 +297,9 @@
     app.post('/transactionHistoryToManager', payment.transactionHistoryToManager(pool));
     app.post('/getFacilityName', payment.getFacilityName(pool));
     app.post('/getAmenityName', payment.getAmenityName(pool));
+    app.post('/managersDueForVendor', payment.managersDueForVendor(pool));
 
+    /*family management*/
     app.post('/addFamilyMember', family.addFamilyMember(pool));
     app.post('/getFamiliyMembersForresident', family.getFamiliyMembersForresident(pool));
 
