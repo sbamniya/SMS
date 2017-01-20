@@ -119,3 +119,23 @@ exports.jobcardDetailsForPrint = function(pool){
         });
     }
 }
+
+
+exports.getJobCardsByVendorID = function(pool){
+    return function(req,res){
+        res.setHeader('Content-Type', 'application/json');      
+        var result     = {};
+        var vendor_id = req.body.vendor_id;
+        var Q = 'select id from job_card_master where vendor_id="'+vendor_id+'"';
+        pool.query(Q,function(err,rows){
+            if(err){
+            console.log(err);
+            result.error = err;
+            }else{
+                result.data = rows;
+                result.sucess = "viewed successfully";
+                res.send(JSON.stringify(result));
+            }
+        });
+    }
+}

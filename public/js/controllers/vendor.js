@@ -32,60 +32,176 @@ socialApp.controller('AddVendor', ['$scope','fileUpload', '$http','$location','$
 	}
 }]);
 
-socialApp.controller('ViewVendorForManager', ['$scope','$http','$routeParams', '$route', '$timeout', function($scope, $http, $routeParams, $route, $timeout){
-	$scope.vendors = [];
-	$scope.success = false;
-	$scope.Error = false;
+socialApp.controller('ViewVendorForManager', ['$scope', '$http', '$routeParams', '$route', '$timeout', function($scope, $http, $routeParams, $route, $timeout) {
+    $scope.vendors = [];
+    $scope.success = false;
+    $scope.Error = false;
+    $scope.$emit('LOAD');
+    var block_id = atob($routeParams.blockID);
+    $http.post('/listvendors', { block_id: block_id }).success(function(response) {
+        if (response.hasOwnProperty('success')) {
+            $scope.vendors = response.data;
+        }
+        $timeout(function() {
+            $scope.$emit('UNLOAD');
+        }, 1000);
+    });
+
+    $scope.deleteVendor = function(vendor_id) {
+        var returnVal = confirm('Are You Sure ?');
+        if (!returnVal) {
+            return;
+        }
+        $scope.$emit('LOAD');
+        $http.post('/deleteVendor', { id: vendor_id }).success(function(response) {
+            if (response.hasOwnProperty('success')) {
+                $route.reload();
+            }
+            $scope.$emit('UNLOAD');
+        });
+    }
+    $scope.updateId = function(vendor_id, vendor_name, email, contact, description, payuavailable, merchant_id, merchant_key, merchant_salt) {
+        $scope.updateData = {
+            id: vendor_id,
+            vendor_name: vendor_name,
+            email: email,
+            contact: contact,
+            description: description,
+            payuavailable: payuavailable,
+            merchant_id: merchant_id,
+            merchant_key: merchant_key,
+            merchant_salt: merchant_salt
+        }
+    }
+
+    $scope.updateDetails = function() {
+        $scope.success = false;
+        $scope.Error = false;
+        $scope.$emit('LOAD');
+        $http.post('/updateVendor', $scope.updateData).success(function(response) {
+            if (response.hasOwnProperty('success')) {
+                $scope.success = true;
+                $scope.Error = false;
+                $scope.successMsg = "Details Updated Successfully !";
+                $timeout(function() {
+                    $route.reload();
+                }, 1000);
+            } else {
+                $scope.Error = true;
+                $scope.ErrorMsg = "Some Error Ocuured While Updating Data !";
+                $scope.success = false;
+            }
+            $scope.$emit('UNLOAD');
+        });
+    }
+}]);
+
+socialApp.controller('VendorEntryExit', ['$scope','$http','$timeout', '$location', function($scope, $http, $timeout, $location){
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	var SatffID = userData.id;
+	$scope.staffData = {
+		staff_id: SatffID
+	};
+	$scope.jobcards = [];
+
 	$scope.$emit('LOAD');
-	var block_id = atob($routeParams.blockID);
-	$http.post('/listvendors', {block_id: block_id}).success(function(response){
+	$http.post('/listvendors', {block_id: blockId}).success(function(response){
 		if (response.hasOwnProperty('success')) {
 			$scope.vendors = response.data;
 		}
 		$scope.$emit('UNLOAD');
 	});
 
-	$scope.deleteVendor = function(vendor_id){
-		var returnVal = confirm('Are You Sure ?');
-		if (!returnVal) {
-			return;
-		}
-		$scope.$emit('LOAD');
-		$http.post('/deleteVendor', {id: vendor_id}).success(function(response){
-			if (response.hasOwnProperty('success')) {
-				$route.reload();
-			}
-			$scope.$emit('UNLOAD');
-		});
-	}
-	$scope.updateId = function(vendor_id, vendor_name, email, contact, description){
-		$scope.updateData = {
-			id: vendor_id,
-			vendor_name: vendor_name,
-			email: email,
-			contact: contact,
-			description: description
+	$scope.getJobCards = function(){
+		var id = $scope.staffData.vendor_id;
+		if (id!='' && angular.isDefined(id)) {
+			$scope.$emit('LOAD');
+			$http.post('/getJobCardsByVendorID', {vendor_id: id}).success(function(res){
+				if (res.hasOwnProperty('sucess')) {
+					$scope.jobcards = res.data;
+				}
+				$scope.$emit('UNLOAD');
+			})
+		}else{
+			$scope.staffData.job_card_id ='';
+			$scope.jobcards = [];
 		}
 	}
 
-	$scope.updateDetails = function(){
-		$scope.success = false;
-		$scope.Error = false;
+	$scope.vendorEntry = function(){
+		var data = $scope.staffData;
 		$scope.$emit('LOAD');
-		$http.post('/updateVendor', $scope.updateData).success(function(response){
-			if (response.hasOwnProperty('success')) {
-				$scope.success = true;
-				$scope.Error = false;
-				$scope.successMsg = "Details Updated Successfully !";
-				$timeout(function(){
-					$route.reload();
-				}, 2000);
+		$http.post('/vendorEntryByStaff', data).success(function(res){
+			$scope.$emit('UNLOAD');
+			if (res.hasOwnProperty('success')) {
+				$location.path('/vendors-in-view')
 			}else{
 				$scope.Error = true;
-				$scope.ErrorMsg = "Some Error Ocuured While Updating Data !";
-				$scope.success = false;
+				$scope.ErrorMsg = res.error;
 			}
+		})
+	}
+}]);
+
+
+socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
+	$scope.$emit('LOAD');
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	$scope.vendors = [];
+
+	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			angular.forEach(response.data, function(item, key){
+				if (item.status==1) {
+					$scope.vendors.push(item);
+				}
+				
+			});
+		}
+		$timeout(function(){
 			$scope.$emit('UNLOAD');
-		});
+		}, 500);
+		
+	});
+
+}]);
+
+socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', function($scope, $http, $timeout, $route){
+	$scope.$emit('LOAD');
+	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+	var blockId = userData.block_id;
+	$scope.vendors = [];
+	$scope.visitorDetails = {
+		staff_id: userData.id
+	};
+
+	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
+		if (response.hasOwnProperty('success')) {
+			angular.forEach(response.data, function(item, key){
+				if (item.status==0) {
+					$scope.vendors.push(item);
+				}
+				
+			});
+		}
+		$timeout(function(){
+			$scope.$emit('UNLOAD');
+		}, 500);
+		
+	});
+	$scope.upadteId = function(id){
+		$scope.visitorDetails.id = id;
+	}
+	$scope.updateVisiterLeavingDetails = function(){
+		$scope.$emit('LOAD');
+		$http.post('/VendorExitDetailsByStaff', $scope.visitorDetails).success(function(response){
+			$timeout(function(){
+				$scope.$emit('UNLOAD');
+				$route.reload();
+			}, 500);
+		
+		})
 	}
 }]);

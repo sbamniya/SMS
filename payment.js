@@ -28,10 +28,6 @@ exports.addPaymentDetails = function(pool){
         var resident_id             = data.udf1;
         var transaction_status      = data.status;
         var status                  = 1;
-// <<<<<<< HEAD
-
-// =======
-// >>>>>>> 4a6f1e74d83424e43df490c5c06b640aa3fdccad
         var proInfo = JSON.parse(productinfo);
         var productstr = JSON.stringify(proInfo);
 
@@ -183,6 +179,32 @@ exports.getFacilityName = function(pool){
                 result.data = rows[0];  
                 result.success = "displayed successfully";
                 res.send(JSON.stringify(result)); 
+            };
+        })
+    }
+}
+
+exports.managersDueForVendor = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var result = {};
+        var vendor_id = req.body.vendor_id;
+        var jobcard_id = req.body.jobcard_id;
+        var payment_type = req.body.payment_type;
+        var d = new Date(req.body.paydate);
+        var payment_date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+
+
+        console.log("sdkuf");
+        var Q = 'INSERT INTO `expenses_history`(`vendor_id`, `jobcard_id`, `payment_type`, `date`, `status`) VALUES ("' + vendor_id + '","' + jobcard_id + '","' + payment_type + '","' + payment_date + '","1")';
+        pool.query(Q, function(err, rows) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                
+                result.success = "inserted successfully";
+                res.send(JSON.stringify(result));
             };
         })
     }

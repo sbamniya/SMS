@@ -1,5 +1,7 @@
     var express  = require('express');
     var app      = express();                               // create our app w/ express
+    var router = express.Router();
+
     var morgan = require('morgan');             // log requests to the console (express4)
     var url = require('url'); 
     var stormpath = require('express-stormpath');
@@ -49,6 +51,8 @@
     var jobcard = require('./jobcard');
     var maintainace_category_master = require('./maintanance_category');
     var payment = require('./payment.js');
+
+    var family = require('./family.js');
 
     var loop = require('node-while-loop');
    
@@ -165,6 +169,8 @@
     app.get('/societyBlockList', societymanager.societyBlockList(pool));
     app.post('/checkForSocietyManager', societymanager.checkForSocietyManager(pool));
     app.post('/society-updatePassword',societymanager.updatePassword(crypto,pool));
+    app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
+    app.post('/paymentDuesFromManagerForUpdate', societymanager.paymentDuesFromManagerForUpdate(pool));
 
     /*Flat Management*/
     app.post('/addFlat', flat.addFlat(pool)); 
@@ -230,7 +236,11 @@
     app.post('/listvendors',vendor.listvendors(pool));  
     app.post('/deleteVendor',vendor.deleteVendor(pool));  
     app.post('/updateVendor',vendor.updateVendor(pool));
+    app.post('/vendorEntryByStaff',vendor.vendorEntryByStaff(pool));
+    app.post('/listVendorsEntry',vendor.listVendorsEntry(pool));
+    app.post('/VendorExitDetailsByStaff',vendor.VendorExitDetailsByStaff(pool));
 
+    
     /*parking management*/
     app.post('/addParking',parking.addParking(pool));  
     app.get('/getParkingList',parking.getParkingList(pool));  
@@ -268,13 +278,15 @@
     app.post('/residentAllFacilityMaintainance',money_management.residentAllFacilityMaintainance(pool));
     app.post('/residentAllAmenityMaintainance',money_management.residentAllAmenityMaintainance(pool));
 
-    /*JOb Card*/
+    /*Job Card*/
     app.post('/addJobcard',jobcard.addJobcard(pool));
     app.post('/allCategory',maintainace_category_master.allCategory(pool));
     app.post('/jobcardDetails',jobcard.jobcardDetails(pool));
     app.post('/deleteJobcardStatus',jobcard.deleteJobcardStatus(pool));
     app.post('/singlejobcardDetailsWithVendor',jobcard.singlejobcardDetailsWithVendor(pool));
     app.post('/jobcardDetailsForPrint',jobcard.jobcardDetailsForPrint(pool));
+    app.post('/getJobCardsByVendorID',jobcard.getJobCardsByVendorID(pool));
+
 
     app.post('/payment-success', payment.addPaymentDetails(pool));
     app.post('/payment-fail', payment.addPaymentDetails(pool));
@@ -284,8 +296,14 @@
     app.post('/transactionHistoryToManager', payment.transactionHistoryToManager(pool));
     app.post('/getFacilityName', payment.getFacilityName(pool));
     app.post('/getAmenityName', payment.getAmenityName(pool));
+    app.post('/managersDueForVendor', payment.managersDueForVendor(pool));
+    
+    app.post('/addFamilyMember', family.addFamilyMember(pool));
+    app.post('/getFamiliyMembersForresident', family.getFamiliyMembersForresident(pool));
+    
+    
+    
 
-     
     /*Create Hash*/
     app.post('/createHash', function(req, res){
         var data = req.body.string;
