@@ -107,9 +107,13 @@ exports.updateVendor = function(pool) {
         var description = req.body.description;
         var vendor_name = req.body.vendor_name;
         var vendor_email = req.body.email;
+        var merchant_id = req.body.merchant_id;
+        var merchant_key = req.body.merchant_key;
+        var merchant_salt = req.body.merchant_salt;
         var contact = req.body.contact;
+        var payuavailable = req.body.payuavailable;
         var result = {};
-        var querystring = 'update vendor_master SET vendor_name = "' + vendor_name + '", email = "' + vendor_email + '",contact ="' + contact + '",description="' + description + '" where id="' + vendor_id + '"';
+        var querystring = 'update vendor_master SET vendor_name = "' + vendor_name + '", email = "' + vendor_email + '",contact ="' + contact + '",merchant_id = "' + merchant_id + '",merchant_key = "' + merchant_key + '",merchant_salt = "' + merchant_salt + '",description="' + description + '",payuavailable = "' + payuavailable + '" where id="' + vendor_id + '"';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
