@@ -51,7 +51,7 @@
     var jobcard = require('./jobcard');
     var maintainace_category_master = require('./maintanance_category');
     var payment = require('./payment.js');
-
+    var maintainance = require('./maintanance');
     var family = require('./family.js');
 
     var loop = require('node-while-loop');
@@ -174,6 +174,7 @@
     app.post('/society-updatePassword', societymanager.updatePassword(crypto, pool));
     app.post('/paymentDuesFromManager', societymanager.paymentDuesFromManager(pool));
     app.post('/paymentDuesFromManagerForUpdate', societymanager.paymentDuesFromManagerForUpdate(pool));
+    app.post('/paymentDuesFromManagerForSinglePay', societymanager.paymentDuesFromManagerForSinglePay(pool));
 
     /*Flat Management*/
     app.post('/addFlat', flat.addFlat(pool));
@@ -187,7 +188,6 @@
     app.post('/society-resetPasswordProcess', societylogin.resetPasswordProcess(transporter, randomstring, pool));
     app.post('/society-confirmToken', societylogin.confirmToken(pool));
     app.post('/societyManager-updatePassword', societylogin.updatePassword(crypto, pool));
-
 
     /*Staff*/
     app.get('/getStaffTypes', staff.getStaffTypes(pool));
@@ -298,11 +298,19 @@
     app.post('/getFacilityName', payment.getFacilityName(pool));
     app.post('/getAmenityName', payment.getAmenityName(pool));
     app.post('/managersDueForVendor', payment.managersDueForVendor(pool));
+    app.post('/displayExpenseHistoryToManager', payment.displayExpenseHistoryToManager(pool));
+    app.post('/detailsAboutVendorToManager', payment.detailsAboutVendorToManager(pool));
+
 
     /*family management*/
     app.post('/addFamilyMember', family.addFamilyMember(pool));
     app.post('/getFamiliyMembersForresident', family.getFamiliyMembersForresident(pool));
 
+    /* maintanance management */
+    app.post('/maintainance', maintainance.addmaintanance(pool, transporter));
+    app.post('/maintananceListToManager', maintainance.maintananceListToManager(pool));
+    app.post('/maintananceListToResident', maintainance.maintananceListToResident(pool));
+    app.post('/allResidentList', maintainance.allResidentList(pool));
     /*Create Hash*/
     app.post('/createHash', function(req, res) {
         var data = req.body.string;

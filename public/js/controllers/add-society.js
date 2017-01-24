@@ -33,6 +33,7 @@ socialApp.controller('society',['$scope', '$http', '$location', '$compile','Uplo
                 	alert('Sorry ! address not found on map, try again !')
                 }
                 $scope.$emit('UNLOAD');
+
             });
 		}
 		

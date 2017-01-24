@@ -145,14 +145,14 @@ socialApp.controller('VendorEntryExit', ['$scope', '$http', '$timeout', '$locati
 
 socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     /*$scope.$emit('LOAD');
-	$http.post('/listvendors', {block_id: blockId}).success(function(response){
-		if (response.hasOwnProperty('success')) {
-			$scope.vendors = response.data;
-		}
-		$timeout(function(){
-			$scope.$emit('UNLOAD');
-		}, 500);
-		
-	});
+    $http.post('/listvendors', {block_id: blockId}).success(function(response){
+        if (response.hasOwnProperty('success')) {
+            $scope.vendors = response.data;
+        }
+        $timeout(function(){
+            $scope.$emit('UNLOAD');
+        }, 500);
+        
+    });
 */
 }]);

@@ -1,5 +1,6 @@
 'use strict';
 
+
 var socialApp = angular.module('socialApp', ['ngRoute', 'datatables', 'datatables.buttons', 'ngFileUpload', 'ngImgCrop', 'ui.bootstrap', 'googlechart', 'angular-hmac-sha512']);
 
 socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
@@ -328,6 +329,26 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'society/html/vendor-due.html',
         activetab: 'MoneyManager',
         title: "Block Expenses | Manager"
+    }).when('/maintainance/:blockID', {
+        controller: 'maintain',
+        templateUrl: 'society/html/maintainance.html',
+        activetab: 'MoneyManager',
+        title: "Block Maintainance | Manager"
+    }).when('/all-resident/:blockID', {
+        controller: 'ResList',
+        templateUrl: 'society/html/all-resident.html',
+        activetab: 'MoneyManager',
+        title: "Block Maintainance | Manager"
+    }).when('/paid-resident/:blockID', {
+        controller: 'ResList',
+        templateUrl: 'society/html/paid-resident.html',
+        activetab: 'MoneyManager',
+        title: "Block Maintainance | Manager"
+    }).when('/unpaid-resident/:blockID', {
+        controller: 'ResList',
+        templateUrl: 'society/html/unpaid-resident.html',
+        activetab: 'MoneyManager',
+        title: "Block Maintainance | Manager"
     });
 
     /*Routes for Front*/

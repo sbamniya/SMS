@@ -56,7 +56,9 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" ng-disabled="type==''" class="btn btn-success" data-toggle="modal" data-target="#myModal" ng-click="payCash(req.id, type)">Submit</button>
+                                            <button type="button" ng-disabled="type==''" class="btn btn-success" ng-hide="type==1" data-toggle="modal" data-target="#myModal" ng-click="payCash(req.id, type)">Submit
+                                            </button>
+                                            <button type="button" ng-hide="type!=1" class="btn btn-success" ng-click="pay(req.id,$event)">Submit</button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -68,6 +70,30 @@
         </div>
     </div>
 </div>
+<!--  -->
+<form id="paymentFrm" action="https://test.payu.in/_payment" method="post">
+    <div>
+        <input type="hidden" name="key" value="{{paymentDetails.key}}" />
+        <input type="hidden" name="hash" value="{{paymentDetails.hash}}" />
+        <input type="hidden" name="txnid" value="{{paymentDetails.txnid}}" />
+        <input type="hidden" name="amount" value="{{paymentDetails.totalPayable}}" />
+        <input type="hidden" name="firstname" value="{{paymentDetails.firstname}}" />
+        <input type="hidden" name="email" value="{{paymentDetails.email}}" />
+        <input type="hidden" name="phone" value="{{paymentDetails.phone}}" />
+        <input type="hidden" name="productinfo" value="{{paymentDetails.productinfo}}">
+        <input type="hidden" name="surl" value="{{paymentDetails.surl}}">
+        <input type="hidden" name="furl" value="{{paymentDetails.furl}}">
+        <input type="hidden" name="udf1" value="{{paymentDetails.udf1}}">
+        <input type="hidden" name="udf2" value="{{paymentDetails.udf2}}">
+        <input type="hidden" name="udf3" value="{{paymentDetails.udf3}}">
+        <input type="hidden" name="service_provider" value="payu_paisa" size="64" />
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+        </div>
+    </div>
+</form>
+<!--  -->
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -120,6 +146,28 @@
                             <div class="form-group">
                                 <label class="pull-left">Charge</label>
                                 <input class="form-control" min="0" type="number" placeholder="Enter Charge" name="chargev" ng-model="cashDetail.charge" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group" ng-show="cashDetail.payment_type==3">
+                                <label class="pull-left">Cheque Number</label>
+                                <input class="form-control" type="text" placeholder="Enter Cheque number" name="chequenumber" ng-model="cashDetail.chequeno" ng-required="cashDetail.payment_type==3">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group" ng-show="cashDetail.payment_type==3">
+                                <label class="pull-left">IFSC Code</label>
+                                <input class="form-control" type="text" placeholder="Enter IFSC Code" name="ifsc" ng-model="cashDetail.ifsc" ng-required="cashDetail.payment_type==3">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group" ng-show="cashDetail.payment_type==3">
+                                <label class="pull-left">Cheque Date</label>
+                                <input class="form-control" type="text" datepicker placeholder="Enter cheque date" name="chequedate" ng-model="cashDetail.chequedate" data-mindate="{{today}}" ng-required="cashDetail.payment_type==3">
                             </div>
                         </div>
                     </div>
