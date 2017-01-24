@@ -1,6 +1,5 @@
 exports.addPaymentDetails = function(pool) {
     return function(req, res) {
-        console.log(req.body);
         var result = {};
         var data = JSON.parse(JSON.stringify(req.body));
 
@@ -29,46 +28,44 @@ exports.addPaymentDetails = function(pool) {
         var transaction_status = data.status;
         var Pay_by = data.udf2;
         var status = 1;
-<<<<<<< HEAD
-=======
-        
->>>>>>> f63c890541c6b511818cb58383412a2024efd2d5
+
         var proInfo = JSON.parse(productinfo);
         var productstr = JSON.stringify(proInfo);
         var block_id = data.udf3;
 
         for (var i = 0; i < proInfo.length; i++) {
-            var type = proInfo[i].type;
-            var id = proInfo[i].id;
-            var Query = '';
-            var tableName = '';
-            var setData = '';
-            var where = '';
-            if (type == 'Facility') {
-                tableName = 'facility_request';
-                setData = 'status=2';
-                where = 'id ="' + id + '"';
-                var Q = 'update facility_request set last_payment_date=now() where ' + where;
-                pool.query(Q, function(err) {
+            if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
+                var type = proInfo[i].type;
+                var id = proInfo[i].id;
+                var Query = '';
+                var tableName = '';
+                var setData = '';
+                var where = '';
+                if (type == 'Facility') {
+                    tableName = 'facility_request';
+                    setData = 'status=2';
+                    where = 'id ="' + id + '"';
+                    var Q = 'update facility_request set last_payment_date=now() where ' + where;
+                    pool.query(Q, function(err) {
+                        if (err) {
+                            console.log(err);
+                        }
+                    });
+                } else if (type == 'Amenity') {
+                    tableName = 'amenity_request';
+                    setData = 'status=2';
+                    where = 'id ="' + id + '"';
+                } else {
+
+                }
+                Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
+                pool.query(Query, function(err, rows) {
                     if (err) {
                         console.log(err);
                     }
                 });
-            } else if (type == 'Amenity') {
-                tableName = 'amenity_request';
-                setData = 'status=2';
-                where = 'id ="' + id + '"';
-            } else {
-
             }
-            Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
-            pool.query(Query, function(err, rows) {
-                if (err) {
-                    console.log(err);
-                }
-            });
         }
-
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`,Pay_by, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`block_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, Pay_by, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId, transaction_status, resident_id, block_id, status], function(err, rows) {
             if (err) {
                 console.log(err);
@@ -105,40 +102,37 @@ exports.displayPaymentDetails = function(pool) {
 
 exports.displayExpenseHistoryToManager = function(pool) {
     return function(req, res) {
-        var result = {};
+        var result = {
+            data: []
+        };
         var block_id = req.body.id;
-        var Q = 'select * from transaction_history where pay_by = "1" and block_id = "' + block_id + '"';
+        var Q = 'SELECT th.*,  vm.vendor_name, jm.job_card_type from transaction_history as th INNER JOIN job_card_master jm on jm.id=th.resident_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id=1 and th.Pay_by="' + block_id + '"';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;
                 console.log(err);
             } else {
                 result.status = '200';
-                result.data = rows;
+                for (var i = rows.length - 1; i >= 0; i--) {
+                    result.data.push(rows[i]);
+                }
+                var Query = 'SELECT eh.*,  vm.vendor_name, jm.job_card_type from expenses_history as eh INNER JOIN job_card_master jm on jm.id=eh.jobcard_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id="' + block_id + '"';
+                pool.query(Query, function(err, rowsp) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        for (var i = rowsp.length - 1; i >= 0; i--) {
+                            result.data.push(rowsp[i]);
+                        }
+                        res.send(JSON.stringify(result));
+                    }
+                })
             }
-            res.send(JSON.stringify(result));
+
         });
     }
 }
 
-/*exports.displayExpenseHistoryToManagerAnother = function(pool) {
-    return function(req, res) {
-        var result = {};
-        var block_id = req.body.id;
-        var Q = 'select vm.vendor_name,eh.payment_type,eh.cheque_no,eh.ifsc_code,eh.cheque_date,eh.date from vendor_master vm INNER JOIN expenses_history eh ON eh.vendor_id = vm.id INNER JOIN job_card_master jm ON jm.id=eh.jobcard_id where jm.block_id = "' + block_id + '"';
-        pool.query(Q, function(err, rows) {
-            if (err) {
-                result.error = err;
-                console.log(err);
-            } else {
-                result.status = '200';
-                result.data = rows;
-            }
-            res.send(JSON.stringify(result));
-        });
-    }
-}
-*/
 
 exports.paymentReceipt = function(pool) {
     return function(req, res) {
@@ -226,7 +220,7 @@ exports.managersDueForVendor = function(pool) {
         var cheque_date = d1.getFullYear() + "-" + (d1.getMonth() + 1) + "-" + d1.getDate();
         var d = new Date(req.body.paydate);
         var payment_date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
-        var Q = 'INSERT INTO `expenses_history`(`vendor_id`, `jobcard_id`, `payment_type`, `date`,`cheque_no`,`ifsc_code`,`cheque_date`, `status`) VALUES ("' + vendor_id + '","' + jobcard_id + '","' + payment_type + '","' + payment_date + '","' + chequeno + '","' + ifsc + '","' + cheque_date + '","1")';
+        var Q = 'INSERT INTO `expenses_history`(`jobcard_id`, `payment_type`, `date`,`cheque_no`,`ifsc_code`,`cheque_date`, `status`) VALUES ("' + jobcard_id + '","' + payment_type + '","' + payment_date + '","' + chequeno + '","' + ifsc + '","' + cheque_date + '","1")';
         pool.query(Q, function(err, rows) {
             if (err) {
                 console.log(err);

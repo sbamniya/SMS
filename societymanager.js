@@ -243,14 +243,13 @@ exports.paymentDuesFromManagerForUpdate = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var job_id = req.body.id;
         var result = {};
-        var queryString = 'select vm.email as vendor_email,vm.contact as contact,vm.merchant_key as merchant_key,vm.merchant_salt as merchant_salt,vm.,vm.id as vendor_id,jm.id as jobcard_id,vm.vendor_name,vm.email,vm.contact,vm.merchant_id,vm.merchant_key,vm.merchant_salt,vm.payuavailable,jm.id ,jm.contract_type,jm.job_card_type,jm.pay_type,jm.start_date,jm.charge,mm.category from vendor_master vm INNER JOIN job_card_master jm ON vm.id = jm.vendor_id INNER JOIN maintainace_category_master mm ON mm.id = jm.category_id where jm.id = "' + job_id + '"';
+        var queryString = 'select vm.email as vendor_email,vm.contact as contact,vm.merchant_key as merchant_key,vm.merchant_salt as merchant_salt,vm.id as vendor_id,jm.id as jobcard_id,vm.vendor_name,vm.email,vm.contact,vm.merchant_id,vm.merchant_key,vm.merchant_salt,vm.payuavailable,jm.id ,jm.contract_type,jm.job_card_type,jm.pay_type,jm.start_date,jm.charge,mm.category from vendor_master vm INNER JOIN job_card_master jm ON vm.id = jm.vendor_id INNER JOIN maintainace_category_master mm ON mm.id = jm.category_id where jm.id = "' + job_id + '"';
         pool.query(queryString, function(err, rows, fields) {
             if (err) {
                 result.error = err;
                 console.log(err);
             } else {
                 result.data = rows[0];
-                console.log(rows);
                 var Q = 'update job_card_master set status ="' + rows[0].pay_type + '" where id="' + rows[0].jobcard_id + '"';
                 pool.query(Q, function(err, rows) {
                     if (err) {

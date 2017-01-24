@@ -522,6 +522,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'AddNewFamilyMembers',
         activetab: 'Familiy',
         title: 'Add New Familiy Members | Resident'
+    }).when('/contributions', {
+        templateUrl: 'resident/html/contributions.html',
+        controller: 'contributions',
+        activetab: 'Familiy',
+        title: 'Add New Familiy Members | Resident'
     });
 
     /*For Security*/

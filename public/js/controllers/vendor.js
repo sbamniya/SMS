@@ -151,7 +151,7 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
 	var blockId = userData.block_id;
 	$scope.vendors = [];
 
-	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
+	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){})
 
     $scope.vendorEntry = function() {
         var data = $scope.staffData;
@@ -166,20 +166,3 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
     }
 }]);
 
-<<<<<<< HEAD
-
-socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
-    /*$scope.$emit('LOAD');
-    $http.post('/listvendors', {block_id: blockId}).success(function(response){
-        if (response.hasOwnProperty('success')) {
-            $scope.vendors = response.data;
-        }
-        $timeout(function(){
-            $scope.$emit('UNLOAD');
-        }, 500);
-        
-    });
-*/
-}]);
-=======
->>>>>>> f63c890541c6b511818cb58383412a2024efd2d5
