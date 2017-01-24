@@ -87,7 +87,7 @@ exports.maintananceListToResident = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var resident_id = req.body.resident_id;
         var result = {}
-        var querystring = 'select mm.* from maintainance_master mm INNER JOIN society_manager sm ON mm.manager_id = sm.id INNER JOIN block_master bm ON sm.id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id = "' + resident_id + '"  ';
+        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id ="' + resident_id + '" ';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -119,24 +119,21 @@ exports.allResidentList = function(pool) {
         });
     };
 }
-/*exports.displayMaintananceToResidents = function(pool, transporter) {
+exports.displayMaintananceToResidents = function(pool, transporter) {
     return function(req, res) {
         res.setHeader('content-Type', 'application/json');
         var result = {}
-        var Q = 'select r.id,concat(r.first_name," ",r.last_name) as resident_name,r.email as resident_email  FROM residents r INNER JOIN flat_master fm ON r.flat_id=fm.id where block_id = "' + block_id + '"';
+        var block_id = req.body.block_id;
+        var Q = 'select mm.month,mm.year,mm.last_payment_date,mm.amount FROM maintainance_master mm INNER JOIN flat_master fm ON fm.block_id = mm.block_id INNER JOIN residents r ON r.flat_id=fm.id where mm.block_id = "' + block_id + '"';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;
                 console.log(err);
             } else {
-                for (var i = 0; i < rows.length; i++) {
-
-                }
+                result.data = rows;
                 result.success = "Manager generate mantainance successfully";
                 res.send(JSON.stringify(result));
             }
         })
     }
 }
-}
-*/

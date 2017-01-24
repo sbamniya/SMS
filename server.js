@@ -235,13 +235,13 @@
     app.post('/facilityRequestesForManager', facility.facilityRequestesForManager(pool));
 
     /*vendor*/
-    app.post('/addVendor',vendor.addVendor(pool,transporter));  
-    app.post('/listvendors',vendor.listvendors(pool));  
-    app.post('/deleteVendor',vendor.deleteVendor(pool));  
-    app.post('/updateVendor',vendor.updateVendor(pool));
-    app.post('/vendorEntryByStaff',vendor.vendorEntryByStaff(pool));
-    app.post('/listVendorsEntry',vendor.listVendorsEntry(pool));
-    app.post('/VendorExitDetailsByStaff',vendor.VendorExitDetailsByStaff(pool));
+    app.post('/addVendor', vendor.addVendor(pool, transporter));
+    app.post('/listvendors', vendor.listvendors(pool));
+    app.post('/deleteVendor', vendor.deleteVendor(pool));
+    app.post('/updateVendor', vendor.updateVendor(pool));
+    app.post('/vendorEntryByStaff', vendor.vendorEntryByStaff(pool));
+    app.post('/listVendorsEntry', vendor.listVendorsEntry(pool));
+    app.post('/VendorExitDetailsByStaff', vendor.VendorExitDetailsByStaff(pool));
 
     /*parking management*/
     app.post('/addParking', parking.addParking(pool));
@@ -312,6 +312,8 @@
     app.post('/maintananceListToManager', maintainance.maintananceListToManager(pool));
     app.post('/maintananceListToResident', maintainance.maintananceListToResident(pool));
     app.post('/allResidentList', maintainance.allResidentList(pool));
+    app.post('/displayMaintananceToResidents', maintainance.displayMaintananceToResidents(pool));
+
     /*Create Hash*/
     app.post('/createHash', function(req, res) {
         var data = req.body.string;

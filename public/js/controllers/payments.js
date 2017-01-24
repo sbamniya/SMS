@@ -51,7 +51,7 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
         });
 
         $scope.paymentDetails.service_provider = 'service_provider';
-        console.log($scope.paymentDetails);
+
         setTimeout(function() {
             document.paymentFrm.submit();
         }, 2000);
@@ -77,7 +77,8 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
                 var diff = payDate - todayDate;
                 var days = (today - last_payment_date) / (1000 * 60 * 60 * 24);
                 /*if ((diff>=5 || diff<=-26) && (days)) {
-                    console.log(diff)
+                    conso
+le.log(diff)
                 }*/
 
                 item.availFcaility = true;
@@ -296,30 +297,31 @@ socialApp.controller('BlockIncomes', ['$scope', '$http', '$routeParams', '$route
 socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$timeout', '$routeParams', function($scope, $http, $location, $route, $timeout, $routeParams) {
 
     var block_id = atob($routeParams.blockID);
-    $scope.transaction = [];
+    $scope.expense = [];
     $scope.$emit('LOAD');
     $http.post('/displayExpenseHistoryToManager', { id: block_id }).success(function(response) {
-        console.log("block_id");
-        console.log(response.data);
         if (response.hasOwnProperty('status') && response.status == 200) {
-            var transaction = response.data;
+            var expense = response.data;
             var log = [];
-            angular.forEach(transaction, function(value, key) {
-                value.enid = btoa(value.id);
+            angular.forEach(expense, function(value, key) {
+                value.jobcard_id = (value.hasOwnProperty('resident_id')) ? value.resident_id : value.jobcard_id;
+                value.job_card_type = (value.job_card_type == 1) ? 'One Time' : 'Reccuring';
+                value.amount = (value.hasOwnProperty('amount')) ? value.amount : value.charge;
+                if (value.hasOwnProperty('payment_type')) {
+                    if (value.payment_type == 1) {
+                        value.pay_by = 'Cash';
+                    } else {
+                        value.pay_by = 'Cheque';
+                    }
+                } else {
+                    value.pay_by = 'Pay U Money';
+                }
+                value.date = (value.hasOwnProperty('date')) ? value.date : value.addedon;
+                value.transaction_status = (value.hasOwnProperty('transaction_status')) ? value.transaction_status : 'N/A';
                 log.push(value);
             });
-            $scope.transaction = log;
-            /*$http.post('/detailsAboutVendorToManager', { id: $scope.transaction.resident_id }).success(function(response) {
-        var transaction = response.data;
-        var log = [];
-        angular.forEach(transaction, function(value, key) {
-            value.enid = btoa(value.id);
-            log.push(value);
-        });
-    }
-    $scope.transaction = log;
-}
-*/
+            $scope.expense = log;
+            console.log(log);
         } else {
             alert(response.error);
         }
@@ -338,7 +340,7 @@ socialApp.controller('ResList', ['$scope', '$route', '$routeParams', '$http', '$
     $scope.list = { isSelected: false };
     $scope.$emit('LOAD');
     $http.post('/allResidentList', { block_id: block_id }).success(function(response) {
-        console.log(response);
+
         if (response.hasOwnProperty('success')) {
             if (response.hasOwnProperty('data')) {
                 angular.forEach(response.data, function(item, key) {

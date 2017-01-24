@@ -349,6 +349,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'society/html/unpaid-resident.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
+    }).when('/resident-maintainance', {
+        templateUrl: 'resident/html/resident-maintainance.html',
+        controller: 'Maintain',
+        activetab: 'MoneyManager',
+        title: 'Maintainance | Resident'
     });
 
     /*Routes for Front*/
@@ -566,7 +571,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         title: "Vendor Entry | Staff Member"
     }).when('/vendors-in-view', {
         controller: 'VendorsInView',
-        templateUrl : 'staff/html/vendors-in.html',
+        templateUrl: 'staff/html/vendors-in.html',
         activetab: 'VendorEntry',
         title: "Vendor Entry | Staff Member"
     });

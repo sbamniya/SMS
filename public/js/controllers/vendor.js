@@ -129,35 +129,13 @@ socialApp.controller('VendorEntryExit', ['$scope', '$http', '$timeout', '$locati
         }
     }
 
-	$scope.vendorEntry = function(){
-		var data = $scope.staffData;
-		$scope.$emit('LOAD');
-		$http.post('/vendorEntryByStaff', data).success(function(res){
-			$scope.$emit('UNLOAD');
-			if (res.hasOwnProperty('success')) {
-				$location.path('/vendors-in-view')
-			}else{
-				$scope.Error = true;
-				$scope.ErrorMsg = res.error;
-			}
-		})
-	}
-}]);
-
-
-socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
-	$scope.$emit('LOAD');
-	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
-	var blockId = userData.block_id;
-	$scope.vendors = [];
-
-	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
-
     $scope.vendorEntry = function() {
         var data = $scope.staffData;
+        $scope.$emit('LOAD');
         $http.post('/vendorEntryByStaff', data).success(function(res) {
+            $scope.$emit('UNLOAD');
             if (res.hasOwnProperty('success')) {
-                $location.path('/visitors-for-staff')
+                $location.path('/vendors-in-view')
             } else {
                 $scope.Error = true;
                 $scope.ErrorMsg = res.error;
@@ -166,7 +144,30 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
     }
 }]);
 
-<<<<<<< HEAD
+
+socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+    $scope.$emit('LOAD');
+    var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+    var blockId = userData.block_id;
+    $scope.vendors = [];
+
+    $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {
+
+        $scope.vendorEntry = function() {
+            var data = $scope.staffData;
+            $http.post('/vendorEntryByStaff', data).success(function(res) {
+                if (res.hasOwnProperty('success')) {
+                    $location.path('/visitors-for-staff')
+                } else {
+                    $scope.Error = true;
+                    $scope.ErrorMsg = res.error;
+                }
+            })
+        }
+    })
+}]);
+
+
 
 socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     /*$scope.$emit('LOAD');
@@ -181,5 +182,3 @@ socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function
     });
 */
 }]);
-=======
->>>>>>> f63c890541c6b511818cb58383412a2024efd2d5
