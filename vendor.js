@@ -160,3 +160,46 @@ exports.vendorEntryByStaff = function(pool) {
         });
     }
 }
+
+
+exports.listVendorsEntry = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var block_id = req.body.block_id;
+        var result = {}
+        var querystring = 'select vm.vendor_name, ve.*, sm.name as in_staff_name, sm1.name as out_staff_name from vendor_entries ve inner join vendor_master vm on vm.id = ve.vendor_id inner join staff_master sm on sm.id = ve.in_security left join staff_master sm1 on ve.out_security=sm1.id  where vm.block_id="' + block_id + '" order by ve.id desc';
+        pool.query(querystring, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err)
+            } else {
+                result.data = rows;
+                result.success = "vendor list displayed successfully";
+                res.send(JSON.stringify(result));
+            };
+        });
+    }
+}
+
+
+exports.VendorExitDetailsByStaff = function(pool) {
+    return function(req, res) {
+        var data = req.body;
+        res.setHeader('Content-Type', 'application/json');
+        var id = data.id;
+        var staff_id = data.staff_id;
+        var time = data.time;
+        var comment = data.comment;
+        var ip = req.connection.remoteAddress;
+        var date = new Date();
+        var in_date_time = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + time;
+        var query = 'update vendor_entries set out_date_time="' + in_date_time + '", out_ip="' + ip + '", out_security="' + staff_id + '", staff_comment="' + comment + '", status=1 where id="' + id + '"';
+        pool.query(query, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send({ success: 'User Updated Successfully!' });
+            }
+        });
+    }
+}
