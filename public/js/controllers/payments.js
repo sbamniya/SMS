@@ -390,20 +390,8 @@ socialApp.controller('maintain', ['$scope', '$route', '$routeParams', '$http', '
             $scope.$emit('UNLOAD');
         }, 1000);
     });
-
-    /*$scope.allResList = function(){
-        $scope.$emit('LOAD');
-        $http.post('/maintananceListToManager',{manager_id: manager_id}).success(function(response)
-        {
-            if(response.hasOwnProperty('success')){
-                $scope.main=response.data;
-            }
-            $timeout(function(){
-                $scope.$emit('UNLOAD');
-            },1000);
-        });
-    }*/
 }]);
+
 socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$route', '$timeout', '$crypthmac', 'sha256', function($scope, $http, $location, $routeParams, $route, $timeout, $crypthmac, sha256) {
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
@@ -590,4 +578,4 @@ socialApp.controller('contributions', ['$scope', function($scope){
                 key :1
             },
     ];
-}])
+}]);
