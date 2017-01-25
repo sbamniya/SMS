@@ -1,6 +1,5 @@
 exports.addPaymentDetails = function(pool) {
     return function(req, res) {
-        console.log(req.body);
         var result = {};
         var data = JSON.parse(JSON.stringify(req.body));
         var merchantTransactionId = data.txnid;
@@ -29,6 +28,7 @@ exports.addPaymentDetails = function(pool) {
         var Pay_by = data.udf2;
         var block_id = data.udf3;
         var status = 1;
+<<<<<<< HEAD
         var productstr = "";
         var proInfo = "";
         if (productinfo == "maintainance") {
@@ -45,6 +45,10 @@ exports.addPaymentDetails = function(pool) {
             proInfo = JSON.parse(productinfo);
         }
 
+=======
+
+        var proInfo = JSON.parse(productinfo);
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
         var productstr = JSON.stringify(proInfo);
 
         for (var i = 0; i < proInfo.length; i++) {
@@ -79,9 +83,11 @@ exports.addPaymentDetails = function(pool) {
                     }
                 });
             }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
         }
-
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`,Pay_by, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`block_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, Pay_by, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId, transaction_status, resident_id, block_id, status], function(err, rows) {
             if (err) {
                 console.log(err);
@@ -132,7 +138,11 @@ exports.displayExpenseHistoryToManager = function(pool) {
                 for (var i = rows.length - 1; i >= 0; i--) {
                     result.data.push(rows[i]);
                 }
+<<<<<<< HEAD
                 var Query = 'SELECT eh.*,  vm.vendor_name, jm.job_card_type, jm.charge as charge from expenses_history as eh INNER JOIN job_card_master jm on jm.id=eh.jobcard_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id="' + block_id + '"';
+=======
+                var Query = 'SELECT eh.*,  vm.vendor_name, jm.job_card_type from expenses_history as eh INNER JOIN job_card_master jm on jm.id=eh.jobcard_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id="' + block_id + '"';
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
                 pool.query(Query, function(err, rowsp) {
                     if (err) {
                         console.log(err);
@@ -140,7 +150,10 @@ exports.displayExpenseHistoryToManager = function(pool) {
                         for (var i = rowsp.length - 1; i >= 0; i--) {
                             result.data.push(rowsp[i]);
                         }
+<<<<<<< HEAD
                         console.log('query');
+=======
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
                         res.send(JSON.stringify(result));
                     }
                 })
@@ -150,7 +163,10 @@ exports.displayExpenseHistoryToManager = function(pool) {
     }
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
 
 exports.paymentReceipt = function(pool) {
     return function(req, res) {
@@ -238,7 +254,11 @@ exports.managersDueForVendor = function(pool) {
         var cheque_date = d1.getFullYear() + "-" + (d1.getMonth() + 1) + "-" + d1.getDate();
         var d = new Date(req.body.paydate);
         var payment_date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+<<<<<<< HEAD
         var Q = 'INSERT INTO `expenses_history`( `jobcard_id`, `payment_type`, `date`,`cheque_no`,`ifsc_code`,`cheque_date`, `status`) VALUES ("' + jobcard_id + '","' + payment_type + '","' + payment_date + '","' + chequeno + '","' + ifsc + '","' + cheque_date + '","1")';
+=======
+        var Q = 'INSERT INTO `expenses_history`(`jobcard_id`, `payment_type`, `date`,`cheque_no`,`ifsc_code`,`cheque_date`, `status`) VALUES ("' + jobcard_id + '","' + payment_type + '","' + payment_date + '","' + chequeno + '","' + ifsc + '","' + cheque_date + '","1")';
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
         pool.query(Q, function(err, rows) {
             if (err) {
                 console.log(err);

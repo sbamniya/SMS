@@ -542,11 +542,14 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'contributions',
         activetab: 'Familiy',
         title: 'Add New Familiy Members | Resident'
+<<<<<<< HEAD
     }).when('/resident-contribution', {
         templateUrl: 'resident/html/resident-contri.html',
         controller: 'Maintain',
         activetab: 'MoneyManager',
         title: 'Maintainance | Resident'
+=======
+>>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
     });
 
     /*For Security*/
