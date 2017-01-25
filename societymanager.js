@@ -250,7 +250,6 @@ exports.paymentDuesFromManagerForUpdate = function(pool) {
                 console.log(err);
             } else {
                 result.data = rows[0];
-                console.log(rows);
                 var Q = 'update job_card_master set status ="' + rows[0].pay_type + '" where id="' + rows[0].jobcard_id + '"';
                 pool.query(Q, function(err, rows) {
                     if (err) {

@@ -454,3 +454,39 @@ body::-webkit-scrollbar-thumb,ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thum
   background-color: rgb(118, 204, 186);
   outline: 1px solid slategrey;
 }
+
+
+.outer-cover {
+    height: 345px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 0.7;
+    margin: 0 0 1.2em 0.5em;
+    border-radius: 5px;
+}
+.title {
+    color: #fff;
+    position: relative;
+    left: 0em;
+    text-align: center;
+}
+.title.description {
+    left: 0;
+    text-align: justify;
+    width: 100%;
+    font-size: 14px;
+    padding: 1em;
+    height: 13em;
+    overflow: hidden;
+}
+.title.charge {
+    /*left: 4em;*/
+    height: 4em;
+}
+.title.charge .fa.fa-inr {
+    margin: 0 !important;
+}
+.cover-overlay {
+    background: rgba(0, 0, 0, 0.28);
+    height: 100%;
+}

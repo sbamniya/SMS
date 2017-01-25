@@ -9,7 +9,7 @@
                 </h1>
                 <ol class="breadcrumb">
                     <li>
-                        <i class="fa fa-dashboard"></i>  <a href="javascript:void(0)">Dashboard</a>
+                        <i class="fa fa-dashboard"></i> <a href="javascript:void(0)">Dashboard</a>
                     </li>
                     <li class="active">
                         <i class="fa fa-users"></i> Maintainance
@@ -20,7 +20,8 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-12 col-sm-12">
-                <h2> Maintainace </h2><br>
+                <h2> Maintainace </h2>
+                <br>
                 <div class="row">
                     <div class="col-sm-8">
                         <form name="amenityAdd" ng-submit="addMaintainance()">
@@ -51,7 +52,7 @@
                                         <label>Year</label>
                                         <select name="year1" class="form-control" ng-model="maintainance.year">
                                             <option value=""> Select Year </option>
-                                            <option  ng-repeat="i in y" value="{{i}}">{{i}}</option>
+                                            <option ng-repeat="i in y" value="{{i}}">{{i}}</option>
                                         </select>
                                         <p ng-show="amenityAdd.year1.$invalid && !amenityAdd.year1.$pristine" class="help-block red-text">Please enter year</p>
                                     </div>
@@ -107,7 +108,8 @@
                                         <td>{{req.year}}</td>
                                         <td>{{req.amount}}</td>
                                         <td>{{req.last_payment_date | date: 'dd MMM,yyyy'}}</td>
-                                        <td><a href="#/all-resident/{{id}}" ng-click="allResList(req.id)" title="All Resident's"><i class="fa fa-list"></i></a> | <a href="#/paid-resident/{{id}}" ng-click="paidResList(req.id)" title="Paid Resident"><i class="fa fa-list"></i></a> | <a href="#/unpaid-resident/{{id}}" ng-click="unpaidList(req.id)" title="Unpaid Resident"><i class="fa fa-list"></i></a></td> 
+                                        <td><a href="#/all-resident/{{id}}" ng-click="allResList()" title="All Resident's"><i class="fa fa-list"></i></a> | <a href="#/paid-resident/{{id}}" ng-click="paidResList()" title="Paid Resident"><i class="fa fa-list"></i></a> | <a href="#/unpaid-resident/{{id}}" ng-click="unpaidList()" title="Unpaid Resident"><i class="fa fa-list"></i></a>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

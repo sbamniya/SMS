@@ -87,7 +87,7 @@ exports.maintananceListToResident = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var resident_id = req.body.resident_id;
         var result = {}
-        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id ="' + resident_id + '" ';
+        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id = "' + resident_id + '" GROUP by id';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -106,6 +106,7 @@ exports.allResidentList = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var block_id = req.body.block_id;
         var result = {}
+        console.log(block_id);
         var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,sm.manager_name,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN society_manager sm on bm.block_manager=sm.id INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where bm.id="' + block_id + '" GROUP BY id ';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
@@ -119,6 +120,48 @@ exports.allResidentList = function(pool) {
         });
     };
 }
+
+
+exports.paidResidentList = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var block_id = req.body.block_id;
+        var maintanance_id = req.body.maintanance_id;
+        var result = {}
+        var querystring = 'SELECT r.* from residents r left join maintainance_master_meta mmm on r.id = mmm.resident_id WHERE r.id not in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="' + block_id + '" and mm1.id="' + maintanance_id + '") as mm on mm.id = maintainance_master_meta.maintanance_id)';
+        pool.query(querystring, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.data = rows;
+                result.success = "mantainance successfully displayed";
+                res.send(JSON.stringify(result));
+            };
+        });
+    };
+}
+
+exports.unpaidResidentList = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var block_id = req.body.block_id;
+        var maintanance_id = req.body.maintanance_id;
+        var result = {}
+        var querystring = 'SELECT r.* from residents r left join maintainance_master_meta mmm on r.id = mmm.resident_id WHERE r.id not in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="' + block_id + '" and mm1.id="' + maintanance_id + '") as mm on mm.id = maintainance_master_meta.maintanance_id)';
+        pool.query(querystring, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.data = rows;
+                result.success = "mantainance successfully displayed";
+                res.send(JSON.stringify(result));
+            };
+        });
+    };
+}
+
 exports.displayMaintananceToResidents = function(pool, transporter) {
     return function(req, res) {
         res.setHeader('content-Type', 'application/json');
@@ -135,5 +178,26 @@ exports.displayMaintananceToResidents = function(pool, transporter) {
                 res.send(JSON.stringify(result));
             }
         })
+    }
+}
+
+exports.residentDetailsForMaintainance = function(pool) {
+    return function(req, res) {
+        res.setHeader('content-Type', 'application/json');
+        var result = {};
+        var resident_id = req.body.id;
+        var Q = 'select smm.marchant_key,smm.marchant_salt,concat(r.first_name," ",r.last_name) as resident_name ,r.email as resident_email ,r.contact_no as contact from residents r INNER JOIN flat_master fm ON r.flat_id = fm.id INNER JOIN block_master bm ON fm.block_id = bm.id INNER JOIN society_manager sm ON bm.block_manager = sm.id INNER JOIN society_manager_meta smm ON smm.manager_id = sm.id where r.id="' + resident_id + '"';
+        pool.query(Q, function(err, rows) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.data = rows[0];
+                result.success = 'displayed successfully';
+                res.send(JSON.stringify(result));
+            }
+
+        });
+
     }
 }

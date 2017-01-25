@@ -53,6 +53,7 @@
     var payment = require('./payment.js');
     var maintainance = require('./maintanance');
     var family = require('./family.js');
+    var contribution = require('./contribution');
 
     var loop = require('node-while-loop');
 
@@ -313,6 +314,12 @@
     app.post('/maintananceListToResident', maintainance.maintananceListToResident(pool));
     app.post('/allResidentList', maintainance.allResidentList(pool));
     app.post('/displayMaintananceToResidents', maintainance.displayMaintananceToResidents(pool));
+    app.post('/residentDetailsForMaintainance', maintainance.residentDetailsForMaintainance(pool));
+    app.post('/paidResidentList', maintainance.paidResidentList(pool));
+    app.post('/unpaidResidentList', maintainance.unpaidResidentList(pool));
+    /*Contribution */
+    app.post('/addContribution', contribution.addContribution(pool));
+    app.post('/listContribution', contribution.listContribution(pool));
 
     /*Create Hash*/
     app.post('/createHash', function(req, res) {
