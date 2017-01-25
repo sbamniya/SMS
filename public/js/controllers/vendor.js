@@ -151,11 +151,11 @@ socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function
     var blockId = userData.block_id;
     $scope.vendors = [];
 
-<<<<<<< HEAD
+
     $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {})
-=======
-	$http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){})
->>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
+
+    $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {})
+
 
     $scope.vendorEntry = function() {
         var data = $scope.staffData;
@@ -172,7 +172,6 @@ socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function
     }
 }]);
 
-<<<<<<< HEAD
 
 socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     $scope.$emit('LOAD');
@@ -195,21 +194,3 @@ socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function
         }
     })
 }]);
-
-
-
-socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
-    /*$scope.$emit('LOAD');
-    $http.post('/listvendors', {block_id: blockId}).success(function(response){
-        if (response.hasOwnProperty('success')) {
-            $scope.vendors = response.data;
-        }
-        $timeout(function(){
-            $scope.$emit('UNLOAD');
-        }, 500);
-        
-    });
-*/
-}]);
-=======
->>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2

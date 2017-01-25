@@ -300,10 +300,6 @@ socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$ti
     $scope.expense = [];
     $scope.$emit('LOAD');
     $http.post('/displayExpenseHistoryToManager', { id: block_id }).success(function(response) {
-<<<<<<< HEAD
-
-=======
->>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
         console.log(response.data);
         if (response.hasOwnProperty('status') && response.status == 200) {
             var expense = response.data;
@@ -423,10 +419,10 @@ socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$ro
                 /*setTimeout(function() {
                     angular.element('#paymentFrm').trigger('submit');
                 }, 1000);*/
-                /*setTimeout(function() {
-    document.paymentFrm.submit();
-}, 2000);
-*/
+                setTimeout(function() {
+                    document.paymentFrm.submit();
+                }, 2000);
+
 
 
             }
@@ -703,26 +699,8 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
         });
     }
 }]);
-<<<<<<< HEAD
 
-socialApp.controller('contributions', ['$scope', function($scope) {
-    $scope.contributions = [{
-        key: 1
-    }, {
-        key: 1
-    }, {
-        key: 1
-    }, {
-        key: 1
-    }, {
-        key: 1
-    }, {
-        key: 1
-    }, {
-        key: 1
-    }, ];
-}])
-=======
+
 socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$route', '$timeout', '$crypthmac', 'sha256', function($scope, $http, $location, $routeParams, $route, $timeout, $crypthmac, sha256) {
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
@@ -798,7 +776,9 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
     $scope.submitPayDetails = function() {
         $scope.$emit('LOAD');
         $http.post('/managersDueForVendor', $scope.cashDetail).success(function(response) {
-            console.log(response);$scope.$emit('UNLOAD'); return;
+            console.log(response);
+            $scope.$emit('UNLOAD');
+            return;
             $timeout(function() {
                 $scope.$emit('UNLOAD');
                 $location.path('/expense/' + $routeParams.blockID)
@@ -885,29 +865,20 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
     }
 }]);
 
-socialApp.controller('contributions', ['$scope', function($scope){
-    $scope.contributions = [
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-            {
-                key :1
-            },
-    ];
+socialApp.controller('contributions', ['$scope', function($scope) {
+    $scope.contributions = [{
+        key: 1
+    }, {
+        key: 1
+    }, {
+        key: 1
+    }, {
+        key: 1
+    }, {
+        key: 1
+    }, {
+        key: 1
+    }, {
+        key: 1
+    }, ];
 }])
->>>>>>> 738723719bbbe9036cee8b273fd252114d7cd3b2
