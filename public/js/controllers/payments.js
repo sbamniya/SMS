@@ -419,9 +419,10 @@ socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$ro
                 /*setTimeout(function() {
                     angular.element('#paymentFrm').trigger('submit');
                 }, 1000);*/
-                setTimeout(function() {
-                    document.paymentFrm.submit();
-                }, 2000);
+                /*setTimeout(function() {
+    document.paymentFrm.submit();
+}, 2000);
+*/
 
 
 
