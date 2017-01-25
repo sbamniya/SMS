@@ -2,7 +2,6 @@ exports.addPaymentDetails = function(pool) {
     return function(req, res) {
         var result = {};
         var data = JSON.parse(JSON.stringify(req.body));
-
         var merchantTransactionId = data.txnid;
         var mihpayid = data.mihpayid;
         var paymentId = data.encryptedPaymentId;
@@ -27,11 +26,30 @@ exports.addPaymentDetails = function(pool) {
         var resident_id = data.udf1;
         var transaction_status = data.status;
         var Pay_by = data.udf2;
+        var block_id = data.udf3;
         var status = 1;
 
+        var productstr = "";
+        var proInfo = "";
+        if (productinfo == "maintainance") {
+            productstr = "maintainance";
+            var Q = 'INSERT INTO `maintainance_master_meta`(`maintanance_id`, `resident_id`, `status`) VALUES ("' + block_id + '","' + resident_id + '","1")';
+            pool.query(Q, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                }
+                console.log(Q);
+            });
+
+        } else {
+            proInfo = JSON.parse(productinfo);
+        }
+
+
+
         var proInfo = JSON.parse(productinfo);
+
         var productstr = JSON.stringify(proInfo);
-        var block_id = data.udf3;
 
         for (var i = 0; i < proInfo.length; i++) {
             if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
@@ -65,12 +83,14 @@ exports.addPaymentDetails = function(pool) {
                     }
                 });
             }
+
         }
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`,Pay_by, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`block_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, Pay_by, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId, transaction_status, resident_id, block_id, status], function(err, rows) {
             if (err) {
                 console.log(err);
             } else {
-                var host = req.protocol + '://' + req.headers.host + '/';
+                var host = req.protocol + '://' + req.head
+                ers.host + '/';
                 setTimeout(function() {
                     res.writeHead(301, {
                         Location: host
@@ -116,7 +136,10 @@ exports.displayExpenseHistoryToManager = function(pool) {
                 for (var i = rows.length - 1; i >= 0; i--) {
                     result.data.push(rows[i]);
                 }
-                var Query = 'SELECT eh.*,  vm.vendor_name, jm.job_card_type from expenses_history as eh INNER JOIN job_card_master jm on jm.id=eh.jobcard_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id="' + block_id + '"';
+
+                var Query = 'SELECT eh.*,  vm.vendor_name, jm.job_card_type, jm.charge as charge from expenses_history as eh INNER JOIN job_card_master jm on jm.id=eh.jobcard_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id="' + block_id + '"';
+
+
                 pool.query(Query, function(err, rowsp) {
                     if (err) {
                         console.log(err);
@@ -124,6 +147,8 @@ exports.displayExpenseHistoryToManager = function(pool) {
                         for (var i = rowsp.length - 1; i >= 0; i--) {
                             result.data.push(rowsp[i]);
                         }
+
+
                         res.send(JSON.stringify(result));
                     }
                 })
@@ -132,6 +157,7 @@ exports.displayExpenseHistoryToManager = function(pool) {
         });
     }
 }
+
 
 
 exports.paymentReceipt = function(pool) {
@@ -220,7 +246,10 @@ exports.managersDueForVendor = function(pool) {
         var cheque_date = d1.getFullYear() + "-" + (d1.getMonth() + 1) + "-" + d1.getDate();
         var d = new Date(req.body.paydate);
         var payment_date = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes();
+
+
         var Q = 'INSERT INTO `expenses_history`(`jobcard_id`, `payment_type`, `date`,`cheque_no`,`ifsc_code`,`cheque_date`, `status`) VALUES ("' + jobcard_id + '","' + payment_type + '","' + payment_date + '","' + chequeno + '","' + ifsc + '","' + cheque_date + '","1")';
+
         pool.query(Q, function(err, rows) {
             if (err) {
                 console.log(err);
@@ -239,6 +268,44 @@ exports.detailsAboutVendorToManager = function(pool) {
         var result = {};
         var jobcard_id = req.body.id;
         var Q = 'select vm.vendor_name,jm.job_card_type,eh.payment_type,eh.date as payment_date,eh.cheque_no,eh.ifsc_code,eh.cheque_date from expenses_history eh INNER JOIN job_card_master jm ON eh.jobcard_id = jm.id INNER JOIN vendor_master vm ON jm.vendor_id = vm.id where eh.jobcard_id = "' + jobcard_id + '"';
+        pool.query(Q, function(err, rows) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.status = '200';
+                result.data = rows;
+            }
+            res.send(JSON.stringify(result));
+        });
+
+    }
+}
+
+exports.detailsAboutVendorToManager = function(pool) {
+    return function(req, res) {
+        var result = {};
+        var jobcard_id = req.body.id;
+        var Q = 'select vm.vendor_name,jm.job_card_type,eh.payment_type,eh.date as payment_date,eh.cheque_no,eh.ifsc_code,eh.cheque_date from expenses_history eh INNER JOIN job_card_master jm ON eh.jobcard_id = jm.id INNER JOIN vendor_master vm ON jm.vendor_id = vm.id where eh.jobcard_id = "' + jobcard_id + '"';
+        pool.query(Q, function(err, rows) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.status = '200';
+                result.data = rows;
+            }
+            res.send(JSON.stringify(result));
+        });
+
+    }
+}
+
+exports.residentDetailsForMaintainance = function(pool) {
+    return function(req, res) {
+        var result = {};
+        var resident_id = req.body.id;
+        var Q = 'select smm.marchant_key,smm.marchant_salt,concat(r.first_name," ",r.last_name) as resident_name ,r.email as resident_email ,r.contact_no as contact from residents r INNER JOIN flat_master fm ON r.flat_id = fm.id INNER JOIN block_master bm ON fm.block_id = bm.id INNER JOIN society_manager sm ON bm.block_manager = sm.id INNER JOIN society_manager_meta smm ON smm.manager_id = sm.id  where r.id="' + resident_id + '"';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;

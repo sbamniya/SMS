@@ -129,19 +129,19 @@ socialApp.controller('VendorEntryExit', ['$scope', '$http', '$timeout', '$locati
         }
     }
 
-	$scope.vendorEntry = function(){
-		var data = $scope.staffData;
-		$scope.$emit('LOAD');
-		$http.post('/vendorEntryByStaff', data).success(function(res){
-			$scope.$emit('UNLOAD');
-			if (res.hasOwnProperty('success')) {
-				$location.path('/vendors-in-view')
-			}else{
-				$scope.Error = true;
-				$scope.ErrorMsg = res.error;
-			}
-		})
-	}
+    $scope.vendorEntry = function() {
+        var data = $scope.staffData;
+        $scope.$emit('LOAD');
+        $http.post('/vendorEntryByStaff', data).success(function(res) {
+            $scope.$emit('UNLOAD');
+            if (res.hasOwnProperty('success')) {
+                $location.path('/vendors-in-view')
+            } else {
+                $scope.Error = true;
+                $scope.ErrorMsg = res.error;
+            }
+        })
+    }
 }]);
 socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', function($scope, $http, $timeout, $route){
     $scope.$emit('LOAD');
@@ -152,6 +152,7 @@ socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', fu
         staff_id: userData.id
     };
 
+<<<<<<< HEAD
     $http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
         if (response.hasOwnProperty('success')) {
             angular.forEach(response.data, function(item, key){
@@ -177,16 +178,48 @@ socialApp.controller('VendorsInView', ['$scope','$http', '$timeout','$route', fu
                 $route.reload();
             }, 500);
         
-        })
-    }
-}]);
+=======
 
-socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
+socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     $scope.$emit('LOAD');
     var userData = JSON.parse(window.localStorage.getItem('userDetails'));
     var blockId = userData.block_id;
     $scope.vendors = [];
 
+
+    $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {})
+
+    $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {})
+
+
+    $scope.vendorEntry = function() {
+        var data = $scope.staffData;
+        $scope.$emit('LOAD');
+        $http.post('/vendorEntryByStaff', data).success(function(res) {
+            $scope.$emit('UNLOAD');
+            if (res.hasOwnProperty('success')) {
+                $location.path('/vendors-in-view')
+            } else {
+                $scope.Error = true;
+                $scope.ErrorMsg = res.error;
+            }
+>>>>>>> df35de88c2510412f2631d1c0fdf922adffe0535
+        })
+    }
+}]);
+
+<<<<<<< HEAD
+socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function($scope, $http, $timeout){
+=======
+
+socialApp.controller('VendorEntryView', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
+>>>>>>> df35de88c2510412f2631d1c0fdf922adffe0535
+    $scope.$emit('LOAD');
+    var userData = JSON.parse(window.localStorage.getItem('userDetails'));
+    var blockId = userData.block_id;
+    $scope.vendors = [];
+
+<<<<<<< HEAD
     $http.post('/listVendorsEntry', {block_id: blockId}).success(function(response){
         if (response.hasOwnProperty('success')) {
             angular.forEach(response.data, function(item, key){
@@ -205,3 +238,20 @@ socialApp.controller('VendorEntryView', ['$scope','$http', '$timeout', function(
 }]);
 
 
+=======
+    $http.post('/listVendorsEntry', { block_id: blockId }).success(function(response) {
+
+        $scope.vendorEntry = function() {
+            var data = $scope.staffData;
+            $http.post('/vendorEntryByStaff', data).success(function(res) {
+                if (res.hasOwnProperty('success')) {
+                    $location.path('/visitors-for-staff')
+                } else {
+                    $scope.Error = true;
+                    $scope.ErrorMsg = res.error;
+                }
+            })
+        }
+    })
+}]);
+>>>>>>> df35de88c2510412f2631d1c0fdf922adffe0535

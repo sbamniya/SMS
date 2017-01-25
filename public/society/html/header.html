@@ -122,6 +122,20 @@
                 </ul>
             </li>
             <li>
+                <a href="javascript:void(0);" ng-class="{active: activetab == 'Contribution'}" data-toggle="collapse" data-target="#con2"><i class="fa fa-users"></i>Contribution<i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="con2" class="collapse" ng-class="{in: activetab == 'Contribution'}">
+                    <li>
+                        <a href="#/add-new-contribution/{{id}}"><i class="fa fa-circle-o"></i>Add New</a>
+                    </li>
+                    <li>
+                        <a href="#/contribution-list/{{id}}"><i class="fa fa-circle-o"></i>All</a>
+                    </li>
+                    <!-- <li>
+                                <a href="#/staff-request-list/{{id}}"><i class="fa fa-circle-o"></i>Request</a>
+                            </li> -->
+                </ul>
+            </li>
+            <li>
                 <a href="javascript:void(0);" ng-class="{active: activetab == 'Staff'}" data-toggle="collapse" data-target="#demo2"><i class="fa fa-users"></i>Staff Member<i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo2" class="collapse" ng-class="{in: activetab == 'Staff'}">
                     <li>

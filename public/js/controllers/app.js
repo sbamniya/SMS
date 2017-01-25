@@ -330,7 +330,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         activetab: 'MoneyManager',
         title: "Block Expenses | Manager"
     }).when('/maintainance/:blockID', {
-        controller: 'maintain',
+        controller: 'maintainanceManager',
         templateUrl: 'society/html/maintainance.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
@@ -348,6 +348,21 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'ResList',
         templateUrl: 'society/html/unpaid-resident.html',
         activetab: 'MoneyManager',
+        title: "Block Maintainance | Manager"
+    }).when('/resident-maintainance', {
+        templateUrl: 'resident/html/resident-maintainance.html',
+        controller: 'MaintainanceResident',
+        activetab: 'MoneyManager',
+        title: 'Maintainance | Resident'
+    }).when('/contribution-list/:blockID', {
+        controller: 'ContributeList',
+        templateUrl: 'society/html/contribution-list.html',
+        activetab: 'Contribution',
+        title: "Block Maintainance | Manager"
+    }).when('/add-new-contribution/:blockID', {
+        controller: 'Contribute',
+        templateUrl: 'society/html/add-new-contribution.html',
+        activetab: 'Contribution',
         title: "Block Maintainance | Manager"
     });
 
@@ -527,6 +542,16 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'contributions',
         activetab: 'MoneyManager',
         title: 'Contribution | Resident'
+<<<<<<< HEAD
+=======
+
+    }).when('/resident-contribution', {
+        templateUrl: 'resident/html/resident-contri.html',
+        controller: 'Maintain',
+        activetab: 'MoneyManager',
+        title: 'Maintainance | Resident'
+
+>>>>>>> df35de88c2510412f2631d1c0fdf922adffe0535
     });
 
     /*For Security*/
@@ -571,7 +596,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         title: "Vendor Entry | Staff Member"
     }).when('/vendors-in-view', {
         controller: 'VendorsInView',
-        templateUrl : 'staff/html/vendors-in.html',
+        templateUrl: 'staff/html/vendors-in.html',
         activetab: 'VendorEntry',
         title: "Vendor Entry | Staff Member"
     });

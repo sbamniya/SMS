@@ -27,27 +27,23 @@
                             <th>Job Card Id </th>
                             <th>Job Card Type</th>
                             <th>Vendor Name </th>
-                            <th>Amount</th>
                             <th>Payment By</th>
                             <th>Payment Date</th>
-                            <th>E-mail</th>
-                            <th>Phone Number</th>
-                            <th>Net Amount Credited</th>
+                            <th>Paid Amount</th>
                             <th>Transaction Status</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="req in transaction">
-                                <td>{{req.resident_id}}</td>
-                                <td></td>
-                                <td></td>
+                            <tr ng-repeat="req in expense">
+                                <td>{{req.jobcard_id}}</td>
+                                <td>{{req.job_card_type }}</td>
+                                <td>{{req.vendor_name}}</td>
+                                <td>{{req.pay_by}}</td>
+                                <td>{{req.date | date:'dd MMM, yyyy'}}</td>
                                 <td>{{req.amount}}</td>
-                                <td>pay U money</td>
-                                <td>{{req.addedon | date:'dd MMM, yyyy'}}</td>
-                                <td>{{req.email}}</td>
-                                <td>{{req.net_amount_debit}}</td>
-                                <td>{{req.discount}}</td>
-                                <td>{{req.transaction_status}}</td>
+                                <td>{{req.transaction_status
+}}
+</td>
                                 <td><a href="javascript:void(0)" ng-click="printReceipt(req.id)"><i class="fa fa-print"></i></a></td>
                             </tr>
                         </tbody>
