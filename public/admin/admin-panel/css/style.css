@@ -490,3 +490,19 @@ body::-webkit-scrollbar-thumb,ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thum
     background: rgba(0, 0, 0, 0.28);
     height: 100%;
 }
+button.btn.btn-success.payment {
+    margin-top: 30px;
+    margin-left: 44%;
+}
+
+.contribution {
+    color: #fff;
+    position: relative;
+    left: 0em;
+    text-align: center;
+    font-size: 20px;
+}
+
+.inner-addon {
+    position: relative;
+}

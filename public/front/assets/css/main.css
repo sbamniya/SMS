@@ -21,7 +21,7 @@
 		display: block;
 	}
 body {
-	font-family: Bitter !important;
+	font-family: 'Quicksand', sans-serif !important;
 	background: rgba(45, 27, 27, 0.11) !important;
 }
 	body {
@@ -1509,8 +1509,6 @@ body {
 		font-weight: bold;
 		line-height: 1.5;
 		margin: 0 0 1em 0;
-		font-family: Raleway;
-
 	}
 
 		h1 a, h2 a, h3 a, h4 a, h5 a, h6 a {
@@ -3340,38 +3338,68 @@ body {
 			}
 		}
 .modal.popup {
-    background: rgba(101, 97, 97, 0.59);
+    background:rgba(0,0,0,0.6);
     display: block;
     width: 100%;
     position: fixed;
+    
 }
+.modal.popup.happiness
+ {
+ 	 background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg2.jpg);
+    background-image: -moz-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg2.jpg);
+    background-image: -o-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg2.jpg);
+    background-image: -ms-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg2.jpg);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(0, 0, 0, 0.4)), to(rgba(0, 0, 0, 0.4))), url(bg2.jpg);
+    background-image: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(bg2.jpg);
+  
+ 	background-size: cover;
+ }
+ .modal.popup.happiness::after
+ {
+  
+ }
 .booking_room {
     margin: 1% 30%;
     width: 40%;
-    background: #f5f5f5;
+    background: rgba(255,255,255,1);
     color: #000;
     padding: 1% 2%;
+    position: relative;
 }
 .man2help-heading {
     text-align: center;
     border-radius: 50%;
-    background: rgb(217, 107, 102);
+    background: rgba(124, 110, 58, 0.69);
     color: #fff;
-    width: 22%;				
-    margin: 0 0.5rem 1rem 2rem;
+    margin: 0rem auto 1.5em;
+    padding: 10% 13%;
+    display: inline-block;
+    box-shadow: -1px 4px 9px 2px rgba(72, 67, 6, 0.31);
+    font-weight: bold;
+    border: 10px solid #eee;
+    
 }
 .man2help-heading i.fa {
     margin-top: 15%;
     text-align: center;
+    width: 100%;
 }
 .form-close {
     float: right;
     color: #716767;
     cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 5px;
 }
+
+.col {display: inline; float: left}
+.no-right-padding{padding-right: 0px !important;    text-align: center;}
 .man2help-heading p {
     margin: 0 0 1em 0;
 }
+.form-close .fa {margin: 0!important;}
 .login-section {
     position: absolute;
     left: 5%;

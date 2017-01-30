@@ -362,7 +362,6 @@ socialApp.controller('StaffEntryBySecurity', ['$scope','$http','$timeout', '$loc
 	};
 	$scope.AllStaffMEmeber = [];
 	$http.post('/staffListByBlockSimple', {blockID: block_id}).success(function(response){
-		console.log(response)
 		if (response.hasOwnProperty('data')) {
 			$scope.AllStaffMEmeber = response.data;
 		}

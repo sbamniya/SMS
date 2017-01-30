@@ -334,18 +334,18 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'society/html/maintainance.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
-    }).when('/all-resident/:blockID', {
+    }).when('/all-resident/:blockID/:maintainanceID', {
         controller: 'ResList',
         templateUrl: 'society/html/all-resident.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
-    }).when('/paid-resident/:blockID', {
-        controller: 'ResList',
+    }).when('/paid-resident/:blockID/:maintainanceID', {
+        controller: 'PaidResidents',
         templateUrl: 'society/html/paid-resident.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
-    }).when('/unpaid-resident/:blockID', {
-        controller: 'ResList',
+    }).when('/unpaid-resident/:blockID/:maintainanceID', {
+        controller: 'UnPaidResidents',
         templateUrl: 'society/html/unpaid-resident.html',
         activetab: 'MoneyManager',
         title: "Block Maintainance | Manager"
@@ -542,16 +542,12 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'contributions',
         activetab: 'MoneyManager',
         title: 'Contribution | Resident'
-<<<<<<< HEAD
-=======
-
     }).when('/resident-contribution', {
         templateUrl: 'resident/html/resident-contri.html',
-        controller: 'Maintain',
+        controller: 'ResidentContribution',
         activetab: 'MoneyManager',
         title: 'Maintainance | Resident'
 
->>>>>>> df35de88c2510412f2631d1c0fdf922adffe0535
     });
 
     /*For Security*/

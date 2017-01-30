@@ -24,25 +24,21 @@
                 <div class="table-responsive">
                     <table id="entry-grid" datatable="ng" width="100%">
                         <thead>
-                            <th>Resident Name</th>
-                            <th>Manager Name</th>
-                            <th>E-Mail</th>
-                            <th>Mobile Number</th>
-                            <th>Last Date</th>
-                            <th>Year</th>
+                            <th>Flat Number</th>
+                            <th>Resident's Name</th>
+                            <th>Resident's E-Mail</th>
+                            <th>Resident's Mobile Number</th>
                             <th>Month</th>
-                            <th>Amount</th>
+                            <th>Amount Paid</th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="amenity in reslist1">
-                                <td>{{amenity.resident_name}}</td>
-                                <td>{{amenity.manager_name}}</td>
-                                <td>{{amenity.email}}</td>
-                                <td>{{amenity.contact_no}}</td>
-                                <td>{{amenity.last_payment_date}}</td>
-                                <td>{{amenity.year}}</td>
-                                <td>{{amenity.month}}</td>
-                                <td>{{amenity.amount}}</td>
+                            <tr ng-repeat="res in reslist">
+                                <td>{{res.flat_number}}</td>
+                                <td>{{res.first_name}} {{res.last_name}}</td>
+                                <td>{{res.email}}</td>
+                                <td>{{res.contact_no}}</td>
+                                <td>{{res.month}}, {{res.year}}</td>
+                                <td>{{res.amount}}</td>
                             </tr>
                         </tbody>
                     </table>

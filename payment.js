@@ -38,16 +38,11 @@ exports.addPaymentDetails = function(pool) {
                 if (err) {
                     console.log(err);
                 }
-                console.log(Q);
             });
 
         } else {
             proInfo = JSON.parse(productinfo);
         }
-
-
-
-        var proInfo = JSON.parse(productinfo);
 
         var productstr = JSON.stringify(proInfo);
 
@@ -89,8 +84,7 @@ exports.addPaymentDetails = function(pool) {
             if (err) {
                 console.log(err);
             } else {
-                var host = req.protocol + '://' + req.head
-                ers.host + '/';
+                var host = req.protocol+'://'+req.headers.host+'/'
                 setTimeout(function() {
                     res.writeHead(301, {
                         Location: host
