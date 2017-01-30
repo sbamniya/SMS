@@ -170,6 +170,7 @@ a.active {
 
 .fa {
     margin: 3px 15px 0 0 !important;
+    width: 1.1rem;
 }
 
 i.fa.fa-fw.fa-caret-down {
@@ -209,13 +210,19 @@ h2 {
 }
 
 div#entry-grid_filter {
-    padding: 4% 0% 0px 0;
+    padding: 0;
 }
 
 .dataTables_filter input[type="search"] {
     height: 25px;
     width: auto;
-    border: 1px solid #a99595;
+    border: 4px solid #fff;
+    box-shadow: 2px 9px 32px 1px #d7d7d7;
+    border-radius: 24px;
+    background: #ececec;
+    padding: 15px;
+    font-size: 14px;
+    color: #867676;
 }
 
 table#entry-grid {
@@ -229,7 +236,7 @@ table#entry-grid {
 
 table#entry-grid thead {
     /*background: #f48fb1;*/
-    background-color: rgb(118, 204, 186);
+    background-color: rgb(220, 104, 5);
     color: #000 !important;
     font-size: 13px;
 }
@@ -278,6 +285,7 @@ table.dataTable tbody tr.odd:hover {
 .col-lg-12 h2 {
     margin-bottom: 0;
     border-bottom: 1px dotted #b1a5a5;
+	color: #a27e5e!important;
 }
 
 .society-logo-container img {
@@ -558,18 +566,22 @@ td.fc-day-top {
 
 body::-webkit-scrollbar,
 ul.nav.navbar-nav.side-nav::-webkit-scrollbar {
-    width: 0.6em;
+    width: 0.4em;
+	padding-top:10px;
+	
 }
 
 body::-webkit-scrollbar-track,
 ul.nav.navbar-nav.side-nav::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+	padding-top:5px;
 }
 
 body::-webkit-scrollbar-thumb,
 ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thumb {
-    background-color: rgb(118, 204, 186);
-    outline: 1px solid slategrey;
+   background: #ccc;
+   box-shadow: 1px 1px #333;
+   border-radius: 1em;
 }
 
 .outer-cover {

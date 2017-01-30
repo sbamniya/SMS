@@ -82,8 +82,12 @@ img { max-width: 100%; }
 /***** Top content *****/
 
 .inner-bg {
-    padding: 0 0 170px 0;
-    background: rgb(102, 178, 162);
+   height: 100%;
+    
+}
+.top-content{
+	background-image: url(bg.jpg);
+    background-size: cover;
 }
 
 .top-content .text {
@@ -106,13 +110,13 @@ img { max-width: 100%; }
 
 .form-box {
 	margin-top: 35px;
+	background: rgba(255, 255,255,0.9);
+    font-weight: bold !important;
 }
 
 .form-top {
 	overflow: hidden;
 	padding: 0 25px 15px 25px;
-	background: #d8e0df;
-	/*background: rgba(0, 0, 0, 0.35);*/
 	-moz-border-radius: 4px 4px 0 0; -webkit-border-radius: 4px 4px 0 0; border-radius: 4px 4px 0 0;
 	text-align: left;
 }
@@ -139,8 +143,6 @@ img { max-width: 100%; }
 
 .form-bottom {
 	padding: 25px 25px 30px 25px;
-	background: #d8e0df;
-	/*background: rgba(0, 0, 0, 0.3);*/
 	-moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
 	text-align: left;
 }
