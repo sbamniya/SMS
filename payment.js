@@ -47,7 +47,7 @@ exports.addPaymentDetails = function(pool) {
 
 
 
-        var proInfo = JSON.parse(productinfo);
+        //var proInfo = JSON.parse(productinfo);
 
         var productstr = JSON.stringify(proInfo);
 
@@ -90,7 +90,7 @@ exports.addPaymentDetails = function(pool) {
                 console.log(err);
             } else {
                 var host = req.protocol + '://' + req.head
-                ers.host + '/';
+                err.host + '/';
                 setTimeout(function() {
                     res.writeHead(301, {
                         Location: host

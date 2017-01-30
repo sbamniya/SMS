@@ -317,6 +317,8 @@
     app.post('/residentDetailsForMaintainance', maintainance.residentDetailsForMaintainance(pool));
     app.post('/paidResidentList', maintainance.paidResidentList(pool));
     app.post('/unpaidResidentList', maintainance.unpaidResidentList(pool));
+    app.post('/notifyToResident', maintainance.notifyToResident(pool));
+
     /*Contribution */
     app.post('/addContribution', contribution.addContribution(pool));
     app.post('/listContribution', contribution.listContribution(pool));

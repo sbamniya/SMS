@@ -108,7 +108,7 @@
                                         <td>{{req.year}}</td>
                                         <td>{{req.amount}}</td>
                                         <td>{{req.last_payment_date | date: 'dd MMM,yyyy'}}</td>
-                                        <td><a href="#/all-resident/{{id}}" ng-click="allResList()" title="All Resident's"><i class="fa fa-list"></i></a> | <a href="#/paid-resident/{{id}}" ng-click="paidResList()" title="Paid Resident"><i class="fa fa-list"></i></a> | <a href="#/unpaid-resident/{{id}}" ng-click="unpaidList()" title="Unpaid Resident"><i class="fa fa-list"></i></a>
+                                        <td> <a href="#/paid-resident/{{id}}" ng-click="paidResList()" title="Paid Resident"><i class="fa fa-list"></i></a> | <a href="#/unpaid-resident/{{id}}" ng-click="unpaidList()" title="Unpaid Resident"><i class="fa fa-list"></i></a>
                                         </td>
                                     </tr>
                                 </tbody>

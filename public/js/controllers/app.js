@@ -545,7 +545,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
 
     }).when('/resident-contribution', {
         templateUrl: 'resident/html/resident-contri.html',
-        controller: 'Maintain',
+        controller: 'ResidentContribution',
         activetab: 'MoneyManager',
         title: 'Maintainance | Resident'
 

@@ -107,7 +107,7 @@ exports.allResidentList = function(pool) {
         var block_id = req.body.block_id;
         var result = {}
         console.log(block_id);
-        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,sm.manager_name,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN society_manager sm on bm.block_manager=sm.id INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where bm.id="' + block_id + '" GROUP BY id ';
+        var querystring = 'select * from maintainance_master mm where mm.id not in(select mmm.maintanance_id FROM maintainance_master_meta mmm INNER join residents r On r.id = mmm.resident_id INNER JOIN flat_master fm ON fm.id = r.flat_id where fm.block_id = "' + block_id + '") and mm.block_id = "' + block_id + '"';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -199,5 +199,47 @@ exports.residentDetailsForMaintainance = function(pool) {
 
         });
 
+    }
+}
+
+exports.notifyToResident = function(pool) {
+    return function(req, res) {
+        res.setHeader('content-Type', 'application/json');
+        var result = {};
+        var ids = [];
+        ids = req.body.id;
+        var message = req.body.message;
+        for (var i = ids.length - 1; i >= 0; i--) {
+            var resident_id = ids[i];
+            var Q = 'select mm.*,concat(r.first_name, " " ,r.last_name) as resident_name ,r.email as email from maintainance_master mm INNER JOIN flat_master fm ON fm.block_id = mm.block_id INNER JOIN residents r ON fm.id = r.flat_id where mm.id not in(select maintanance_id from maintainance_master_meta mmm inner join residents r ON r.id = mmm.resident_id INNER JOIN flat_master fm ON r.flat_id = fm.id INNER JOIN block_master bm On fm.block_id = bm.id WHERE r.id = "' + resident_id + '") group by mm.id';
+            pool.query(Q, function(err, rows) {
+                if (err) {
+                    result.error = err;
+                    console.log(err);
+                } else {
+                    var info = "";
+                    for (var i = 0; i < rows.lenght; i++) {
+                        info.concate(rows[i].month)
+                    }
+                    var resident_name = rows[0].resident_name;
+                    var email = rows[0].email;
+                    transporter.sendMail({
+                        from: 'kalika.deltabee@gmail.com',
+                        to: email,
+                        subject: 'Notice for Maintainance',
+                        html: 'Hello ' + resident_name + '!<br/><br> Maintainance <table><th>Maintainance MOnth</th><><tr>' + month + ',' + year + ' is ' + amount + ' <br/> please pay your maintainance as soon as possible <br/><br/>Thank You.'
+                    }, function(error, response) {
+                        if (error) {
+                            console.log(error);
+                        } else {
+                            console.log('Message sent');
+                        }
+                    });
+                    result.data = rows;
+                    result.success = 'displayed successfully';
+                    res.send(JSON.stringify(result));
+                }
+            });
+        }
     }
 }
