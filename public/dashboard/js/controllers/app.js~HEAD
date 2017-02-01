@@ -94,7 +94,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'admin/admin-panel/html/service-all.html',
         activetab: 'Service',
         title: 'All Services | Admin'
-    }).when('/game', {
+    }).when('/admin_game', {
         controller: 'games',
         templateUrl: 'admin/admin-panel/html/games.html',
         activetab: 'game',
@@ -369,7 +369,7 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'society/html/add-new-contribution.html',
         activetab: 'Contribution',
         title: "Block Maintainance | Manager"
-    }).when('/games/:blockID', {
+    }).when('/manager_games/:blockID', {
         controller: 'games',
         templateUrl: 'society/html/games.html',
         activetab: 'game',
@@ -552,12 +552,13 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'contributions',
         activetab: 'MoneyManager',
         title: 'Contribution | Resident'
-    }).when('/resident-contribution', {
+    }).when('/resident-contribution/:conID', {
         templateUrl: 'resident/html/resident-contri.html',
-        controller: 'ResidentContribution',
+        controller: 'ResContribution',
         activetab: 'MoneyManager',
-        title: 'Maintainance | Resident'
-    }).when('/games', {
+        title: 'Your Contribution | Resident'
+
+    }).when('/resident_games', {
         controller: 'games',
         templateUrl: 'resident/html/games.html',
         activetab: 'game',
