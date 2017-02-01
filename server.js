@@ -322,6 +322,9 @@
     /*Contribution */
     app.post('/addContribution', contribution.addContribution(pool));
     app.post('/listContribution', contribution.listContribution(pool));
+    app.post('/deleteContri',contribution.deleteContri(pool));
+    app.post('/getSingleContributions',contribution.getSingleContributions(pool));
+    app.post('/listOfPaidContributionByResident',contribution.listOfPaidContributionByResident(pool));
 
     /*Create Hash*/
     app.post('/createHash', function(req, res) {

@@ -85,6 +85,7 @@ exports.addSociety = function(formidable, fs, pool, step) {
         var treasurer = $data.treasurer;
         var treasurer_contact = $data.treasurer_contact;
         var manager = $data.manager;
+        var society_id = '';
         if ($data.has_blocks == 'Y') {
             var has_block = 1;
         } else {
@@ -129,6 +130,7 @@ exports.addSociety = function(formidable, fs, pool, step) {
                 } else {
                     result.success = 'true';
                     result.lastInsertId = rows.insertId;
+                    society_id = result.lastInsertId;
                     pool.query("delete from image_temp where id='" + cover_img_id + "'", this);
                 }
             },
@@ -148,8 +150,22 @@ exports.addSociety = function(formidable, fs, pool, step) {
             function successHandler(err, rows) {
                 if (err) {} else {
                     if (rows.insertId > 0) {
-                        result.success = 'success';
-                        res.send(JSON.stringify(result));
+                        var manager_id = society_id; /*society id*/
+                        var merchant_id = req.body.merchant_id;
+                        var marchant_key = req.body.marchant_key;
+                        var marchant_salt = req.body.marchant_salt;
+                        var Q = 'INSERT INTO society_manager_meta(`merchant_id`, `marchant_key`, `marchant_salt`, `manager_id`, `status`) VALUES ("' + merchant_id + '","' + marchant_key + '","' + marchant_salt + '","' + manager_id + '","1")';
+                        pool.query(Q, function(err, rows, fields) {
+                            if (err) {
+                                console.log(err);
+                                result.error = err;
+                            } else {
+                                result.success = "Society Registered Successfully";
+                                res.send(JSON.stringify(result));
+                                return;
+                            }
+                        });
+
                     }
                 }
             }

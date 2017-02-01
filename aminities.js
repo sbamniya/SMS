@@ -252,7 +252,7 @@ exports.sendApproveDetailsToResidentAboutAmenities  = function(pool,transporter)
         var $result={}
         var id = req.body.id;
         var comment = req.body.manager_comment;
-        var querystring='select ar.*,DATE_FORMAT(ar.booking_end_date,  "%Y-%m-%d") as end_date,  DATE_FORMAT(ar.booking_start_date,  "%Y-%m-%d") as start_date, concat(r.first_name," ",r.last_name) as resident_name, r.email as resident_email ,am.aminity_name from amenities_master am INNER JOIN amenity_request ar ON am.id = ar.amenity_id INNER JOIN residents r ON ar.resident_id = r.id INNER JOIN flat_master flm ON r.flat_id = flm.id INNER JOIN block_master bm ON flm.block_id = bm.id INNER JOIN society_manager sm ON bm.block_manager = sm.id where ar.id="'+id+'"';
+        var querystring='select ar.*,DATE_FORMAT(ar.booking_end_date,  "%Y-%m-%d") as end_date,  DATE_FORMAT(ar.booking_start_date,  "%Y-%m-%d") as start_date, concat(r.first_name," ",r.last_name) as resident_name, r.email as resident_email ,am.aminity_name, am.charges from amenities_master am INNER JOIN amenity_request ar ON am.id = ar.amenity_id INNER JOIN residents r ON ar.resident_id = r.id INNER JOIN flat_master flm ON r.flat_id = flm.id INNER JOIN block_master bm ON flm.block_id = bm.id INNER JOIN society_manager sm ON bm.block_manager = sm.id where ar.id="'+id+'"';
 
         pool.query(querystring,function(err,result){
             if(err)
@@ -265,10 +265,12 @@ exports.sendApproveDetailsToResidentAboutAmenities  = function(pool,transporter)
                 var resident_name = '';
                 var resident_email = '';
                 var facility_name = '';
+                var charges = '';
                 if (result.length>0) {
                         resident_name = result[0].resident_name;
                         resident_email = result[0].resident_email;
                         aminity_name = result[0].aminity_name;
+                        charges = result[0].charges;
                 }
                 var Q ='select *, DATE_FORMAT(booking_end_date,  "%Y-%m-%d") as end_date,  DATE_FORMAT(booking_start_date,  "%Y-%m-%d") as start_date from amenity_request where ((booking_start_date<="'+result[0].start_date+'" and booking_end_date>="'+result[0].start_date+'") or (booking_start_date<="'+result[0].end_date+'" and booking_end_date>="'+result[0].end_date+'")) and amenity_id="'+result[0].amenity_id+'" and status="2"';
 
@@ -301,7 +303,11 @@ exports.sendApproveDetailsToResidentAboutAmenities  = function(pool,transporter)
                                 console.log('Message sent');
                                 }
                             });
-                            var queryString = 'update amenity_request SET status=1, response_date = now(), manager_message="'+comment+'" where id="'+id+'"';
+                            var status=1;
+                            if(charges==0){
+                               status=2
+                            }
+                            var queryString = 'update amenity_request SET status="'+status+'", response_date = now(), manager_message="'+comment+'" where id="'+id+'"';
                             pool.query(queryString,function(err,row){
                                 if(err)
                                 {

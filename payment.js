@@ -40,52 +40,57 @@ exports.addPaymentDetails = function(pool) {
                 }
             });
 
+        } else if (productinfo == "contribution") {
+            var Q = 'INSERT INTO contribution_master(`contribution_id`, `resident_id`, `amount`, `status`) VALUES ("' + block_id + '","' + resident_id + '","' + amount + '","1")';
+            pool.query(Q, function(err, rows) {
+                if (err) {
+                    console.log(err);
+                }
+            });
         } else {
             proInfo = JSON.parse(productinfo);
-        }
+            var productstr = JSON.stringify(proInfo);
 
+            for (var i = 0; i < proInfo.length; i++) {
+                if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
+                    var type = proInfo[i].type;
+                    var id = proInfo[i].id;
+                    var Query = '';
+                    var tableName = '';
+                    var setData = '';
+                    var where = '';
+                    if (type == 'Facility') {
+                        tableName = 'facility_request';
+                        setData = 'status=2';
+                        where = 'id ="' + id + '"';
+                        var Q = 'update facility_request set last_payment_date=now() where ' + where;
+                        pool.query(Q, function(err) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
+                    } else if (type == 'Amenity') {
+                        tableName = 'amenity_request';
+                        setData = 'status=2';
+                        where = 'id ="' + id + '"';
+                    } else {
 
-        var productstr = JSON.stringify(proInfo);
-
-        for (var i = 0; i < proInfo.length; i++) {
-            if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
-                var type = proInfo[i].type;
-                var id = proInfo[i].id;
-                var Query = '';
-                var tableName = '';
-                var setData = '';
-                var where = '';
-                if (type == 'Facility') {
-                    tableName = 'facility_request';
-                    setData = 'status=2';
-                    where = 'id ="' + id + '"';
-                    var Q = 'update facility_request set last_payment_date=now() where ' + where;
-                    pool.query(Q, function(err) {
+                    }
+                    Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
+                    pool.query(Query, function(err, rows) {
                         if (err) {
                             console.log(err);
                         }
                     });
-                } else if (type == 'Amenity') {
-                    tableName = 'amenity_request';
-                    setData = 'status=2';
-                    where = 'id ="' + id + '"';
-                } else {
-
                 }
-                Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
-                pool.query(Query, function(err, rows) {
-                    if (err) {
-                        console.log(err);
-                    }
-                });
-            }
 
+            }
         }
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`,Pay_by, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`block_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, Pay_by, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId, transaction_status, resident_id, block_id, status], function(err, rows) {
             if (err) {
                 console.log(err);
             } else {
-                var host = req.protocol+'://'+req.headers.host+'/'
+                var host = req.protocol + '://' + req.headers.host + '/'
 
                 setTimeout(function() {
                     res.writeHead(301, {
