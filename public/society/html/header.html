@@ -13,7 +13,7 @@
 </span>
         <span class="management-logo-container">
 <img ng-src="images/Society-Management_logo.png">-->
-</span>
+        </span>
         <!--  <a class="navbar-brand" href="#/society-dashboard/{{id}}">Welcome {{userDetail.manager_name}} !</a> -->
     </div>
     <!-- Top Menu Items -->
@@ -50,7 +50,7 @@
     <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-			<li><img ng-src="images/Society-Management_logo.png" style="width: 100%; background: #48352a; padding: 0px 25px;"></li>
+            <li><img ng-src="images/Society-Management_logo.png" style="width: 100%; background: #48352a; padding: 0px 25px;"></li>
             <li>
                 <a href="#/society-dashboard/{{id}}" ng-class="{active: activetab == 'societyDashboard'}"><i class="fa fa-fw fa-dashboard"></i>Dashboard</a>
             </li>
@@ -208,6 +208,17 @@
                     </li>
                     <li>
                         <a href="#/external-visitors/{{id}}"><i class="fa fa-circle-o"></i>External Visitors</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-class="{active: activetab == 'Games'}" data-toggle="collapse" data-target="#demo6"><i class="fa fa-music"></i> Entertainment <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="demo6" class="collapse" ng-class="{in: activetab == 'Visitor'}">
+                    <li>
+                        <a href="#/games/{{id}}"><i class="fa fa-circle-o"></i>Games</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-circle-o"></i>Stories</a>
                     </li>
                 </ul>
             </li>

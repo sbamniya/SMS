@@ -1,9 +1,18 @@
 socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$location', '$crypthmac', function($scope, $http, $timeout, sha256, $location, $crypthmac) {
+
+    $scope.payUdetail = [];
     var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = userDetails.id;
     var userName = userDetails.first_name + ' ' + userDetails.last_name;
     var userEmail = userDetails.email;
     var userCon = userDetails.contact_no;
+
+    $http.post('/payUdetailsOfSocietyByResident', { resident_id: id }).success(function(response) {
+        console.log(response);
+        if (response.hasOwnProperty('success')) {
+            $scope.payUdetail = response.data;
+        }
+    });
 
     $scope.noData = true;
     /*Define PayuCredentials*/
@@ -375,7 +384,7 @@ socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$ro
 
         $scope.paymentDetails = {
             key: "hDkYGPQe",
-            firstname: userDetails.first_name+' '+userDetails.last_name,
+            firstname: userDetails.first_name + ' ' + userDetails.last_name,
             email: userDetails.email,
             phone: userDetails.contact_no,
             surl: surl,
@@ -390,19 +399,19 @@ socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$ro
         };
 
         /*$scope.paymentDetails.txnid = ;*/
-        
+
         var hashString = $scope.paymentDetails.key + '|' + $scope.paymentDetails.txnid + '|' + $scope.paymentDetails.amount + '|' + $scope.paymentDetails.productinfo + '|' + $scope.paymentDetails.firstname + '|' + $scope.paymentDetails.email + '|' + $scope.paymentDetails.udf1 + '|' + $scope.paymentDetails.udf2 + '|' + $scope.paymentDetails.udf3 + '||||||||' + SALT;
 
 
         $http.post('/createHash', { string: hashString }).success(function(response) {
             $scope.paymentDetails.hash = response;
-            
+
         });
-        
+
         setTimeout(function() {
             document.paymentFrm.submit();
         }, 2000);
-        
+
 
 
 
@@ -550,7 +559,7 @@ socialApp.controller('maintainanceManager', ['$scope', '$route', '$routeParams',
     var i;
     var year = 2000;
     $scope.y = [];
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < 100; i++) {
         $scope.y.push(year + i);
     }
     $scope.today = new Date();
@@ -584,6 +593,14 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
     $scope.VendorDues = [];
+    $scope.payUDet = [];
+    $http.post('/payUdetailsOfSociety', { blockId: block_id }).success(function(response) {
+        console.log($scope.payUDet);
+        if (response.hasOwnProperty('success')) {
+            $scope.payUDet = response.data;
+        }
+        $scope.$emit('UNLOAD');
+    });
     $http.post('/paymentDuesFromManager', { block_id: block_id }).success(function(response) {
         if (response.hasOwnProperty('succes')) {
             if (response.hasOwnProperty('data')) {

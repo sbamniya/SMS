@@ -94,6 +94,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'admin/admin-panel/html/service-all.html',
         activetab: 'Service',
         title: 'All Services | Admin'
+    }).when('/game', {
+        controller: 'games',
+        templateUrl: 'admin/admin-panel/html/games.html',
+        activetab: 'game',
+        title: "Entertainments | Admin"
     });
 
     /*routes for manager*/
@@ -364,6 +369,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'society/html/add-new-contribution.html',
         activetab: 'Contribution',
         title: "Block Maintainance | Manager"
+    }).when('/games/:blockID', {
+        controller: 'games',
+        templateUrl: 'society/html/games.html',
+        activetab: 'game',
+        title: "Entertainments | Manager"
     });
 
     /*Routes for Front*/
@@ -547,7 +557,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         controller: 'ResidentContribution',
         activetab: 'MoneyManager',
         title: 'Maintainance | Resident'
-
+    }).when('/games', {
+        controller: 'games',
+        templateUrl: 'resident/html/games.html',
+        activetab: 'game',
+        title: "Entertainments | Manager"
     });
 
     /*For Security*/
@@ -595,6 +609,11 @@ socialApp.config(function($routeProvider, $crypthmacProvider, $httpProvider) {
         templateUrl: 'staff/html/vendors-in.html',
         activetab: 'VendorEntry',
         title: "Vendor Entry | Staff Member"
+    }).when('/games', {
+        controller: 'games',
+        templateUrl: 'staff/html/game.html',
+        activetab: 'game',
+        title: "Entertainments | Staff Member"
     });
 
     /*Routes for 404*/

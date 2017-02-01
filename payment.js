@@ -85,7 +85,7 @@ exports.addPaymentDetails = function(pool) {
             if (err) {
                 console.log(err);
             } else {
-                var host = req.protocol+'://'+req.headers.host+'/'
+                var host = req.protocol + '://' + req.headers.host + '/'
 
                 setTimeout(function() {
                     res.writeHead(301, {
@@ -122,7 +122,7 @@ exports.displayExpenseHistoryToManager = function(pool) {
             data: []
         };
         var block_id = req.body.id;
-        var Q = 'SELECT th.*,  vm.vendor_name, jm.job_card_type from transaction_history as th INNER JOIN job_card_master jm on jm.id=th.resident_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id=1 and th.Pay_by="' + block_id + '"';
+        var Q = 'SELECT th.*,  vm.vendor_name, jm.job_card_type from transaction_history as th INNER JOIN job_card_master jm on jm.id=th.resident_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id=1 and th.Pay_by="' + block_id + '" order by addedon DESC';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;
@@ -179,7 +179,7 @@ exports.transactionHistoryToManager = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var block_id = req.body.id;
-        var Q = 'SELECT tr.*, concat(r.first_name, " ", r.last_name) as resident_name, fm.flat_number, bm.name from transaction_history tr INNER JOIN residents r on r.id = tr.resident_id INNER JOIN flat_master fm on fm.id = r.flat_id INNER JOIN block_master bm on bm.id= fm.block_id INNER JOIN society_manager sm on sm.id = bm.block_manager where bm.id = "' + block_id + '"';
+        var Q = 'SELECT tr.*, concat(r.first_name, " ", r.last_name) as resident_name, fm.flat_number, bm.name from transaction_history tr INNER JOIN residents r on r.id = tr.resident_id INNER JOIN flat_master fm on fm.id = r.flat_id INNER JOIN block_master bm on bm.id= fm.block_id INNER JOIN society_manager sm on sm.id = bm.block_manager where bm.id = "' + block_id + '" ';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;

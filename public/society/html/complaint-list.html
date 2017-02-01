@@ -7,7 +7,6 @@
                 <h3 class="page-header">
                    <!--  Dashboard -->
                 </h3>
-                <br>
                 <ol class="breadcrumb">
                     <li>
                         <a href="javascript:void(0)"><i class="fa fa-dashboard"></i> Dashboard</a>
@@ -30,60 +29,58 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /#page-wrapper -->
-<society-footer></society-footer>   
+<society-footer></society-footer>
 <div id="myModal" class="modal fade" role="dialog" ng-show="openModel">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-         <h4 class="modal-title">Add Comment</h4>
-      </div>
-      <div class="modal-body">
-        <form name="flatUpdateForm">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>Comment(*)</label>
-                        <textarea class="form-control" name="first_name" ng-model="comment" placeholder="Enter Your Comment Here" required></textarea>
-                        
-                        <p ng-show="flatUpdateForm.first_name.$invalid && !flatUpdateForm.first_name.$pristine" class="help-block red-text">Please enter Your Comment</p>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Comment</h4>
+            </div>
+            <div class="modal-body">
+                <form name="flatUpdateForm">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Comment(*)</label>
+                                <textarea class="form-control" name="first_name" ng-model="comment" placeholder="Enter Your Comment Here" required></textarea>
+                                <p ng-show="flatUpdateForm.first_name.$invalid && !flatUpdateForm.first_name.$pristine" class="help-block red-text">Please enter Your Comment</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled="flatUpdateForm.$invalid" ng-click="UpdateStatus(ComplaintUpdateID, 2)" class="btn btn-success">Submit</button>
+                <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" ng-disabled="flatUpdateForm.$invalid" ng-click="UpdateStatus(ComplaintUpdateID, 2)" class="btn btn-success">Submit</button>
-            <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
-        </div>
+        </form>
     </div>
-    </form>
-  </div>
 </div>
 <div id="myModal1" class="modal fade" role="dialog" ng-show="openModel">
-  <div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-         <h4 class="modal-title">Send Staus Report</h4>
-      </div>
-      <div class="modal-body">
-        <form name="flatUpdateForm1">
-            <div class="row">
-                <div class="col-sm-12">
-                    <div class="form-group">
-                        <label>Add Satus Comment(*)</label>
-                        <textarea class="form-control" name="first_name" ng-model="StatusData" placeholder="Enter Your Comment Here" required></textarea>
-                        
-                        <p ng-show="flatUpdateForm1.first_name.$invalid && !flatUpdateForm1.first_name.$pristine" class="help-block red-text">Please enter your Comment</p>
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Send Staus Report</h4>
+            </div>
+            <div class="modal-body">
+                <form name="flatUpdateForm1">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>Add Satus Comment(*)</label>
+                                <textarea class="form-control" name="first_name" ng-model="StatusData" placeholder="Enter Your Comment Here" required></textarea>
+                                <p ng-show="flatUpdateForm1.first_name.$invalid && !flatUpdateForm1.first_name.$pristine" class="help-block red-text">Please enter your Comment</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" ng-disabled="flatUpdateForm1.$invalid" ng-click="SendStatusReport(ComplaintUpdateID)" class="btn btn-success" data-dismiss="modal">Submit</button>
+                <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
             </div>
         </div>
-        <div class="modal-footer">
-            <button type="button" ng-disabled="flatUpdateForm1.$invalid" ng-click="SendStatusReport(ComplaintUpdateID)" class="btn btn-success" data-dismiss="modal">Submit</button>
-            <button type="button" class="btn btn-default closeBtn" data-dismiss="modal">Close</button>
-        </div>
+        </form>
     </div>
-    </form>
-  </div>
 </div>

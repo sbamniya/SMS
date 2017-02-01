@@ -24,7 +24,7 @@
                     <a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
                 </li> -->
                 <li>
-                    <a href="javascript:void(0)" ><i class="fa fa-fw fa-key"></i> Change Password</a>
+                    <a href="javascript:void(0)"><i class="fa fa-fw fa-key"></i> Change Password</a>
                 </li>
                 <!-- <li>
                     <a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
@@ -39,28 +39,28 @@
     <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->
     <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav side-nav">
-            <li >
+            <li>
                 <a href="#/dashboard" ng-class="{active: activetab == 'dashboard'}"><i class="fa fa-fw fa-dashboard"></i> Dashboard</a>
             </li>
-            <li >
+            <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo" ng-class="{active: activetab == 'society'}"><i class="fa fa-globe"></i> Societies <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo" class="collapse" ng-class="{in: activetab == 'society'}">
                     <li>
-                       <a href="#/add-society"> <i class="fa fa-circle-o"></i> Add</a>
+                        <a href="#/add-society"> <i class="fa fa-circle-o"></i> Add</a>
                     </li>
                     <li>
                         <a href="#/society-list"><i class="fa fa-circle-o"></i> List</a>
                     </li>
                 </ul>
             </li>
-            <li >
+            <li>
                 <a href="javascript:;" data-toggle="collapse" data-target="#demo1" ng-class="{active: activetab == 'managers'}"><i class="fa fa-users"></i> Managers <i class="fa fa-fw fa-caret-down"></i></a>
                 <ul id="demo1" class="collapse" ng-class="{in: activetab == 'managers'}">
                     <li>
-                       <a href="#/add-manager"> <i class="fa fa-circle-o"></i> Add</a>
+                        <a href="#/add-manager"> <i class="fa fa-circle-o"></i> Add</a>
                     </li>
                     <li>
-                       <a href="#/manager-list" ><i class="fa fa-circle-o"></i> List</a>
+                        <a href="#/manager-list"><i class="fa fa-circle-o"></i> List</a>
                     </li>
                 </ul>
             </li>
@@ -85,7 +85,7 @@
                         <a href="#/service-all"><i class="fa fa-circle-o"></i> List</a>
                     </li>
                     <li>
-                       <a href="#/add-service"> <i class="fa fa-circle-o"></i> Add Service</a>
+                        <a href="#/add-service"> <i class="fa fa-circle-o"></i> Add Service</a>
                     </li>
                     <li>
                         <a href="#/service-list"><i class="fa fa-circle-o"></i> Service Requests</a>
@@ -94,6 +94,17 @@
             </li>
             <li>
                 <a href="#/resident-list" ng-class="{active:activetab == 'residetns'}"><i class="fa fa-fw fa-users"></i> Residents</a>
+            </li>
+            <li>
+                <a href="javascript:void(0);" ng-class="{active: activetab == 'game'}" data-toggle="collapse" data-target="#demo6"><i class="fa fa-music"></i> Entertainment <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="demo6" class="collapse" ng-class="{in: activetab == 'game'}">
+                    <li>
+                        <a href="#/game"><i class="fa fa-circle-o"></i>Games</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-circle-o"></i>Stories</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </div>

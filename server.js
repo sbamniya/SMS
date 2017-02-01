@@ -154,6 +154,10 @@
     app.get('/getAllSocieties', society.getAllSocieties(pool));
     app.post('/getBySocietyId', society.getBySocietyId(pool));
     app.post('/deleteSociety', society.deleteSociety(pool));
+    app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
+    app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
+
+
 
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
@@ -232,7 +236,6 @@
     app.post('/sendApproveDetailsToResidentAboutFacility', facility.sendApproveDetailsToResidentAboutFacility(pool, transporter));
     app.post('/listOfFacilitiesForResident', facility.listOfFacilitiesForResident(pool));
     app.post('/listOfRequestedFacilitiesForResident', facility.listOfRequestedFacilitiesForResident(pool));
-
     app.post('/facilityRequestesForManager', facility.facilityRequestesForManager(pool));
 
     /*vendor*/
