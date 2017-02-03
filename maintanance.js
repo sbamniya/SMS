@@ -87,7 +87,7 @@ exports.maintananceListToResident = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var resident_id = req.body.resident_id;
         var result = {}
-        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id = "'+resident_id+'" and mm.id not in(SELECT resident_id from maintainance_master_meta inner join maintainance_master on maintainance_master.id=maintainance_master_meta.maintanance_id)';
+        var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id = "'+resident_id+'" and mm.id not in(SELECT maintainance_master_meta.maintanance_id from maintainance_master_meta inner join maintainance_master on maintainance_master.id=maintainance_master_meta.maintanance_id)';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -241,5 +241,23 @@ exports.notifyToResident = function(pool) {
                 }
             });
         }
+    }
+}
+exports.getMaintainanceDetails = function(pool){
+    return function(req, res){
+        var data = req.body;
+        var block_id = data.block_id
+        var no = data.no_of_last_months;
+        var result = {};
+        var query = 'SELECT (SELECT COUNT(id) from maintainance_master_meta WHERE maintanance_id = mm.id) as totalPaid, mm.amount, concat(mm.month, ", ", mm.year) as month from maintainance_master mm WHERE mm.block_id = "'+block_id+'" GROUP by mm.id ORDER by mm.id desc LIMIT '+no;
+        pool.query(query, function(err, rows){
+            if (err) {
+                console.log(err);
+            }else{
+                result.data = rows;
+                result.success = 'displayed successfully';
+                res.send(JSON.stringify(result));
+            }
+        });
     }
 }

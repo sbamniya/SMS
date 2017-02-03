@@ -183,6 +183,7 @@
     app.post('/AllFlatsOfBlock', flat.AllFlatsOfBlock(pool));
     app.post('/updateFlatDetails', flat.updateFlatDetails(pool));
     app.post('/getFlatDetails', flat.getFlatDetails(pool));
+    app.post('/forPieChart', flat.forPieChart(pool));
 
     /*Society login*/
     app.post('/society-login', societylogin.login(crypto, pool));
@@ -318,13 +319,14 @@
     app.post('/paidResidentList', maintainance.paidResidentList(pool));
     app.post('/unpaidResidentList', maintainance.unpaidResidentList(pool));
     app.post('/notifyToResident', maintainance.notifyToResident(pool));
-
+    app.post('/getMaintainanceDetails', maintainance.getMaintainanceDetails(pool))
     /*Contribution */
     app.post('/addContribution', contribution.addContribution(pool));
     app.post('/listContribution', contribution.listContribution(pool));
     app.post('/deleteContri',contribution.deleteContri(pool));
     app.post('/getSingleContributions',contribution.getSingleContributions(pool));
     app.post('/listOfPaidContributionByResident',contribution.listOfPaidContributionByResident(pool));
+    app.post('/listContributionForResident', contribution.listContributionForResident(pool))
 
     /*Create Hash*/
     app.post('/createHash', function(req, res) {

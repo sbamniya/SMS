@@ -48,7 +48,7 @@ socialApp.controller('contributions', ['$scope','$http','$timeout', function($sc
     var transData = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = transData.id;
     $scope.$emit('LOAD');
-    $http.post('/listContribution', {block_id: id}).success(function(response){
+    $http.post('/listContributionForResident', {id: id}).success(function(response){
         if (response.hasOwnProperty('success')) {
             var contributions = response.data;
             var log = [];
@@ -119,13 +119,9 @@ socialApp.controller('ResContribution', ['$scope','$http','$timeout','sha256','$
 
     $scope.pay = function(amount,event) {
         $scope.paymentDetails.txnid = sha256.convertToSHA256(randomString(5)).substring(0, 20).toLowerCase();
-        //$scope.paymentDetails.txnid = 'ae7dc1217fe9a4994ea0';
-        //$scope.paymentDetails.amount = $scope.amonut;
         $scope.paymentDetails.totalPayable = $scope.amount;
-        var product ="contribution";
-        var proDetail = JSON.stringify(product);
-        $scope.paymentDetails.productinfo =  proDetail;
-        /*var hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";*/
+        
+        $scope.paymentDetails.productinfo =  'contribution';
         
         hashString = $scope.paymentDetails.key+'|'+$scope.paymentDetails.txnid+'|'+$scope.paymentDetails.totalPayable+'|'+$scope.paymentDetails.productinfo+'|'+$scope.paymentDetails.firstname+'|'+$scope.paymentDetails.email+'|'+$scope.paymentDetails.udf1+'|'+$scope.paymentDetails.udf2+'|'+$scope.paymentDetails.udf3+'||||||||'+SALT;
 
@@ -133,9 +129,7 @@ socialApp.controller('ResContribution', ['$scope','$http','$timeout','sha256','$
             $scope.paymentDetails.hash = response;
         }); 
         
-        $scope.paymentDetails.hash = $crypthmac.encrypt(hashString,"").toLowerCase();
         $scope.paymentDetails.service_provider = 'service_provider';
-        console.log($scope.paymentDetails);
         setTimeout(function(){
             document.paymentFrm.submit();
         },2000);

@@ -199,7 +199,17 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
 }]);
 
 
-socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout', function($scope, $http, $window, $timeout) {
+socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout','DTOptionsBuilder', function($scope, $http, $window, $timeout, DTOptionsBuilder) {
+    
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
+
     $scope.transaction = [];
     var transData = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = transData.id;

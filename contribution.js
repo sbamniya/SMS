@@ -52,6 +52,24 @@ exports.listContribution = function(pool) {
     }
 }
 
+exports.listContributionForResident = function(pool) {
+    return function(req, res) {
+        res.setHeader('Content-Type', 'application/json');
+        var resident_id = req.body.id;
+        var result = {}
+        var querystring = 'select c.*, (case when (select count(id) from contribution_master where resident_id=r.id and contribution_id=c.id) then "Paid" else "Unpaid" end) as isPaid from contribution c inner join block_master bm on bm.id=c.block_id inner join flat_master fm on fm.block_id = bm.id inner join residents r on r.flat_id = fm.id where r.id ="'+resident_id+'"';
+        pool.query(querystring, function(err, rows, fields) {
+            if (err) {
+                result.error = err;
+                console.log(err);
+            } else {
+                result.data = rows;
+                result.success = "Contribution Displayed successfully";
+                res.send(JSON.stringify(result));
+            };
+        });
+    }
+}
 exports.deleteContri = function(pool){
     return function(req,res){
         res.setHeader('Content-Type', 'application/json');
@@ -101,7 +119,7 @@ exports.listOfPaidContributionByResident = function(pool){
         res.setHeader('Content-Type', 'application/json');  
         var contribution_id = req.body.id;
         var result = {}
-        var querystring='select DISTINCT c.*,cm.*,r.* from contribution c INNER JOIN contribution_master cm ON c.id = cm.contribution_id INNER JOIN residents r ON r.id = cm.resident_id INNER Join flat_master fm ON fm.id = r.flat_id INNER JOIN block_master bm ON fm.block_id = bm.id INNER JOIN contribution cc ON bm.id = cc.block_id where c.id = "'+contribution_id+'"';
+        var querystring='select c.*,cm.*,r.* from contribution c INNER JOIN contribution_master cm ON c.id = cm.contribution_id INNER JOIN residents r ON r.id = cm.resident_id INNER Join flat_master fm ON fm.id = r.flat_id INNER JOIN block_master bm ON fm.block_id = bm.id INNER JOIN contribution cc ON bm.id = cc.block_id where c.id = "'+contribution_id+'"';
         pool.query(querystring,function(err, rows, fields){
             if(err)
             {

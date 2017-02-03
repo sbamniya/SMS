@@ -131,3 +131,21 @@ exports.AllFlatsOfBlock = function(pool){
     });
   }
 };
+exports.forPieChart = function(pool) {
+    return function(req, res) {
+        var block_id = req.body.block_id;
+        res.setHeader('Content-Type', 'application/json');
+        var result = {};
+        var query = 'select (count(id)-(SELECT count(r.id)as booked_flats FROM residents r INNER JOIN flat_master fm On fm.id = r.flat_id where fm.block_id = "' + block_id + '"))as available_flats,(SELECT count(r.id)as booked_flats FROM residents r INNER JOIN flat_master fm On fm.id = r.flat_id where fm.block_id = "1")as booked_flats from flat_master where block_id="' + block_id + '"';
+        pool.query(query, function(err, rows, fields) {
+            if (err) {
+                console.log('error');
+            } else {
+                result.status = 200;
+                result.data = rows[0];
+                res.send(JSON.stringify(result));
+                return;
+            }
+        });
+    }
+};

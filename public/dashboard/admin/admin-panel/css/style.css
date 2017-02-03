@@ -448,12 +448,13 @@ a.paginate_button.current:hover {
 a.dt-button {
     padding: 0.4em !important;
     font-size: 0.7em !important;
-    background: #F48FB1 !important;
+    background: #DC6805 !important;
     border: 1px solid #d11756 !important;
+    color: #fff !important;
 }
 
 div.dt-buttons {
-    top: 30px;
+   /* top: 30px;*/
 }
 
 
@@ -587,7 +588,7 @@ ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thumb {
 .outer-cover {
     height: 345px;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     opacity: 0.7;
     margin: 0 0 1.2em 0.5em;
     border-radius: 5px;
@@ -596,7 +597,7 @@ ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thumb {
 .outer-cover1 {
     height: 400px;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     opacity: 0.7;
     margin: 0 0 1.2em 0.5em;
     border-radius: 5px;

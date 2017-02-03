@@ -19,26 +19,73 @@
         <!-- /.row -->
         <div class="row">
             <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="panel panel-primary">
+                <div class="panel panel-red">
                     <div class="panel-heading">
                         <div class="row">
                             <div class="col-xs-3">
-                                <i class="fa fa-comments fa-5x"></i>
+                                <i class="fa fa-comment fa-5x"></i>
                             </div>
                             <div class="col-xs-9 text-right">
-                                <div class="huge">26</div>
-                                <div>New Comments!</div>
+                                <div class="huge">{{pending}}</div>
+                                <div>Pending Complaints!</div>
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="#/pending-complaint-list/{{id}}">
                         <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
+                            <span class="pull-left">View All</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
                     </a>
                 </div>
+                
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="panel panel-yellow">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-comment fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{under_surveillance}}</div>
+                                <div>Under Servillance Compaints!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#/underS-complaint-list/{{id}}">
+                        <div class="panel-footer">
+                            <span class="pull-left">View All</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+                
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-comment fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{resolved}}</div>
+                                <div>Resolved Complaints!</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#/resolved-complaint-list/{{id}}">
+                        <div class="panel-footer">
+                            <span class="pull-left">View All</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
+                
             </div>
             <div class="col-lg-3 col-md-3 col-sm-6">
                 <div class="panel panel-green">
@@ -49,57 +96,13 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 <div class="huge">12</div>
-                                <div>New Tasks!</div>
+                                <div>Total Residents!</div>
                             </div>
                         </div>
                     </div>
-                    <a href="#">
+                    <a href="#/resident-list/{{id}}">
                         <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="panel panel-yellow">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-shopping-cart fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">124</div>
-                                <div>New Orders!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
-                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                            <div class="clearfix"></div>
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-3 col-sm-6">
-                <div class="panel panel-red">
-                    <div class="panel-heading">
-                        <div class="row">
-                            <div class="col-xs-3">
-                                <i class="fa fa-support fa-5x"></i>
-                            </div>
-                            <div class="col-xs-9 text-right">
-                                <div class="huge">13</div>
-                                <div>Support Tickets!</div>
-                            </div>
-                        </div>
-                    </div>
-                    <a href="#">
-                        <div class="panel-footer">
-                            <span class="pull-left">View Details</span>
+                            <span class="pull-left">View All</span>
                             <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                             <div class="clearfix"></div>
                         </div>
@@ -111,13 +114,43 @@
     </div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-4">
+            <div class="col-lg-6 col-sm-6 col-xs-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h3 class="panel-title"><i class="fa fa-pie-chart" aria-hidden="true"></i> All Complaints of {{block.name}}</h3>
                     </div>
                     <div class="panel-body">
-                         <div google-chart chart="chart"></div>
+                         <div google-chart chart="ComplaintChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-pie-chart" aria-hidden="true"></i> Flats of {{block.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                         <div google-chart chart="FlatChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-pie-chart" aria-hidden="true"></i> Maintainance Collection of last {{lastMonths}} months of {{block.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                         <div google-chart chart="MaintainanceChart"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 col-sm-6 col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-pie-chart" aria-hidden="true"></i> Maintainance Collection of last {{lastMonths}} months of {{block.name}}</h3>
+                    </div>
+                    <div class="panel-body">
+                         <div google-chart chart="MaintainanceChartLine"></div>
                     </div>
                 </div>
             </div>

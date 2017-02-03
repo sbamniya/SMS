@@ -41,7 +41,7 @@ exports.addPaymentDetails = function(pool) {
             });
 
         } else if (productinfo == "contribution") {
-            var Q = 'INSERT INTO contribution_master(`contribution_id`, `resident_id`, `amount`, `status`) VALUES ("' + block_id + '","' + resident_id + '","' + amount + '","1")';
+            var Q = 'INSERT INTO contribution_master(`contribution_id`, `resident_id`, `amount`, `status`) VALUES ("' + block_id + '","' + resident_id + '","' + amount + '", "1")';
             pool.query(Q, function(err, rows) {
                 if (err) {
                     console.log(err);
