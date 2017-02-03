@@ -37,7 +37,15 @@ socialApp.controller('addNotice', ['$scope','$http','$routeParams','CkGetData','
 }]);
 
 /**/
-socialApp.controller('listOfNoticeToManager', ['$scope', '$http','$routeParams', '$sce', '$route','$timeout', function($scope, $http, $routeParams, $sce, $route, $timeout){
+socialApp.controller('listOfNoticeToManager', ['$scope', '$http','$routeParams', '$sce', '$route','$timeout','DTOptionsBuilder', function($scope, $http, $routeParams, $sce, $route, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.notices = [];
 	var block_id = atob($routeParams.blockID);
 	$scope.$emit('LOAD');

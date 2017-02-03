@@ -1,6 +1,14 @@
 /**/
-socialApp.controller('FamilyMembers', ['$scope', '$http', '$location', '$timeout', '$route', function($scope, $http, $location, $timeout, $route){
+socialApp.controller('FamilyMembers', ['$scope', '$http', '$location', '$timeout', '$route','DTOptionsBuilder', function($scope, $http, $location, $timeout, $route,DTOptionsBuilder){
 	$scope.$emit('LOAD');
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.Members = [];
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	$http.post('/getFamiliyMembersForresident', {id: userDetails.id}).success(function(response){

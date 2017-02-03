@@ -3400,8 +3400,17 @@ body {
     margin: 0 0 1em 0;
 	font-size: 0.7rem;
 }
-.societyHeader .navbar-inverse{
+residentheader .navbar-inverse,.societyHeader .navbar-inverse{
 	background-color: rgb(220, 104, 5);
+}
+staffmember .navbar-inverse{
+	background-color: rgb(220, 104, 5);
+}
+header .navbar-inverse{
+	background-color: rgb(220, 104, 5);
+}
+residentheader progress-bar {
+	color: #fff !important;
 }
 .societyHeader .side-nav {
     position: fixed;
@@ -3430,6 +3439,7 @@ body {
 }
 .container-fluid .breadcrumb>.active ,.container-fluid .breadcrumb li,.container-fluid .breadcrumb li a{
     color: #fff !Important;
+    font-size: x-large;
 }
 table.dataTable tbody th, table.dataTable tbody td{
 	padding: 8px 10px;

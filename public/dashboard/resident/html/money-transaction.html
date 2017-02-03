@@ -24,7 +24,7 @@
             <div class="col-lg-12 col-sm-12">
                 <h2>Money Transaction Detail's</h2>
                 <div class="table-responsive">
-                    <table id="entry-grid" datatable="ng" width="100%">
+                    <table id="entry-grid" datatable="ng" dt-options="dtOptions" width="100%">
                         <thead>
                             <th>Payment ID</th>
                             <th>Payment Mode</th>
@@ -37,10 +37,11 @@
                             <th>Net Amount Debit</th>
                             <th>Discount</th>
                             <th>Transaction Status</th>
+                            <th>Payment For</th>
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="req in transaction">
+                            <tr ng-repeat="req in transaction | orderBy: '-id'">
                                 <td>{{req.id}}</td>
                                 <td>{{req.mode}}</td>
                                 <td>{{req.amount}}</td>
@@ -52,6 +53,7 @@
                                 <td>{{req.net_amount_debit}}</td>
                                 <td>{{req.discount}}</td>
                                 <td>{{req.transaction_status}}</td>
+                                <td>{{req.pay_for}}</td>
                                 <td><a href="javascript:void(0)" ng-click="printReceipt(req.id)"><i class="fa fa-print"></i></a></td>
                             </tr>
                         </tbody>

@@ -19,6 +19,27 @@ socialApp.controller('login', ['$scope', '$http', '$location', '$compile', funct
     }
 }]);
 
+socialApp.controller('servicelogin', ['$scope', '$http', '$location', '$compile', function($scope, $http, $location, $compile) {
+    $scope.noError = true;
+
+    $scope.loginAction1 = function() {
+        $scope.$emit('LOAD');
+        $http.post("/serviceadminLogin", $scope.serviceadmin).success(function(response, status, headers, config) {
+            console.log(response);
+            if (response.error) {
+                $scope.noError = false;
+                $scope.ErrorMessage = response.error;
+            } else {
+                console.log('ahhdkhd');
+                window.localStorage.setItem('userDetails', JSON.stringify(response.success));
+                $scope.$emit('UNLOAD');
+                $location.path("/servicedashboard");
+            }
+            $scope.$emit('UNLOAD');
+        });
+    }
+}]);
+
 /*For Forget password*/
 socialApp.controller('resetPasswordController', ['$scope', '$http', function($scope, $http) {
     $scope.noError = true;

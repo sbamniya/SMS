@@ -15,7 +15,15 @@ socialApp.controller('AddFacility', ['$scope','$http','$routeParams','$location'
 	}
 }]);
 
-socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','$timeout', function($scope, $http, $routeParams,$route, $timeout){
+socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','$timeout','DTOptionsBuilder', function($scope, $http, $routeParams,$route, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var block_id = atob($routeParams.blockID);
 	$scope.facilities = [];
 	$scope.$emit('LOAD');
@@ -73,8 +81,16 @@ socialApp.controller('ListFacility', ['$scope','$http','$routeParams','$route','
 
 }]);
 
-socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route', function($scope, $routeParams, $http,$route){
+socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route','$timeout','DTOptionsBuilder', function($scope, $routeParams, $http,$route,$timeout,DTOptionsBuilder){
 	$scope.$emit('LOAD');
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var block_id = atob($routeParams.blockID);
 	$scope.AllRequests = [];
 	$http.post('/facilityRequestesForManager', {block_id: block_id}).success(function(response){
@@ -109,7 +125,15 @@ socialApp.controller('RequestFacility', ['$scope','$routeParams','$http','$route
 	}
 }]);
 
-socialApp.controller('RequestedFacilityListForResident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+socialApp.controller('RequestedFacilityListForResident', ['$scope','$http','$timeout','DTOptionsBuilder', function($scope, $http, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.$emit('LOAD');
 
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
@@ -134,7 +158,15 @@ socialApp.controller('RequestedFacilityListForResident', ['$scope','$http','$tim
 	});
 }]);
 
-socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route','$timeout', function($scope, $http, $route, $timeout){
+socialApp.controller('newFacilityRequestForResident', ['$scope','$http','$route','$timeout','DTOptionsBuilder', function($scope, $http, $route, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Facilities = [];

@@ -31,7 +31,15 @@ socialApp.controller('AddAmenity', ['$scope','$http','$routeParams','$location',
 	}
 }]);
 
-socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$timeout', function($scope, $http, $routeParams,$route, $timeout){
+socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$timeout','DTOptionsBuilder', function($scope, $http, $routeParams,$route, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.$emit('LOAD');
 	var block_id = atob($routeParams.blockID);
 	$scope.amenities = [];
@@ -86,9 +94,16 @@ socialApp.controller('ListAmenity', ['$scope','$http','$routeParams','$route','$
 	}
  }]);
 
-socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeout','$route', function($scope,$routeParams,$http, $timeout, $route){
+socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeout','$route','DTOptionsBuilder', function($scope,$routeParams,$http, $timeout, $route,DTOptionsBuilder){
 	$scope.$emit('LOAD');
-
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.error = false;
 	var block_id = atob($routeParams.blockID);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
@@ -139,7 +154,15 @@ socialApp.controller('RequestEminity', ['$scope','$routeParams','$http','$timeou
 		});
 	}
  }]);
-socialApp.controller('RequestedListForResident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+socialApp.controller('RequestedListForResident', ['$scope','$http','$timeout','DTOptionsBuilder', function($scope, $http, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.$emit('LOAD');
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
@@ -155,8 +178,16 @@ socialApp.controller('RequestedListForResident', ['$scope','$http','$timeout', f
 	});
 }]);
 
-socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route','$timeout', function($scope, $http, $route, $timeout){
+socialApp.controller('newAmilityRequestForResident', ['$scope','$http','$route','$timeout','DTOptionsBuilder', function($scope, $http, $route, $timeout,DTOptionsBuilder){
 	$scope.$emit('LOAD');
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.Amenities = [];

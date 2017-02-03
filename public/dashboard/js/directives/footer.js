@@ -6,6 +6,25 @@ socialApp.directive('footer', ['$compile', function ($compile) {
     }
 }]);
 
+socialApp.directive('residentfooter', ['$compile','$http','$location', '$route', function ($compile,$http,$location, $route) {
+    return {
+        restrict: 'E',
+        templateUrl: 'resident/html/footer.html',
+		link: function(scope, element, attrs) {
+			 var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
+			 var resident_id = userDetails.id;
+			 var block_id = '';
+			 $http.post('/residentsBlockId', { resident_id: resident_id }).success(function(response){
+				  if(response.hasOwnProperty('success')){
+					   block_id =response.success.id;
+				  }
+			  });
+		     var p = new Invoke({u:resident_id,v:block_id,s:1});
+			 
+		}
+    }
+}]);
+
 /*Front footer*/
 socialApp.directive('frontFooter', ['$compile', function ($compile) {
     return {

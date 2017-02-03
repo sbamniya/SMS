@@ -32,7 +32,15 @@ socialApp.controller('AddVendor', ['$scope', 'fileUpload', '$http', '$location',
     }
 }]);
 
-socialApp.controller('ViewVendorForManager', ['$scope', '$http', '$routeParams', '$route', '$timeout', function($scope, $http, $routeParams, $route, $timeout) {
+socialApp.controller('ViewVendorForManager', ['$scope', '$http', '$routeParams', '$route', '$timeout','DTOptionsBuilder', function($scope, $http, $routeParams, $route, $timeout,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     $scope.vendors = [];
     $scope.success = false;
     $scope.Error = false;

@@ -35,6 +35,10 @@ socialApp.controller('AdminDashboard', ['$scope','$http','$timeout', function($s
 socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compile', '$routeParams', '$route', '$timeout', function ($scope, $http,$location, $compile, $routeParams,$route, $timeout) {
 		$scope.$emit('LOAD');
 		var chart1 = {};
+		var chart2 = {};
+		var chart3 = {};
+		var chart4 = {};
+		$scope.lastMonths = 6;
 		var id = window.atob($routeParams.blockID);
 		$scope.flatInfo = {
 				flat_id : '',
@@ -79,17 +83,17 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 
 				$http.post('/getComplaintsStatusForManager', {id: id}).success(function(res){
 					if (res.hasOwnProperty('success')) {
-			    		resolved = res.success.Resolved;
-						pending = res.success.Pending;
-						under_surveillance = res.success.Under_Surveillance;
+			    		$scope.resolved = res.success.Resolved;
+						$scope.pending = res.success.Pending;
+						$scope.under_surveillance = res.success.Under_Surveillance;
 
 						chart1.type = "PieChart";
 
 					    chart1.data = [
 					       ['Component', 'Complaints'],
-					       ['Resolved', resolved],
-					       ['Pending', pending],
-					       ['Under Surveillance',under_surveillance]
+					       ['Resolved', $scope.resolved],
+					       ['Pending', $scope.pending],
+					       ['Under Surveillance',$scope.under_surveillance]
 					    ];
 					 
 					    chart1.options = {
@@ -100,7 +104,63 @@ socialApp.controller('societyDashboard',['$scope', '$http', '$location', '$compi
 					        chartArea: {left:10,top:10,bottom:0,height:"100%"}
 					    };
 
-					    $scope.chart = chart1;
+					    $scope.ComplaintChart = chart1;
+			    	}
+			    });
+
+			    $http.post('/forPieChart', {block_id: id}).success(function(res){
+			    	if (res.hasOwnProperty('status') && res.status==200) {
+			    		var booked = res.data.booked_flats;
+						var availiable = res.data.available_flats;
+						
+						chart2.type = "PieChart";
+
+					    chart2.data = [
+					       ['Component', 'Flat'],
+					       ['Booked', booked],
+					       ['Availiable', availiable],
+					    ];
+					 
+					    chart2.options = {
+					        displayExactValues: true,
+					        width: 400,
+					        height: 200,
+					        //is3D: true,
+					        chartArea: {left:10,top:10,bottom:0,height:"100%"}
+					    };
+
+					    $scope.FlatChart = chart2;
+
+			    	}
+			    });
+
+			    $http.post('/getMaintainanceDetails', {block_id: id, no_of_last_months:$scope.lastMonths}).success(function(res){
+
+					if (res.hasOwnProperty('success')) {
+			    		
+
+						chart3.type = "ColumnChart";
+						chart4.type = "LineChart";
+
+					    chart3.data = [
+					       ['Component', 'Maintainance Collection'],
+					    ];
+					    angular.forEach(res.data, function(item, key){
+					    	var month = item.month;
+			    			var amount = item.amount*item.totalPaid;
+					    	chart3.data.push([month, amount]);
+					    });
+					 	chart4.data = chart3.data;
+					    /*chart3.options = {
+					        displayExactValues: true,
+					        width: 400,
+					        height: 200,
+					        //is3D: true,
+					        chartArea: {left:10,top:10,bottom:0,height:"100%"}
+					    };
+					    chart4.options = chart3.options;*/
+					    $scope.MaintainanceChart = chart3;
+					    $scope.MaintainanceChartLine = chart4;
 			    	}
 			    });
 				$scope.block.parent_id = window.btoa($scope.block.parent_id);
@@ -283,5 +343,11 @@ socialApp.controller('residentDashboard', ['$scope','$http','$timeout', function
 /*Staff Dashboard*/
 
 socialApp.controller('staffDashboard', ['$scope', function($scope){
+	
+}]);
+
+/*Service Manager Dashboard*/
+
+socialApp.controller('serviceAdminDashboard', ['$scope', function($scope){
 	
 }]);

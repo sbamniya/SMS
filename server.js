@@ -13,7 +13,7 @@
     var connection = require('express-myconnection');
 
     var querystring = require('querystring');
-    var http = require('https');
+    //var http = require('https');
 
     var bodyParser = require('body-parser'); // pull information from HTML POST (express4)
     var methodOverride = require('method-override'); // simulate DELETE and PUT (express4)
@@ -30,6 +30,7 @@
 
     var pool = require('./db');
     var admin = require("./admin");
+    //var service_admin = require("./service_admin");
     var block = require("./block");
     var complaint = require("./complaint");
     var flat = require("./flat");
@@ -87,7 +88,87 @@
             pass: 'Delta09098888!@#'
         }
     }));
+    /*socket.io*/
+    http = require('http'),
+        appCom = http.createServer(app),
+        io = require('socket.io').listen(appCom, { path: '/aprxyz.track' });
+    var usernames = {};
+    var usertracktracking = {};
+    var roomObj = { rooms: '' };
+    var roomData = {};
+    roomObj.rooms = [];
+    if (io.sockets.length > 0) {
+        io.sockets.sockets.forEach(function(s) {
+            s.disconnect(true);
+        });
+    }
 
+    var queryString = 'SELECT id FROM block_master';
+
+    function callback(data) {
+        roomObj.rooms.push(data);
+        console.log(roomObj.rooms);
+        roomData[data] = {};
+
+    }
+
+    pool.query(queryString, function(err, rows, fields) {
+        if (err) {
+
+            //result.error = err;
+            console.log(err);
+        } else {
+            for (var i = rows.length - 1; i >= 0; i--) {
+                callback(rows[i].id.toString());
+            }
+
+        }
+
+
+    });
+
+    var rooms = roomObj.rooms;
+
+    io.sockets.on('connection', function(socket) {
+
+        // when the client emits 'adduser', this listens and executes
+        socket.on('adduser', function(username, block, access) {
+
+            socket.username = username;
+            // store the room name in the socket session for this client
+            socket.room = client;
+            // add the client's username to the global list
+            usernames[username] = username;
+            // send client to room 1
+            socket.join(client);
+            // echo to client they've connected
+            usertracktracking[socket.username] = { count: 0 };
+
+
+        });
+
+        // when the user disconnects.. perform this
+        socket.on('disconnect', function() {
+            // remove the username from global usernames list
+            var pack = usertracktracking[socket.username];
+            if (typeof pack == 'object' && pack.hasOwnProperty('data')) {
+                api.addTrack(pool, pack);
+                rec = pack.data;
+                v = s = '';
+                if (rec.hasOwnProperty('vendor_id')) {
+                    v = rec.vendor_id;
+                }
+                if (rec.hasOwnProperty('session_id')) {
+                    s = rec.session_id;
+                }
+                io.sockets.in(v).emit('removerecord', s);
+            }
+            //io.sockets.in().emit('removerecord',pack.data);
+            delete usertracktracking[socket.username];
+            delete usernames[socket.username];
+            socket.leave(socket.room);
+        });
+    });
     /*Routing Handler for resident*/
     app.post('/resident-login', resident.login(crypto, pool));
     app.post('/resident-resetPasswordProcess', resident.resetPasswordProcess(transporter, randomstring, pool));
@@ -116,6 +197,8 @@
     app.post('/tenantDetail', resident.tenantDetail(pool));
     app.get('/neighbourList', resident.neighbourList(pool));
     app.get('/tenantList', resident.tenantList(pool));
+    app.post('/residentsBlockId', resident.residentsBlockId(pool));
+
 
 
 
@@ -139,6 +222,15 @@
     app.post('/confirmToken', admin.confirmToken(pool));
     app.post('/updatePassword', admin.updatePassword(crypto, pool));
 
+    /*Admin login & other functionality*/
+    app.post('/serviceadminLogin', admin.serviceadminLogin(crypto, pool));
+   /* app.post('/login', service_admin.login(crypto, pool));
+    app.get('/authentication/:access', service_admin.authenticated);
+    app.get('/logout', service_admin.logout);
+    app.post('/resetPasswordProcess', service_admin.resetPasswordProcess(transporter, randomstring, pool));
+    app.post('/confirmToken', service_admin.confirmToken(pool));
+    app.post('/updatePassword', service_admin.updatePassword(crypto, pool));*/
+
 
     /* Slug Society and other functionality */
     app.post('/checkSlug', slugSociety.checkSlug(slug, moment, async, pool));
@@ -154,10 +246,11 @@
     app.get('/getAllSocieties', society.getAllSocieties(pool));
     app.post('/getBySocietyId', society.getBySocietyId(pool));
     app.post('/deleteSociety', society.deleteSociety(pool));
-
+    app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
+    app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
-
+    
     /*Block Management*/
     app.get('/getblockList', block.getblockList(pool));
     app.post('/editBlock', block.editBlock(pool));
@@ -183,6 +276,7 @@
     app.post('/AllFlatsOfBlock', flat.AllFlatsOfBlock(pool));
     app.post('/updateFlatDetails', flat.updateFlatDetails(pool));
     app.post('/getFlatDetails', flat.getFlatDetails(pool));
+    app.post('/forPieChart', flat.forPieChart(pool));
 
     /*Society login*/
     app.post('/society-login', societylogin.login(crypto, pool));
@@ -232,7 +326,6 @@
     app.post('/sendApproveDetailsToResidentAboutFacility', facility.sendApproveDetailsToResidentAboutFacility(pool, transporter));
     app.post('/listOfFacilitiesForResident', facility.listOfFacilitiesForResident(pool));
     app.post('/listOfRequestedFacilitiesForResident', facility.listOfRequestedFacilitiesForResident(pool));
-
     app.post('/facilityRequestesForManager', facility.facilityRequestesForManager(pool));
 
     /*vendor*/
@@ -318,13 +411,15 @@
     app.post('/paidResidentList', maintainance.paidResidentList(pool));
     app.post('/unpaidResidentList', maintainance.unpaidResidentList(pool));
     app.post('/notifyToResident', maintainance.notifyToResident(pool));
-
+    app.post('/getMaintainanceDetails', maintainance.getMaintainanceDetails(pool))
     /*Contribution */
     app.post('/addContribution', contribution.addContribution(pool));
     app.post('/listContribution', contribution.listContribution(pool));
     app.post('/deleteContri',contribution.deleteContri(pool));
     app.post('/getSingleContributions',contribution.getSingleContributions(pool));
     app.post('/listOfPaidContributionByResident',contribution.listOfPaidContributionByResident(pool));
+    app.post('/listContributionForResident', contribution.listContributionForResident(pool))
+
 
     /*Create Hash*/
     app.post('/createHash', function(req, res) {
@@ -336,5 +431,7 @@
     /*Routing Handler*/
     app.use(app.router);
 
+    /*appCom.listen(process.env.PORT || 3000);*/
     app.listen(process.env.PORT || 2000);
+
     console.log("App listening on port 2000");

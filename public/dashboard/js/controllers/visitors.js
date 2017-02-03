@@ -1,5 +1,13 @@
 
-socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','$timeout', function($scope,$http, $filter, $route, $timeout){
+socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','$timeout','DTOptionsBuilder', function($scope,$http, $filter, $route, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.AllVisitors = [];
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var block_id = userData.block_id;
@@ -70,7 +78,15 @@ socialApp.controller('visitorsForStaff', ['$scope','$http', '$filter','$route','
     }
 }]);
 
-socialApp.controller('visitorsForResident', ['$scope','$http','$timeout', function($scope,$http,$timeout){
+socialApp.controller('visitorsForResident', ['$scope','$http','$timeout','DTOptionsBuilder', function($scope,$http,$timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.AllVisitors = [];
 	var userData = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userData.id;
@@ -175,6 +191,14 @@ socialApp.controller('DetailVisitor', ['$scope','$http','$routeParams','$timeout
 }]);
 
 socialApp.controller('ExternalVisitorsForManager', ['$scope','$http','$routeParams','DTOptionsBuilder','$timeout', function($scope, $http,$routeParams, DTOptionsBuilder, $timeout){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.AllVisitors = [];
 	var id = atob($routeParams.blockID);
 	$scope.$emit('LOAD');
