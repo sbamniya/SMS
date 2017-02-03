@@ -49,42 +49,44 @@ exports.addPaymentDetails = function(pool) {
             });
         } else {
             proInfo = JSON.parse(productinfo);
-            var productstr = JSON.stringify(proInfo);
+        }
 
-            for (var i = 0; i < proInfo.length; i++) {
-                if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
-                    var type = proInfo[i].type;
-                    var id = proInfo[i].id;
-                    var Query = '';
-                    var tableName = '';
-                    var setData = '';
-                    var where = '';
-                    if (type == 'Facility') {
-                        tableName = 'facility_request';
-                        setData = 'status=2';
-                        where = 'id ="' + id + '"';
-                        var Q = 'update facility_request set last_payment_date=now() where ' + where;
-                        pool.query(Q, function(err) {
-                            if (err) {
-                                console.log(err);
-                            }
-                        });
-                    } else if (type == 'Amenity') {
-                        tableName = 'amenity_request';
-                        setData = 'status=2';
-                        where = 'id ="' + id + '"';
-                    } else {
 
-                    }
-                    Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
-                    pool.query(Query, function(err, rows) {
+        var productstr = JSON.stringify(proInfo);
+
+        for (var i = 0; i < proInfo.length; i++) {
+            if (proInfo[i].hasOwnProperty('type') && proInfo[i].hasOwnProperty('id')) {
+                var type = proInfo[i].type;
+                var id = proInfo[i].id;
+                var Query = '';
+                var tableName = '';
+                var setData = '';
+                var where = '';
+                if (type == 'Facility') {
+                    tableName = 'facility_request';
+                    setData = 'status=2';
+                    where = 'id ="' + id + '"';
+                    var Q = 'update facility_request set last_payment_date=now() where ' + where;
+                    pool.query(Q, function(err) {
                         if (err) {
                             console.log(err);
                         }
                     });
-                }
+                } else if (type == 'Amenity') {
+                    tableName = 'amenity_request';
+                    setData = 'status=2';
+                    where = 'id ="' + id + '"';
+                } else {
 
+                }
+                Query = 'update ' + tableName + ' set ' + setData + ' where ' + where;
+                pool.query(Query, function(err, rows) {
+                    if (err) {
+                        console.log(err);
+                    }
+                });
             }
+
         }
         pool.query('INSERT INTO transaction_history(`merchantTransactionId`,Pay_by, `mihpayid`, `paymentId`, `mode`, `status_for_data`, `txnid`, `amount`, `additionalCharges`, `addedon`, `productinfo`, `firstname`, `email`, `phone`, `hash`, `bank_ref_num`, `bankcode`, `name_on_card`, `cardnum`, `net_amount_debit`, `discount`, `payuMoneyId`, `transaction_status`,`resident_id`,`block_id`,`status`) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)', [merchantTransactionId, Pay_by, mihpayid, paymentId, mode, status_for_data, txnid, amount, additionalCharges, addedon, productstr, firstname, email, phone, hash, bank_ref_num, bankcode, name_on_card, cardnum, net_amount_debit, discount, payuMoneyId, transaction_status, resident_id, block_id, status], function(err, rows) {
             if (err) {
@@ -127,7 +129,7 @@ exports.displayExpenseHistoryToManager = function(pool) {
             data: []
         };
         var block_id = req.body.id;
-        var Q = 'SELECT th.*,  vm.vendor_name, jm.job_card_type from transaction_history as th INNER JOIN job_card_master jm on jm.id=th.resident_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id=1 and th.Pay_by="' + block_id + '"';
+        var Q = 'SELECT th.*,  vm.vendor_name, jm.job_card_type from transaction_history as th INNER JOIN job_card_master jm on jm.id=th.resident_id INNER JOIN vendor_master vm on vm.id=jm.vendor_id WHERE jm.block_id=1 and th.Pay_by="' + block_id + '" order by addedon DESC';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;
@@ -184,7 +186,7 @@ exports.transactionHistoryToManager = function(pool) {
         res.setHeader('Content-Type', 'application/json');
         var result = {};
         var block_id = req.body.id;
-        var Q = 'SELECT tr.*, concat(r.first_name, " ", r.last_name) as resident_name, fm.flat_number, bm.name from transaction_history tr INNER JOIN residents r on r.id = tr.resident_id INNER JOIN flat_master fm on fm.id = r.flat_id INNER JOIN block_master bm on bm.id= fm.block_id INNER JOIN society_manager sm on sm.id = bm.block_manager where bm.id = "' + block_id + '"';
+        var Q = 'SELECT tr.*, concat(r.first_name, " ", r.last_name) as resident_name, fm.flat_number, bm.name from transaction_history tr INNER JOIN residents r on r.id = tr.resident_id INNER JOIN flat_master fm on fm.id = r.flat_id INNER JOIN block_master bm on bm.id= fm.block_id INNER JOIN society_manager sm on sm.id = bm.block_manager where bm.id = "' + block_id + '" ';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;

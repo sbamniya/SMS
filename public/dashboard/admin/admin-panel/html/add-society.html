@@ -2,9 +2,8 @@
 <div id="page-wrapper">
     <div class="container-fluid">
         <!-- Page Heading -->
-        <div class="row">
+        <div class="row " style="margin-top:50px; ">
             <div class="col-lg-12">
-                <!-- <h1 class="page-header">Add Society</h1> -->
                 <ol class="breadcrumb">
                     <li>
                         <i class="fa fa-dashboard"></i> <a href="#/dashboard">Dashboard</a>
@@ -13,6 +12,7 @@
                         <i class="fa fa-edit"></i> Add Society
                     </li>
                 </ol>
+                <h2>Add Society</h2>
             </div>
         </div>
         <!-- /.row -->
@@ -214,8 +214,8 @@
                     <div class="modal-footer">
                         <span ng-show="result">Croped Successfully</span>
                         <span class="progress" ng-show="progress >= 0">
-								<div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
-							</span>
+                                <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+                            </span>
                         <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
                         <button type="button" class="btn btn-default" ng-click="upload_cover(croppedDataUrl, picFile.name,'cover')" ng-hide="crop">Crop</button>
                         <button type="button" class="btn btn-danger" ng-hide="close" data-dismiss="modal">Close</button>
@@ -243,8 +243,8 @@
                     <div class="modal-footer">
                         <span ng-show="result">Croped Successfully</span>
                         <span class="progress" ng-show="progress >= 0">
-								<div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
-							</span>
+                                <div style="width:{{progress}}%" ng-bind="progress + '%'"></div>
+                            </span>
                         <span class="err" ng-show="errorMsg">{{errorMsg}}</span>
                         <button type="button" class="btn btn-default" ng-click="upload_logo(croppedDataUrl1, logoFile.name, 'logo')" ng-hide="crop">Crop</button>
                         <button type="button" class="btn btn-danger" ng-hide="close" data-dismiss="modal">Close</button>

@@ -44,6 +44,17 @@
             <li>
                 <a href="#/staff-entry" ng-class="{active: activetab == 'StaffEntry'}"><i class="fa fa-users"></i>Staff Attandance</a>
             </li>
+            <li>
+                <a href="javascript:void(0);" ng-class="{active: activetab == 'game'}" data-toggle="collapse" data-target="#demo6"><i class="fa fa-music"></i> Entertainment <i class="fa fa-fw fa-caret-down"></i></a>
+                <ul id="demo6" class="collapse" ng-class="{in: activetab == 'game'}">
+                    <li>
+                        <a href="#/games"><i class="fa fa-circle-o"></i>Games</a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0);"><i class="fa fa-circle-o"></i>Stories</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
     <!-- /.navbar-collapse -->

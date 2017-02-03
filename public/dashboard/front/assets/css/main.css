@@ -3400,8 +3400,11 @@ body {
     margin: 0 0 1em 0;
 	font-size: 0.7rem;
 }
-.societyHeader .navbar-inverse{
+residentheader .navbar-inverse,.societyHeader .navbar-inverse{
 	background-color: rgb(220, 104, 5);
+}
+residentheader progress-bar {
+	color: #fff !important;
 }
 .societyHeader .side-nav {
     position: fixed;

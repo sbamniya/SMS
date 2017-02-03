@@ -68,7 +68,7 @@ exports.maintananceListToManager = function(pool) {
         var manager_id = req.body.block_id;
 
         var result = {}
-        var querystring = 'select * from maintainance_master where block_id="' + manager_id + '"';
+        var querystring = 'select * from maintainance_master where block_id="' + manager_id + '" order by last_payment_date DESC';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -88,6 +88,7 @@ exports.maintananceListToResident = function(pool) {
         var resident_id = req.body.resident_id;
         var result = {}
         var querystring = 'select concat(r.first_name," ",r.last_name) as resident_name,r.contact_no,r.email,mm.* from maintainance_master mm INNER JOIN block_master bm ON mm.block_id = bm.block_manager INNER JOIN flat_master fm ON bm.id = fm.block_id INNER JOIN residents r ON fm.id = r.flat_id where r.id = "'+resident_id+'" and mm.id not in(SELECT maintainance_master_meta.maintanance_id from maintainance_master_meta inner join maintainance_master on maintainance_master.id=maintainance_master_meta.maintanance_id)';
+
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -128,7 +129,7 @@ exports.paidResidentList = function(pool) {
         var block_id = req.body.block_id;
         var maintanance_id = req.body.maintanance_id;
         var result = {}
-        var querystring = 'SELECT r.*, fm.flat_number, mm.year, mm.month, mm.amount from residents r INNER join flat_master fm on fm.id = r.flat_id INNER join block_master bm on bm.id = fm.block_id left join maintainance_master mm on bm.id = mm.block_id WHERE bm.id="'+block_id+'" and mm.id = "'+maintanance_id+'" and r.id in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="'+block_id+'" and mm1.id="'+maintanance_id+'") as mm on mm.id = maintainance_master_meta.maintanance_id) GROUP by r.id';
+        var querystring = 'SELECT r.*, fm.flat_number, mm.year, mm.month, mm.amount from residents r INNER join flat_master fm on fm.id = r.flat_id INNER join block_master bm on bm.id = fm.block_id left join maintainance_master mm on bm.id = mm.block_id WHERE bm.id="' + block_id + '" and mm.id = "' + maintanance_id + '" and r.id in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="' + block_id + '" and mm1.id="' + maintanance_id + '") as mm on mm.id = maintainance_master_meta.maintanance_id) GROUP by r.id';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -148,7 +149,7 @@ exports.unpaidResidentList = function(pool) {
         var block_id = req.body.block_id;
         var maintanance_id = req.body.maintanance_id;
         var result = {}
-        var querystring = 'SELECT r.*, fm.flat_number, mm.year, mm.month, mm.amount from residents r INNER join flat_master fm on fm.id = r.flat_id INNER join block_master bm on bm.id = fm.block_id left join maintainance_master mm on bm.id = mm.block_id WHERE bm.id="'+block_id+'" and mm.id = "'+maintanance_id+'" and r.id not in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="'+block_id+'" and mm1.id="'+maintanance_id+'") as mm on mm.id = maintainance_master_meta.maintanance_id) GROUP by r.id';
+        var querystring = 'SELECT r.*, fm.flat_number, mm.year, mm.month, mm.amount from residents r INNER join flat_master fm on fm.id = r.flat_id INNER join block_master bm on bm.id = fm.block_id left join maintainance_master mm on bm.id = mm.block_id WHERE bm.id="' + block_id + '" and mm.id = "' + maintanance_id + '" and r.id not in(SELECT resident_id from maintainance_master_meta left join (SELECT mm1.id from maintainance_master mm1 INNER JOIN block_master bm on bm.id = mm1.block_id where mm1.block_id="' + block_id + '" and mm1.id="' + maintanance_id + '") as mm on mm.id = maintainance_master_meta.maintanance_id) GROUP by r.id';
         pool.query(querystring, function(err, rows, fields) {
             if (err) {
                 result.error = err;
@@ -167,7 +168,7 @@ exports.displayMaintananceToResidents = function(pool, transporter) {
         res.setHeader('content-Type', 'application/json');
         var result = {}
         var block_id = req.body.block_id;
-        var Q = 'select mm.month,mm.year,mm.last_payment_date,mm.amount FROM maintainance_master mm INNER JOIN flat_master fm ON fm.block_id = mm.block_id INNER JOIN residents r ON r.flat_id=fm.id where mm.block_id = "' + block_id + '"';
+        var Q = 'select mm.month,mm.year,mm.last_payment_date,mm.amount FROM maintainance_master mm INNER JOIN flat_master fm ON fm.block_id = mm.block_id INNER JOIN residents r ON r.flat_id=fm.id where mm.block_id = "' + block_id + '" order by last_payment_date DESC';
         pool.query(Q, function(err, rows) {
             if (err) {
                 result.error = err;
