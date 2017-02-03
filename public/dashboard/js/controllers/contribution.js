@@ -76,9 +76,20 @@ socialApp.controller('contributions', ['$scope', '$http', '$timeout', function($
     });
 }]);
 
+<<<<<<< HEAD
 socialApp.controller('ResContribution', ['$scope', '$http', '$timeout', 'sha256', '$location', '$crypthmac', '$routeParams', '$route', function($scope, $http, $timeout, sha256, $location, $crypthmac, $routeParams, $route) {
 
     var id = $routeParams.conID;
+=======
+<<<<<<< HEAD
+socialApp.controller('ResContribution', ['$scope','$http','$timeout','sha256','$location','$crypthmac','$routeParams','$route', function($scope, $http, $timeout, sha256, $location, $crypthmac,$routeParams,$route){
+    var id=$routeParams.conID;
+=======
+socialApp.controller('ResContribution', ['$scope', '$http', '$timeout', 'sha256', '$location', '$crypthmac', '$routeParams', '$route', function($scope, $http, $timeout, sha256, $location, $crypthmac, $routeParams, $route) {
+
+    var id = $routeParams.conID;
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
     $scope.contribute = {
         id: id
     };

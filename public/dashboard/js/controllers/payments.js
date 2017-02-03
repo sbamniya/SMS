@@ -211,7 +211,16 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
 }]);
 
 
+<<<<<<< HEAD
 socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout','DTOptionsBuilder', function($scope, $http, $window, $timeout, DTOptionsBuilder) {
+=======
+<<<<<<< HEAD
+socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout','DTOptionsBuilder', function($scope, $http, $window, $timeout,DTOptionsBuilder) {
+=======
+socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout','DTOptionsBuilder', function($scope, $http, $window, $timeout, DTOptionsBuilder) {
+    
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
     $scope.dtOptions = DTOptionsBuilder.newOptions() 
                         .withOption('order', [1, 'desc'])
                         .withButtons([
@@ -220,6 +229,13 @@ socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout
                             'csv',
                             'pdf'
                         ]);
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
     $scope.transaction = [];
     var transData = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = transData.id;

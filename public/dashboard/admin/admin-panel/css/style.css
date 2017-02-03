@@ -3,7 +3,13 @@ ul.nav.navbar-nav.side-nav {
     background-color: #748883;
     padding: 1.5% 0 1.5em 0;
 }
+<<<<<<< HEAD
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
 ul.nav.navbar-nav.side-nav.resident-nav {
     text-align: left;
     background-color: #48352a;
@@ -25,7 +31,14 @@ div.progress-bar {
     -o-transition: width .6s ease;
     transition: width .6s ease;
 }
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
 svg {
     width: 100%;
 }

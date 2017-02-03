@@ -246,11 +246,27 @@
     app.get('/getAllSocieties', society.getAllSocieties(pool));
     app.post('/getBySocietyId', society.getBySocietyId(pool));
     app.post('/deleteSociety', society.deleteSociety(pool));
+<<<<<<< HEAD
     app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
     app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
     
+=======
+<<<<<<< HEAD
+    
+=======
+    app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
+    app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
+
+
+
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
+    app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
+    app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
+    app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
+    app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
+>>>>>>> 84e4e55189ae5986e26294827a87fe0281acb9f0
     /*Block Management*/
     app.get('/getblockList', block.getblockList(pool));
     app.post('/editBlock', block.editBlock(pool));
