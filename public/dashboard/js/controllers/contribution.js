@@ -34,6 +34,7 @@ socialApp.controller('Contribute', ['$scope', '$http', '$routeParams', '$locatio
     $scope.addContribution = function() {
         $scope.$emit('LOAD');
         $http.post('/addContribution', $scope.contribution).success(function(res) {
+            console.log($scope.contribution);
             $scope.$emit('UNLOAD');
             if (res.hasOwnProperty('status') && res.status == 200) {
                 $location.path('/contribution-list/' + block_id);
@@ -43,107 +44,107 @@ socialApp.controller('Contribute', ['$scope', '$http', '$routeParams', '$locatio
 }]);
 
 
-socialApp.controller('contributions', ['$scope','$http','$timeout', function($scope,$http,$timeout) {
+socialApp.controller('contributions', ['$scope', '$http', '$timeout', function($scope, $http, $timeout) {
     $scope.contributions = [];
     var transData = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = transData.id;
     $scope.$emit('LOAD');
-    $http.post('/listContribution', {block_id: id}).success(function(response){
+    $http.post('/listContribution', { block_id: id }).success(function(response) {
         if (response.hasOwnProperty('success')) {
             var contributions = response.data;
             var log = [];
-            angular.forEach(contributions, function(value, key){
+            angular.forEach(contributions, function(value, key) {
                 value.enid = btoa(value.id);
                 log.push(value);
             });
             $scope.contributions = log;
-        }
-        else{
+        } else {
             alert(response.error);
         }
-        $timeout(function(){
+        $timeout(function() {
             $scope.$emit('UNLOAD');
         }, 1000);
     });
 }]);
 
-socialApp.controller('ResContribution', ['$scope','$http','$timeout','sha256','$location','$crypthmac','$routeParams','$route', function($scope, $http, $timeout, sha256, $location, $crypthmac,$routeParams,$route){
-       
-    var id=$routeParams.conID;
+socialApp.controller('ResContribution', ['$scope', '$http', '$timeout', 'sha256', '$location', '$crypthmac', '$routeParams', '$route', function($scope, $http, $timeout, sha256, $location, $crypthmac, $routeParams, $route) {
+
+    var id = $routeParams.conID;
     $scope.contribute = {
         id: id
     };
     $scope.$emit('LOAD');
-    $http.post('/getSingleContributions', {id: id}).success(function(response){
+    $http.post('/getSingleContributions', { id: id }).success(function(response) {
         if (response.hasOwnProperty('success')) {
-            $scope.contribute = response.data; 
-            $scope.amount = parseInt(response.data.amount);  
+            $scope.contribute = response.data;
+            $scope.amount = parseInt(response.data.amount);
         }
-        $timeout(function(){
+        $timeout(function() {
             $scope.$emit('UNLOAD');
-        }, 1000); 
-     });
+        }, 1000);
+    });
     var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
     var resident_id = userDetails.id;
-    var userName = userDetails.first_name+' '+userDetails.last_name;
+    var userName = userDetails.first_name + ' ' + userDetails.last_name;
     var userEmail = userDetails.email;
     var userCon = userDetails.contact_no;
-   
+
     var SALT = "yIEkykqEH3";
-    
+
     var protocol = $location.protocol();
     var host = $location.host();
     var port = $location.port();
 
-    var surl = protocol+'://'+host;
-    var furl = protocol+'://'+host;
+    var surl = protocol + '://' + host;
+    var furl = protocol + '://' + host;
 
-    if (host=='localhost') {
-        surl += ':'+port;
-        furl += ':'+port;
+    if (host == 'localhost') {
+        surl += ':' + port;
+        furl += ':' + port;
     }
     surl += '/payment-success';
     furl += '/payment-fail';
 
     $scope.paymentDetails = {
-        key : "hDkYGPQe",
+        key: "hDkYGPQe",
         firstname: userName,
         email: userEmail,
         phone: userCon,
-        surl:  surl,
+        surl: surl,
         furl: furl,
-        udf1 : resident_id,
-        udf2 : '0',
-        udf3 :$scope.contribute.id
+        udf1: resident_id,
+        udf2: '0',
+        udf3: $scope.contribute.id
     };
 
-    $scope.pay = function(amount,event) {
+    $scope.pay = function(amount, event) {
         $scope.paymentDetails.txnid = sha256.convertToSHA256(randomString(5)).substring(0, 20).toLowerCase();
         //$scope.paymentDetails.txnid = 'ae7dc1217fe9a4994ea0';
         //$scope.paymentDetails.amount = $scope.amonut;
         $scope.paymentDetails.totalPayable = $scope.amount;
-        var product ="contribution";
+        var product = "contribution";
         var proDetail = JSON.stringify(product);
-        $scope.paymentDetails.productinfo =  proDetail;
+        $scope.paymentDetails.productinfo = proDetail;
         /*var hashSequence = "key|txnid|amount|productinfo|firstname|email|udf1|udf2|udf3|udf4|udf5|udf6|udf7|udf8|udf9|udf10";*/
-        
-        hashString = $scope.paymentDetails.key+'|'+$scope.paymentDetails.txnid+'|'+$scope.paymentDetails.totalPayable+'|'+$scope.paymentDetails.productinfo+'|'+$scope.paymentDetails.firstname+'|'+$scope.paymentDetails.email+'|'+$scope.paymentDetails.udf1+'|'+$scope.paymentDetails.udf2+'|'+$scope.paymentDetails.udf3+'||||||||'+SALT;
 
-        $http.post('/createHash', {string: hashString}).success(function(response){
+        hashString = $scope.paymentDetails.key + '|' + $scope.paymentDetails.txnid + '|' + $scope.paymentDetails.totalPayable + '|' + $scope.paymentDetails.productinfo + '|' + $scope.paymentDetails.firstname + '|' + $scope.paymentDetails.email + '|' + $scope.paymentDetails.udf1 + '|' + $scope.paymentDetails.udf2 + '|' + $scope.paymentDetails.udf3 + '||||||||' + SALT;
+
+        $http.post('/createHash', { string: hashString }).success(function(response) {
             $scope.paymentDetails.hash = response;
-        }); 
-        
-        $scope.paymentDetails.hash = $crypthmac.encrypt(hashString,"").toLowerCase();
+        });
+
+        $scope.paymentDetails.hash = $crypthmac.encrypt(hashString, "").toLowerCase();
         $scope.paymentDetails.service_provider = 'service_provider';
         console.log($scope.paymentDetails);
-        setTimeout(function(){
+        setTimeout(function() {
             document.paymentFrm.submit();
-        },2000);
+        }, 2000);
     }
-    function randomString (length) {
+
+    function randomString(length) {
         var text = "";
         var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for(var i = 0; i < length; i++) {
+        for (var i = 0; i < length; i++) {
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         }
         return text;
