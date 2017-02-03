@@ -41,7 +41,7 @@
                             <th>Action</th>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="req in transaction">
+                            <tr ng-repeat="req in transaction | orderBy: '-id'">
                                 <td>{{req.id}}</td>
                                 <td>{{req.mode}}</td>
                                 <td>{{req.amount}}</td>

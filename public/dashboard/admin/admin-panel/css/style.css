@@ -3,7 +3,10 @@ ul.nav.navbar-nav.side-nav {
     background-color: #748883;
     padding: 1.5% 0 1.5em 0;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
 ul.nav.navbar-nav.side-nav.resident-nav {
     text-align: left;
     background-color: #48352a;
@@ -25,7 +28,10 @@ div.progress-bar {
     -o-transition: width .6s ease;
     transition: width .6s ease;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
 svg {
     width: 100%;
 }
@@ -470,12 +476,22 @@ a.paginate_button.current:hover {
 a.dt-button {
     padding: 0.4em !important;
     font-size: 0.7em !important;
+<<<<<<< HEAD
     background: #D11777 !important;
     border: 1px solid #fff !important;
 }
 
 div.dt-buttons {
     /*top: 30px;*/
+=======
+    background: #DC6805 !important;
+    border: 1px solid #d11756 !important;
+    color: #fff !important;
+}
+
+div.dt-buttons {
+   /* top: 30px;*/
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
 }
 
 
@@ -609,7 +625,7 @@ ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thumb {
 .outer-cover {
     height: 345px;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     opacity: 0.7;
     margin: 0 0 1.2em 0.5em;
     border-radius: 5px;
@@ -618,7 +634,7 @@ ul.nav.navbar-nav.side-nav::-webkit-scrollbar-thumb {
 .outer-cover1 {
     height: 400px;
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-size: cover;
     opacity: 0.7;
     margin: 0 0 1.2em 0.5em;
     border-radius: 5px;
@@ -673,4 +689,11 @@ button.btn.btn-success.payment {
 
 .inner-addon {
     position: relative;
+}
+.games{
+    width: 100%; 
+    height: 480px
+}
+.padding-2em{
+    padding: 2em;
 }

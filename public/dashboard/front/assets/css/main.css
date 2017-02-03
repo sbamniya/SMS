@@ -3401,13 +3401,19 @@ body {
 	font-size: 0.7rem;
 }
 residentheader .navbar-inverse,.societyHeader .navbar-inverse{
+<<<<<<< HEAD
  background-color: rgb(220, 104, 5);
 }
 .header .navbar-inverse{
 	background-color: rgb(220, 104, 5);
 }
 .staffmember .navbar-inverse{
+=======
+>>>>>>> 3c258ea8a5aa582a732ee584ff71210e48757c92
 	background-color: rgb(220, 104, 5);
+}
+residentheader progress-bar {
+	color: #fff !important;
 }
 .societyHeader .side-nav {
     position: fixed;

@@ -37,11 +37,18 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-8">
-                                <div class="form-group">
+                            <div class="col-md-12">
+                                <div class="form-group col-md-6">
                                     <label>Choose Images</label>
                                     <input type="file" class="form-control" name="imageID" accept="image/*" ng-blur="upload_Image()" file-model="imageID" ng-readonly="hasNoBlocks" required>
                                     <p ng-show="addBlockForm.imageID.$invalid && !addBlockForm.imageID.$pristine" class="help-block red-text">Please select image for amenity </p>
+                                </div>
+                                <div class="col-lg-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Last Contribution Date</label>
+                                        <input type="datepicker" minvalue="0" placeholder="Enter Amount " class="form-control" ng-model="contribution.last_date" name="blockManager" required data-mindate="{{today}}" datepicker>
+                                        <p ng-show="addBlockForm.blockManager.$invalid && !addBlockForm.blockManager.$pristine" class="help-block red-text">Enter Last Date for Contribution.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
