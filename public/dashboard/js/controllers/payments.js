@@ -1,14 +1,26 @@
 socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$location', '$crypthmac', function($scope, $http, $timeout, sha256, $location, $crypthmac) {
     var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = userDetails.id;
+    console.log(id);
     var userName = userDetails.first_name + ' ' + userDetails.last_name;
     var userEmail = userDetails.email;
     var userCon = userDetails.contact_no;
-
+    $scope.$emit('LOAD');
+    $scope.payUdetail=[];
+    $http.post('/payUdetailsOfSocietyByResident',{resident_id:id}).success(function(response){
+        if(response.hasOwnProperty('success')){
+            $scope.payUdetail=response.success;
+        } 
+        console.log($scope.payUdetail.merchant_key);
+        console.log($scope.payUdetail.merchant_salt);
+        $scope.$emit('UNLOAD');
+    });
+   
     $scope.noData = true;
     /*Define PayuCredentials*/
-    var SALT = "yIEkykqEH3";
+    var SALT = $scope.payUdetail.marchant_salt;//"yIEkykqEH3";
 
+    console.log(SALT);
     var protocol = $location.protocol();
     var host = $location.host();
     var port = $location.port();
@@ -24,7 +36,7 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
     furl += '/payment-fail';
 
     $scope.paymentDetails = {
-        key: "hDkYGPQe",
+        key: $scope.payUdetail.marchant_key,//"hDkYGPQe",
         firstname: userName,
         email: userEmail,
         phone: userCon,
@@ -199,7 +211,15 @@ socialApp.controller('PayDues', ['$scope', '$http', '$timeout', 'sha256', '$loca
 }]);
 
 
-socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout', function($scope, $http, $window, $timeout) {
+socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout','DTOptionsBuilder', function($scope, $http, $window, $timeout,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     $scope.transaction = [];
     var transData = JSON.parse(window.localStorage.getItem('userDetails'));
     var id = transData.id;
@@ -211,6 +231,18 @@ socialApp.controller('listTransaction', ['$scope', '$http', '$window', '$timeout
             angular.forEach(transaction, function(value, key) {
                 value.enid = btoa(value.id);
                 log.push(value);
+                if(value.pay_for==1){
+                    value.pay_for="Facility";
+                }else if(value.pay_for==2){
+                    value.pay_for="Amenity";
+                }else if(value.pay_for==3){
+                    value.pay_for="Maintainance";
+                }
+                else if(value.pay_for==4){
+                    value.pay_for="Contribution";
+                }else if(value.pay_for==0){
+                    value.pay_for="-";
+                }
             });
             $scope.transaction = log;
         } else {
@@ -260,8 +292,16 @@ socialApp.controller('printReceipt', ['$scope', '$http', '$location', '$routePar
 }]);
 
 
-socialApp.controller('BlockIncomes', ['$scope', '$http', '$routeParams', '$route', '$window', function($scope, $http, $routeParams, $route, $window) {
+socialApp.controller('BlockIncomes', ['$scope', '$http', '$routeParams', '$route', '$window','DTOptionsBuilder', function($scope, $http, $routeParams, $route, $window,DTOptionsBuilder) {
     /**/
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
 
@@ -273,6 +313,18 @@ socialApp.controller('BlockIncomes', ['$scope', '$http', '$routeParams', '$route
             angular.forEach(transaction, function(value, key) {
                 value.enid = btoa(value.id);
                 log.push(value);
+                  if(value.pay_for==1){
+                    value.pay_for="Facility";
+                }else if(value.pay_for==2){
+                    value.pay_for="Amenity";
+                }else if(value.pay_for==3){
+                    value.pay_for="Maintainance";
+                }
+                else if(value.pay_for==4){
+                    value.pay_for="Contribution";
+                }else if(value.pay_for==0){
+                    value.pay_for="-";
+                }
             });
             $scope.transaction = log;
             $scope.$emit('UNLOAD');
@@ -289,8 +341,15 @@ socialApp.controller('BlockIncomes', ['$scope', '$http', '$routeParams', '$route
 }]);
 
 
-socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$timeout', '$routeParams', function($scope, $http, $location, $route, $timeout, $routeParams) {
-
+socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$timeout', '$routeParams','DTOptionsBuilder', function($scope, $http, $location, $route, $timeout, $routeParams,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     var block_id = atob($routeParams.blockID);
     $scope.expense = [];
     $scope.$emit('LOAD');
@@ -317,7 +376,6 @@ socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$ti
                 log.push(value);
             });
             $scope.expense = log;
-            console.log(log);
         } else {
             alert(response.error);
         }
@@ -327,7 +385,15 @@ socialApp.controller('Expenses', ['$scope', '$http', '$location', '$route', '$ti
     });
 }]);
 
-socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$routeParams', '$timeout', '$crypthmac', 'sha256', '$location', function($scope, $http, $window, $routeParams, $timeout, $crypthmac, sha256, $location) {
+socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$routeParams', '$timeout', '$crypthmac', 'sha256', '$location','DTOptionsBuilder', function($scope, $http, $window, $routeParams, $timeout, $crypthmac, sha256, $location,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     $scope.resmain = [];
     var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
     console.log(userDetails);
@@ -414,7 +480,15 @@ socialApp.controller('MaintainanceResident', ['$scope', '$http', '$window', '$ro
 
 }]);
 
-socialApp.controller('ResList', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location', function($scope, $route, $routeParams, $http, $timeout, $location) {
+socialApp.controller('ResList', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location','DTOptionsBuilder', function($scope, $route, $routeParams, $http, $timeout, $location,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     var block_id = atob($routeParams.blockID);
     var maintainanceID = atob($routeParams.maintainanceID);
 
@@ -442,7 +516,15 @@ socialApp.controller('ResList', ['$scope', '$route', '$routeParams', '$http', '$
     });
 }]);
 
-socialApp.controller('PaidResidents', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location', function($scope, $route, $routeParams, $http, $timeout, $location) {
+socialApp.controller('PaidResidents', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location','DTOptionsBuilder', function($scope, $route, $routeParams, $http, $timeout, $location,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     var block_id = atob($routeParams.blockID);
     var maintainanceID = atob($routeParams.maintainanceID);
     $scope.$emit('LOAD');
@@ -462,7 +544,15 @@ socialApp.controller('PaidResidents', ['$scope', '$route', '$routeParams', '$htt
 
 }]);
 
-socialApp.controller('UnPaidResidents', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location', function($scope, $route, $routeParams, $http, $timeout, $location) {
+socialApp.controller('UnPaidResidents', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location','DTOptionsBuilder', function($scope, $route, $routeParams, $http, $timeout, $location,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     var block_id = atob($routeParams.blockID);
     var maintainanceID = atob($routeParams.maintainanceID);
     $scope.noResident = true;
@@ -575,10 +665,28 @@ socialApp.controller('maintainanceManager', ['$scope', '$route', '$routeParams',
         }, 1000);
     });
 }]);
-socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$route', '$timeout', '$crypthmac', 'sha256', function($scope, $http, $location, $routeParams, $route, $timeout, $crypthmac, sha256) {
+socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$route', '$timeout', '$crypthmac', 'sha256','DTOptionsBuilder', function($scope, $http, $location, $routeParams, $route, $timeout, $crypthmac, sha256,DTOptionsBuilder) {
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     $scope.$emit('LOAD');
     var block_id = atob($routeParams.blockID);
-    $scope.VendorDues = [];
+    $scope.payUDet = {
+        block_id: block_id
+    };
+    $http.post('/payUdetailsOfSociety',{blockId:block_id}).success(function(response){
+        if(response.hasOwnProperty('success')){
+            $scope.payUDet = response.success;
+        }
+        console.log($scope.payUDet.merchant_key);
+        $scope.$emit('UNLOAD');
+    });
+     $scope.VendorDues = [];
     $http.post('/paymentDuesFromManager', { block_id: block_id }).success(function(response) {
         if (response.hasOwnProperty('succes')) {
             if (response.hasOwnProperty('data')) {
@@ -646,7 +754,6 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
             $scope.$emit('UNLOAD');
         });
     }
-
     $scope.submitPayDetails = function() {
         $scope.$emit('LOAD');
         $http.post('/managersDueForVendor', $scope.cashDetail).success(function(response) {
@@ -669,7 +776,8 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
                 $scope.PayDues = response.data;
                 $scope.noData = true;
                 /*Define PayuCredentials*/
-                var SALT = "yIEkykqEH3";
+                var SALT = $scope.payUDet.marchant_salt;//"yIEkykqEH3";
+                console.log(SALT);
 
                 var protocol = $location.protocol();
                 var host = $location.host();
@@ -686,7 +794,7 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
                 furl += '/payment-fail';
 
                 $scope.paymentDetails = {
-                    key: "hDkYGPQe",
+                    key: $scope.payUDet.marchant_key,//"hDkYGPQe",
                     firstname: $scope.PayDues.vendor_name,
                     email: $scope.PayDues.email,
                     phone: $scope.PayDues.contact,
@@ -736,7 +844,7 @@ socialApp.controller('Due', ['$scope', '$http', '$location', '$routeParams', '$r
         });
     }
 }]);
-
+/*
 socialApp.controller('contributions', ['$scope', function($scope) {
     $scope.contributions = [{
         key: 1
@@ -754,3 +862,4 @@ socialApp.controller('contributions', ['$scope', function($scope) {
         key: 1
     }, ];
 }]);
+*/

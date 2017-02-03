@@ -316,3 +316,40 @@ exports.getTenatsForAdminByBlockId = function(pool) {
         });
     }
 }
+
+exports.payUdetailsOfSocietyByResident = function(pool) {
+    return function(req, res) {
+        var data = {};
+        var resident_id = req.body.resident_id;
+        var query = 'select smm.* from residents r INNER JOIN flat_master fm On r.flat_id = fm.id INNER JOIN block_master bm ON fm.block_id = bm.id INNER JOIN society_manager_meta smm On bm.parent_id = smm.manager_id where r.id = "' + resident_id + '"';
+        res.setHeader('Content-Type', 'application/json');
+        pool.query(query, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+                data.error = err;
+            } else {
+                data.success = rows[0];
+                res.send(JSON.stringify(data));
+            }
+        });
+    }
+}
+
+exports.payUdetailsOfSociety = function(pool) {
+    return function(req, res) {
+        var block_id = req.body.blockId;
+        var query = 'select smm.* from society_manager_meta smm INNER JOIN society_master sm ON smm.manager_id = sm.id INNER JOIN block_master bm  ON sm.id = bm.parent_id where bm.id = "' + block_id + '"';
+        var data = {};
+        res.setHeader('Content-Type', 'application/json');
+        pool.query(query, function(err, rows, fields) {
+            if (err) {
+                console.log(err);
+                data.error = err;
+            } else {
+                data.success = rows[0];
+                console.log(JSON.stringify(data));
+                res.send(JSON.stringify(data));
+            }
+        });
+    }
+}

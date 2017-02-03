@@ -11,8 +11,16 @@ socialApp.controller('service',['$scope', '$http','$location',function ($scope, 
 		});
 	}
 }]);
-socialApp.controller('serviceList', ['$scope','$http','$routeParams','$route','$timeout', function($scope, $http, $routeParams,$route, $timeout){
+socialApp.controller('serviceList', ['$scope','$http','$routeParams','$route','$timeout','DTOptionsBuilder', function($scope, $http, $routeParams,$route, $timeout,DTOptionsBuilder){
 	$scope.$emit('LOAD');
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.service_name={};
 	$scope.services = [];
 	$http.post('/requestedServicesListToAdmin').success(function(response){
@@ -44,7 +52,15 @@ socialApp.controller('serviceList', ['$scope','$http','$routeParams','$route','$
 	}
 }]);
 
-socialApp.controller('serviceAll', ['$scope', '$http','$route', function($scope, $http, $route){
+socialApp.controller('serviceAll', ['$scope', '$http','$route','DTOptionsBuilder', function($scope, $http, $route,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.services = [];
 	$scope.$emit('LOAD');
 	$http.post('/ListServices').success(function(response){

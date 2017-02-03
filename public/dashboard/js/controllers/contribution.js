@@ -1,5 +1,13 @@
-socialApp.controller('ContributeList', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location', function($scope, $route, $routeParams, $http, $timeout, $location) {
+socialApp.controller('ContributeList', ['$scope', '$route', '$routeParams', '$http', '$timeout', '$location','DTOptionsBuilder', function($scope, $route, $routeParams, $http, $timeout, $location,DTOptionsBuilder) {
     $scope.$emit('LOAD');
+    $scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
     var block_id = atob($routeParams.blockID);
     $scope.contri = [];
     $http.post('/listContribution', { block_id: block_id }).success(function(response) {
@@ -68,7 +76,6 @@ socialApp.controller('contributions', ['$scope','$http','$timeout', function($sc
 }]);
 
 socialApp.controller('ResContribution', ['$scope','$http','$timeout','sha256','$location','$crypthmac','$routeParams','$route', function($scope, $http, $timeout, sha256, $location, $crypthmac,$routeParams,$route){
-       
     var id=$routeParams.conID;
     $scope.contribute = {
         id: id

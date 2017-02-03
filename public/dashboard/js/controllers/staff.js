@@ -276,7 +276,15 @@ socialApp.controller('RequestServent', ['$scope','$http','$location','$route', '
 
 }]);
 
-socialApp.controller('staffListForRessident', ['$scope','$http','$timeout', function($scope, $http, $timeout){
+socialApp.controller('staffListForRessident', ['$scope','$http','$timeout','DTOptionsBuilder', function($scope, $http, $timeout,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	$scope.AllRequests = [];
@@ -353,7 +361,15 @@ socialApp.controller('staffApprove', ['$scope','$http', '$location', '$routePara
 	}
 }]);
 
-socialApp.controller('StaffEntryBySecurity', ['$scope','$http','$timeout', '$location', '$route', function($scope, $http, $timeout, $location, $route){
+socialApp.controller('StaffEntryBySecurity', ['$scope','$http','$timeout', '$location', '$route','DTOptionsBuilder', function($scope, $http, $timeout, $location, $route,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var userDetails = JSON.parse(window.localStorage.getItem('userDetails'));
 	var id = userDetails.id;
 	var block_id = userDetails.block_id;
@@ -372,14 +388,22 @@ socialApp.controller('StaffEntryBySecurity', ['$scope','$http','$timeout', '$loc
 				$scope.successMsg = response.success;
 				$timeout(function(){
 					$route.reload();	
-				}, delay);
+				}, 1000);
 			}
 		});
 	}
 }]);
 
 
-socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$http', function($scope, $routeParams, $http){
+socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$http','DTOptionsBuilder', function($scope, $routeParams, $http,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	var block_id = atob($routeParams.blockID);
 	$scope.AllStaffMemeber = [];
 	$scope.today = new Date();
@@ -408,7 +432,15 @@ socialApp.controller('staffAttandanceForManager', ['$scope','$routeParams', '$ht
 }]);
 
 
-socialApp.controller('StaffReuestsForManager', ['$scope','$http','$routeParams','$timeout','$route', function($scope, $http, $routeParams, $timeout, $route){
+socialApp.controller('StaffReuestsForManager', ['$scope','$http','$routeParams','$timeout','$route','DTOptionsBuilder', function($scope, $http, $routeParams, $timeout, $route,DTOptionsBuilder){
+	$scope.dtOptions = DTOptionsBuilder.newOptions() 
+                        .withOption('order', [1, 'desc'])
+                        .withButtons([
+                            'print',
+                            'excel',
+                            'csv',
+                            'pdf'
+                        ]);
 	$scope.AllRequests = [];
 	$scope.updateData = {};
 	var block_id = atob($routeParams.blockID);

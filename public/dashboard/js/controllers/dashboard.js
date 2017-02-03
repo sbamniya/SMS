@@ -285,3 +285,9 @@ socialApp.controller('residentDashboard', ['$scope','$http','$timeout', function
 socialApp.controller('staffDashboard', ['$scope', function($scope){
 	
 }]);
+
+/*Service Manager Dashboard*/
+
+socialApp.controller('serviceAdminDashboard', ['$scope', function($scope){
+	
+}]);

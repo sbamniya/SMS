@@ -30,6 +30,7 @@
 
     var pool = require('./db');
     var admin = require("./admin");
+    //var service_admin = require("./service_admin");
     var block = require("./block");
     var complaint = require("./complaint");
     var flat = require("./flat");
@@ -139,6 +140,15 @@
     app.post('/confirmToken', admin.confirmToken(pool));
     app.post('/updatePassword', admin.updatePassword(crypto, pool));
 
+    /*Admin login & other functionality*/
+    app.post('/serviceadminLogin', admin.serviceadminLogin(crypto, pool));
+   /* app.post('/login', service_admin.login(crypto, pool));
+    app.get('/authentication/:access', service_admin.authenticated);
+    app.get('/logout', service_admin.logout);
+    app.post('/resetPasswordProcess', service_admin.resetPasswordProcess(transporter, randomstring, pool));
+    app.post('/confirmToken', service_admin.confirmToken(pool));
+    app.post('/updatePassword', service_admin.updatePassword(crypto, pool));*/
+
 
     /* Slug Society and other functionality */
     app.post('/checkSlug', slugSociety.checkSlug(slug, moment, async, pool));
@@ -154,10 +164,11 @@
     app.get('/getAllSocieties', society.getAllSocieties(pool));
     app.post('/getBySocietyId', society.getBySocietyId(pool));
     app.post('/deleteSociety', society.deleteSociety(pool));
-
+    
     app.post('/getResidentsForAdminByBlockId', society.getResidentsForAdminByBlockId(pool));
     app.post('/getTenatsForAdminByBlockId', society.getTenatsForAdminByBlockId(pool));
-
+    app.post('/payUdetailsOfSocietyByResident', society.payUdetailsOfSocietyByResident(pool));
+    app.post('/payUdetailsOfSociety', society.payUdetailsOfSociety(pool));
     /*Block Management*/
     app.get('/getblockList', block.getblockList(pool));
     app.post('/editBlock', block.editBlock(pool));
